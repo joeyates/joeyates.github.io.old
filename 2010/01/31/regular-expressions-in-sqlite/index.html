@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Regular Expressions in SQLite With Ruby - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="Recently, I was writing an autocomplete method in a Ruby on Rails application. I wanted to find whole word matches, and words starting with the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://joeyates.github.io/2010/01/31/regular-expressions-in-sqlite">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:joeyates.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Regular Expressions in SQLite With Ruby</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-31T00:00:00+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Recently, I was writing an autocomplete method in a Ruby on Rails application. I wanted to find whole word matches, and words starting with the entered text.</p>
+
+<p>The regex I wanted to use was like this:</p>
+
+<pre><code>word =~ /\W#{query}/
+</code></pre>
+
+<p>So, if the user entered <em>&lsquo;and&rsquo;</em>, I wanted to retrieve <em>&lsquo;<strong>And</strong>es&rsquo;</em> and <em>&lsquo;Bill <strong>and</strong> Ben&rsquo;</em>, but not <em>&lsquo;c<strong>and</strong>le&rsquo;</em>.</p>
+
+<!--more-->
+
+
+<p>In development I was using an SQLite database, and SQLite does not yet implement a regular expression operator. Actually, it <em>defines</em> the <code>REGEX</code> operator, but it doesn&rsquo;t implement it &ndash; if you use it you get an error.</p>
+
+<p>I tried writing the method with just the <code>LIKE</code> operator, but it was getting very long-winded: you have to jump through hoops to approximate the regex <code>\W</code> operator.</p>
+
+<p>The <code>REGEXP</code> operator is just syntactic sugar for the (unimplemented) <a href="http://www.sqlite.org/lang_expr.html#regexp">regexp() function</a>. SQLite allows you to add external functions at runtime, so I realized that there must be a way around the limitation, but, initially I thought I had to implement regexp() as a C function.</p>
+
+<p>I found <a href="http://stephen-veit.blogspot.com/2009/03/implementing-regexp-in-sqlite3.html">an article about implementing regexp() in Ruby</a>. It needed a bit of tweaking as in the Rails 2.3.x interface for SQLite <code>ActiveRecord::ConnectionAdapters::SQLite3Adapter.initialize()</code> takes 3 parameters, not 2.</p>
+
+<p>I got <code>REGEXP</code> working by creating an initializer:</p>
+
+<figure class='code'><figcaption><span>Implement SQLite&#8217;s REGEXP Operator in Ruby - config/initializers/sqlite3_regexp.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;active_record/connection_adapters/sqlite3_adapter&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ActiveRecord</span><span class="o">::</span><span class="ss">ConnectionAdapters</span><span class="p">:</span><span class="ss">:SQLite3Adapter</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">super</span>
+</span><span class='line'>    <span class="n">db</span><span class="o">.</span><span class="n">create_function</span><span class="p">(</span><span class="s1">&#39;regexp&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">func</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">expression</span><span class="o">|</span>
+</span><span class='line'>       <span class="n">regexp</span> <span class="o">=</span> <span class="no">Regexp</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">pattern</span><span class="o">.</span><span class="n">to_s</span><span class="p">,</span> <span class="ss">Regexp</span><span class="p">:</span><span class="ss">:IGNORECASE</span><span class="p">)</span>
+</span><span class='line'>       <span class="k">if</span> <span class="n">expression</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">regexp</span><span class="p">)</span>
+</span><span class='line'>         <span class="n">func</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>       <span class="k">else</span>
+</span><span class='line'>         <span class="n">func</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>       <span class="k">end</span>
+</span><span class='line'>     <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The proof of the pudding:</p>
+
+<pre><code>./script/console
+&gt;&gt; Noun.find(:all, :conditions =&gt; ['name LIKE ?', '%and%']).collect(&amp;:name)
+=&gt; ["Candle", "Bill and Ben", "Andes"]
+&gt;&gt; Noun.find(:all, :conditions =&gt; ['name REGEXP ?', '\Wand']).collect(&amp;:name)
+=&gt; ["Bill and Ben", "Andes"]
+</code></pre>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-31T00:00:00+01:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://joeyates.github.io/2010/01/31/regular-expressions-in-sqlite/" data-via="" data-counturl="http://joeyates.github.io/2010/01/31/regular-expressions-in-sqlite/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2010/01/30/callbacks-in-objective-c/" title="Previous Post: Callbacks in Objective-C">&laquo; Callbacks in Objective-C</a>
+      
+      
+        <a class="basic-alignment right" href="/2010/02/01/managing-multiple-gnu-screen-sessions/" title="Next Post: Managing multiple GNU screen sessions">Managing multiple GNU screen sessions &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/12/23/my-everyday-find-command/">My Everyday Find Command</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/">Ruby Bareword Assignment and Method Calls With Implicit Self</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/07/18/html-history-api/">HTML History API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes/">Overriding the Insertion Operator for C++ Template Classes</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/02/19/hello-gosu/">Hello Gosu!</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

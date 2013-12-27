@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Debian Alternatives - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="The Debian Alternatives system manages groups of symlinks, which can be modified en-masse. For each program that it has to manage, Alternatives &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://joeyates.github.io/2010/02/22/debian-alternatives">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:joeyates.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Debian Alternatives</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-22T00:00:00+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>The Debian <a href="http://www.debian-administration.org/articles/91">Alternatives</a> system manages groups of symlinks, which can be modified en-masse.</p>
+
+<p>For each program that it has to manage, Alternatives expects there to be a symlink from /usr/bin to /etc/alternatives/[PROGRAM NAME].</p>
+
+<!--more-->
+
+
+<p>For example, with vi, on my system:</p>
+
+<pre><code>$ which vi
+/usr/bin/vi
+
+$ ls -ll /usr/bin/vi
+lrwxrwxrwx 1 root root 20 2009-11-03 15:33 /usr/bin/vi -&amp;gt; /etc/alternatives/vi
+
+$ ls -l /etc/alternatives/vi
+lrwxrwxrwx 1 root root 16 2009-11-03 15:33 /etc/alternatives/vi -&amp;gt; /usr/bin/vim.nox
+
+$ ls -l /usr/bin/vim.nox
+-rwxr-xr-x 1 root root 1825312 2009-09-21 13:23 /usr/bin/vim.nox
+</code></pre>
+
+<p>So, on my system, the command &#39;vi&#39; starts /usr/bin/vim.nox via 2 symlinks.</p>
+
+<h1>Commands</h1>
+
+<h2>List Main Programs</h2>
+
+<pre><code>$ update-alternatives --get-selections
+</code></pre>
+
+<h2>Show setup for a certain program</h2>
+
+<pre><code>$ update-alternatives --display vi
+vi - auto mode
+ link currently points to /usr/bin/vim.nox
+/usr/bin/vim.nox - priority 40
+ slave vi.1.gz: /usr/share/man/man1/vim.1.gz
+ slave vi.fr.1.gz: /usr/share/man/fr/man1/vim.1.gz
+ slave vi.it.1.gz: /usr/share/man/it/man1/vim.1.gz
+ slave vi.pl.1.gz: /usr/share/man/pl/man1/vim.1.gz
+ slave vi.ru.1.gz: /usr/share/man/ru/man1/vim.1.gz
+/usr/bin/vim.tiny - priority 10
+ slave vi.1.gz: /usr/share/man/man1/vim.1.gz
+ slave vi.fr.1.gz: /usr/share/man/fr/man1/vim.1.gz
+ slave vi.it.1.gz: /usr/share/man/it/man1/vim.1.gz
+ slave vi.pl.1.gz: /usr/share/man/pl/man1/vim.1.gz
+ slave vi.ru.1.gz: /usr/share/man/ru/man1/vim.1.gz
+ Current `best&amp;#39; version is /usr/bin/vim.nox.
+</code></pre>
+
+<h2>Set Up a Program</h2>
+
+<pre><code>$ sudo update-alternatives --install /usr/bin/[SYMLINK] [TITLE] /PATH/TO/PROGRAM 10
+</code></pre>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-22T00:00:00+01:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://joeyates.github.io/2010/02/22/debian-alternatives/" data-via="" data-counturl="http://joeyates.github.io/2010/02/22/debian-alternatives/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2010/02/21/shared-git-repositories/" title="Previous Post: Shared Git Repositories">&laquo; Shared Git Repositories</a>
+      
+      
+        <a class="basic-alignment right" href="/2010/02/22/handling-multiple-versions-of-ruby/" title="Next Post: Handling Multiple Versions of Ruby">Handling Multiple Versions of Ruby &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/12/23/my-everyday-find-command/">My Everyday Find Command</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/">Ruby Bareword Assignment and Method Calls With Implicit Self</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/07/18/html-history-api/">HTML History API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes/">Overriding the Insertion Operator for C++ Template Classes</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/02/19/hello-gosu/">Hello Gosu!</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

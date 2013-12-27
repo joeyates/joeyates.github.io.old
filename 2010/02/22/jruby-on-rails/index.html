@@ -1,0 +1,310 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>JRuby on Rails - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="Which Java Version? JRuby is normally run on the &ldquo;official&rdquo; Sun (now Oracle) Java. Some people seem to be able to get it to run on GNU &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://joeyates.github.io/2010/02/22/jruby-on-rails">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:joeyates.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">JRuby on Rails</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-22T00:00:00+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>Which Java Version?</h1>
+
+<p>JRuby is normally run on the &ldquo;official&rdquo; Sun (now Oracle) Java. Some people seem to be able to get it to run on GNU Java (GCJ), but I suggest sticking with Sun Java to get you started.</p>
+
+<h1>Which Type of Installation?</h1>
+
+<p>First of all you should decide where to install JRuby &ndash; do you want to install it for all system users or just for your own user?</p>
+
+<!--more-->
+
+
+<h1>Download</h1>
+
+<p>Download the latest JRuby from <a href="http://jruby.org/download"><a href="http://jruby.org/download">http://jruby.org/download</a></a>.</p>
+
+<pre><code>$ wget http://jruby.kenai.com/downloads/1.4.0/jruby-bin-1.4.0.tar.gz
+$ tar -xkzf jruby-bin-1.4.0.tar.gz
+</code></pre>
+
+<h2>Personal Installation</h2>
+
+<pre><code>$ cd ~/bin
+$ cp -r ../jruby-1.4.0 .
+</code></pre>
+
+<p>Make a symlink to simplify things in the future when we upgrade to a new version:</p>
+
+<pre><code>$ ln -s jruby-1.4.0 jruby
+</code></pre>
+
+<p>Add the following line to your ~/.bashrc to add JRuby executables to your %PATH:</p>
+
+<pre><code>export PATH=~/bin/jruby/bin:$PATH
+</code></pre>
+
+<h2>System-wide Installation</h2>
+
+<pre><code>$ sudo cp jruby-1.4.0 /usr/local/lib
+$ sudo ln -s /usr/local/lib/jruby-1.4.0 /usr/local/lib/jruby
+</code></pre>
+
+<h1>Gems</h1>
+
+<p>List installed gems:</p>
+
+<pre><code>$ jruby -S gem list
+</code></pre>
+
+<p>Install a gem (in a personal installation):</p>
+
+<pre><code>$ jruby -S gem install rails
+</code></pre>
+
+<p>Install a gem (in a system-wide installation):</p>
+
+<pre><code>$ sudo /usr/local/lib/jruby/bin/jruby -S gem install rails
+</code></pre>
+
+<h1>Modifying your Rails Project</h1>
+
+<p>You need to look at the list of dependencies of your project, principally the gems, and make sure they are available for JRuby.</p>
+
+<p>Gems written in pure Ruby work &lsquo;out of the box&rsquo; with JRuby. But you&rsquo;ll need to find replacecements for gems which are written in whole or in part in C.</p>
+
+<p>One example of this is RMagick (the Ruby interface to the ImageMagick/GraphicsMagick packages). Ruby on Rails which run on MRI Ruby and use RMagick will have to use RMagick4J under JRuby.</p>
+
+<p>If your Ruby on Rails application has no gem dependency problems, you should be able to run it by changing the name of the database adapter:</p>
+
+<figure class='code'><figcaption><span>Dynamic Database Setup According to Ruby Platform  - config/database.yml </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">&lt;% if RUBY_PLATFORM =~ /java/ %&gt;</span>
+</span><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+</span><span class='line'><span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">jdbcsqlite3</span>
+</span><span class='line'><span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">db/development.db</span>
+</span><span class='line'><span class="l-Scalar-Plain">&lt;% else %&gt;</span>
+</span><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+</span><span class='line'><span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">sqlite3</span>
+</span><span class='line'><span class="l-Scalar-Plain">dbfile</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">db/development.db</span>
+</span><span class='line'><span class="l-Scalar-Plain">&lt;% end %&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here I have made use of the fact that Rails runs config/database.yml through ERB before loading it.</p>
+
+<p>Once the database adapter setting has changed, you should be able to run</p>
+
+<pre><code>$ ./script/server
+</code></pre>
+
+<p>Packaging your application for a servlet container can be done with the <a href="http://rubygems.org/gems/warbler">warbler gem</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-22T00:00:00+01:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://joeyates.github.io/2010/02/22/jruby-on-rails/" data-via="" data-counturl="http://joeyates.github.io/2010/02/22/jruby-on-rails/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2010/02/22/handling-multiple-versions-of-ruby/" title="Previous Post: Handling Multiple Versions of Ruby">&laquo; Handling Multiple Versions of Ruby</a>
+      
+      
+        <a class="basic-alignment right" href="/2010/02/22/setting-up-postgis/" title="Next Post: Setting up PostGIS">Setting up PostGIS &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/12/23/my-everyday-find-command/">My Everyday Find Command</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/">Ruby Bareword Assignment and Method Calls With Implicit Self</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/07/18/html-history-api/">HTML History API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes/">Overriding the Insertion Operator for C++ Template Classes</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/02/19/hello-gosu/">Hello Gosu!</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

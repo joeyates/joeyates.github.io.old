@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Show Your Git Branch Name in Your GNU Screen Status Line - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="Git Branch Prompt Many people have written about showing the current git branch in your shell prompt. There is even the Bash function __git_ps1 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://joeyates.github.io/2010/03/09/show-your-git-branch-name-in-your-gnu-screen-status-line">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:joeyates.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Show Your Git Branch Name in Your GNU Screen Status Line</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-09T00:00:00+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>Git Branch Prompt</h1>
+
+<p><a href="http://github.com/guides/put-your-git-branch-name-in-your-shell-prompt">Many</a> <a href="http://github.com/lvv/git-prompt/">people</a> <a href="http://www.jukie.net/bart/blog/20080404105620">have</a> written about showing the current git branch in your shell prompt.</p>
+
+<p>There is even the Bash function <a href="http://repo.or.cz/w/git.git?a=blob_plain;f=contrib/completion/git-completion.bash">__git_ps1</a> provided in the main Git repo.</p>
+
+<p>I prefer to show info like the current time and current git branch in a GNU screen status line.</p>
+
+<!--more-->
+
+
+<h1>Screen Status</h1>
+
+<p>As I use screen constantly, I decided to take a different route: put the current branch name in my screen status line.</p>
+
+<h1>Changing the Screen Current Directory</h1>
+
+<p>When you start screen, it remembers the current directory. Issuing &lsquo;cd&rsquo; commands inside a shell does not change the value. The only way to change it is to issue a <code>screen</code> <code>chdir</code> command.</p>
+
+<p>In order to know the current branch in a particular screen window, I needed to make screen&rsquo;s current directory change to follow the shell it is presenting.</p>
+
+<p>I added the following to my .bashrc:</p>
+
+<figure class='code'><figcaption><span>set_screen_path function - .bashrc.sh </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="k">function </span>set_screen_path<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  screen -X chdir <span class="s2">&quot;`pwd`&quot;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">case</span> <span class="nv">$TERM</span> in
+</span><span class='line'>screen*<span class="o">)</span>
+</span><span class='line'>  <span class="nv">PROMPT_COMMAND</span><span class="o">=</span>set_screen_path
+</span><span class='line'>  ;;
+</span><span class='line'><span class="k">esac</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is Bash specific, but similar code should work in other shells.</p>
+
+<h1>git-current-branch</h1>
+
+<p>Next, I created the following shell script:</p>
+
+<figure class='code'><figcaption><span>Return the Current Git Path - git-current-branch.sh </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'>
+</span><span class='line'>git branch 2&gt;/dev/null | grep <span class="s1">&#39;*&#39;</span> | sed <span class="s1">&#39;s/\* //&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>.screenrc</h1>
+
+<p>And finally, I added a &lsquo;backtick&rsquo; command to my .screenrc file:</p>
+
+<pre><code>startup_message off
+
+backtick 1 0 1 git-current-branch
+
+hardstatus alwayslastline "%-w%{.bw}%n %t%{-}%+w %-45= %1`"
+
+screen -t bash 0
+screen -t edit 1
+select 0
+</code></pre>
+
+<p>The important line is:</p>
+
+<pre><code>backtick 1 0 1 git-current-branch
+</code></pre>
+
+<p>which creates a &lsquo;<a href="http://www.gnu.org/software/screen/manual/html_node/Backtick.html">backtick command</a>&rsquo; (number 1) which calls <code>git-current-branch</code> once a second via <code>%1`</code> in the hardstatus line.</p>
+
+<h1>The Result</h1>
+
+<p><img src="/images/GnuScreenShowingCurrentGitBranch.png" width="341" height="153"></p>
+
+<h1>Conclusion</h1>
+
+<p>This system is not perfect as the shell only notifies screen of its directory when a new prompt is created.</p>
+
+<p>The result is that if you switch screens, the status line doesn&rsquo;t get updated until after you issue a command.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-09T00:00:00+01:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://joeyates.github.io/2010/03/09/show-your-git-branch-name-in-your-gnu-screen-status-line/" data-via="" data-counturl="http://joeyates.github.io/2010/03/09/show-your-git-branch-name-in-your-gnu-screen-status-line/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2010/03/09/a-sunrise-and-sunset-time-calculator/" title="Previous Post: A Sunrise and Sunset Time Calculator">&laquo; A Sunrise and Sunset Time Calculator</a>
+      
+      
+        <a class="basic-alignment right" href="/2010/04/02/editing-javascript-in-emacs/" title="Next Post: Editing Javascript in Emacs">Editing Javascript in Emacs &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/12/23/my-everyday-find-command/">My Everyday Find Command</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/">Ruby Bareword Assignment and Method Calls With Implicit Self</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/07/18/html-history-api/">HTML History API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes/">Overriding the Insertion Operator for C++ Template Classes</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/02/19/hello-gosu/">Hello Gosu!</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

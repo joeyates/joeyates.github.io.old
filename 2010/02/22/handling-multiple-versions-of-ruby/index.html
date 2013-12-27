@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Handling Multiple Versions of Ruby - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="Currenly, I am developing with 3 different versions of Ruby: MRI Ruby 1.8.7 MRI Ruby 1.9.1 JRuby 1.4.0 I need a quick way to switch betwwen the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://joeyates.github.io/2010/02/22/handling-multiple-versions-of-ruby">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:joeyates.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Handling Multiple Versions of Ruby</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-22T00:00:00+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>
+	Currenly, I am developing with 3 different versions of Ruby:</p>
+<ol>
+	<li>
+		MRI Ruby 1.8.7</li>
+	<li>
+		MRI Ruby 1.9.1</li>
+	<li>
+		JRuby 1.4.0</li>
+</ol>
+<p>
+	I need a quick way to switch betwwen the three main Ruby executables, and the related other programs (gem, irb, etc).</p>
+<p>I have set up Debian Alternatives to handle the job.</p>
+
+<!--more-->
+
+<h2>
+	Alternatives with Ruby</h2>
+<p>
+	The programs I want to switch are:</p>
+<ul>
+	<li>
+		ruby</li>
+	<li>
+		gem</li>
+	<li>
+		irb</li>
+	<li>
+		ri</li>
+	<li>
+		rake</li>
+	<li>
+		rails</li>
+</ul>
+<h2>
+	Ruby MRI 1.8 and 1.9</h2>
+<p>
+	If you compiled your own ruby 1.8 and 1.9, make sure you indicate the version:</p>
+<pre>$ ./configure --program-suffix=1.9
+</pre>
+<h2>
+	Install JRuby</h2>
+<p>
+	See my <a href="http://titusd.co.uk/2010/02/22/jruby-on-rails">other post</a>.</p>
+<h2>
+	Create Links from /etc/alternatives to /usr/bin</h2>
+<pre>$ cd /usr/bin
+$ sudo ln -s /etc/alternatives/ruby
+$ sudo ln -s /etc/alternatives/irb
+$ sudo ln -s /etc/alternatives/ri
+$ sudo ln -s /etc/alternatives/rake
+$ sudo ln -s /etc/alternatives/gem</pre>
+<h2>
+	Create Ruby Alternatives</h2>
+<pre>$ sudo update-alternatives \
+  --install  /usr/bin/ruby  ruby  /usr/local/bin/ruby1.9   30 \
+  --slave    /usr/bin/irb   irb   /usr/local/bin/irb1.9       \
+  --slave    /usr/bin/gem   gem   /usr/local/bin/gem1.9       \
+  --slave    /usr/bin/ri    ri    /usr/local/bin/ri1.9        \
+  --slave    /usr/bin/rails rails /usr/local/bin/rails1.9     \
+  --slave    /usr/bin/rake  rake  /usr/local/bin/rake1.9
+
+$ sudo update-alternatives \
+  --install  /usr/bin/ruby  ruby  /usr/bin/ruby1.8   20 \
+  --slave    /usr/bin/irb   irb   /usr/bin/irb1.8       \
+  --slave    /usr/bin/ri    ri    /usr/bin/ri1.8        \
+  --slave    /usr/bin/gem   gem   /usr/bin/gem1.8       \
+  --slave    /usr/bin/rails rails /usr/bin/rails1.8     \
+  --slave    /usr/bin/rake  rake  /usr/bin/rake1.8
+
+$ sudo update-alternatives \
+  --install  /usr/bin/ruby  ruby  /usr/local/lib/jruby/bin/jruby   10 \
+  --slave    /usr/bin/irb   irb   /usr/local/lib/jruby/bin/jirb       \
+  --slave    /usr/bin/ri    ri    /usr/local/lib/jruby/bin/ri         \
+  --slave    /usr/bin/rails rails /usr/local/lib/jruby/bin/rails      \
+  --slave    /usr/bin/gem   gem   /usr/local/lib/jruby/bin/gem        \
+  --slave    /usr/bin/rake  rake  /usr/local/lib/jruby/bin/rake
+</pre>
+<h2>
+	Check the result</h2>
+<pre>$ update-alternatives --display ruby
+ruby - auto mode
+ link currently points to /usr/local/bin/ruby1.9
+/usr/bin/ruby1.8 - priority 20
+ slave gem: /usr/bin/gem1.8
+ slave irb: /usr/bin/irb1.8
+ slave rails: /usr/bin/rails1.8
+ slave rake: /usr/bin/rake1.8
+ slave ri: /usr/bin/ri1.8
+/usr/local/bin/ruby1.9 - priority 30
+ slave gem: /usr/local/bin/gem1.9
+ slave irb: /usr/local/bin/irb1.9
+ slave rails: /usr/local/bin/rails1.9
+ slave rake: /usr/local/bin/rake1.9
+ slave ri: /usr/local/bin/ri1.9
+/usr/local/lib/jruby/bin/jruby - priority 10
+ slave gem: /usr/local/lib/jruby/bin/gem
+ slave irb: /usr/local/lib/jruby/bin/jirb
+ slave rails: /usr/local/lib/jruby/bin/rails
+ slave rake: /usr/local/lib/jruby/bin/rake
+ slave ri: /usr/local/lib/jruby/bin/ri
+Current `best' version is /usr/local/bin/ruby1.9.
+</pre>
+<h2>
+	Switch versions</h2>
+<pre>$ sudo update-alternatives --config ruby
+There are 3 choices for the alternative ruby (providing /usr/bin/ruby).
+
+  Selection    Path                            Priority   Status
+------------------------------------------------------------
+* 0            /usr/local/bin/ruby1.9           30        auto mode
+  1            /usr/bin/ruby1.8                 20        manual mode
+  2            /usr/local/bin/ruby1.9           30        manual mode
+  3            /usr/local/lib/jruby/bin/jruby   10        manual mode
+
+Press enter to keep the current choice[*], or type selection number: 1
+Using '/usr/bin/ruby1.8' to provide 'ruby'.
+</pre>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-22T00:00:00+01:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://joeyates.github.io/2010/02/22/handling-multiple-versions-of-ruby/" data-via="" data-counturl="http://joeyates.github.io/2010/02/22/handling-multiple-versions-of-ruby/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2010/02/22/debian-alternatives/" title="Previous Post: Debian Alternatives">&laquo; Debian Alternatives</a>
+      
+      
+        <a class="basic-alignment right" href="/2010/02/22/jruby-on-rails/" title="Next Post: JRuby on Rails">JRuby on Rails &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/12/23/my-everyday-find-command/">My Everyday Find Command</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/">Ruby Bareword Assignment and Method Calls With Implicit Self</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/07/18/html-history-api/">HTML History API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes/">Overriding the Insertion Operator for C++ Template Classes</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/02/19/hello-gosu/">Hello Gosu!</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

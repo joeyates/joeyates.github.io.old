@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ruby | My Octopress Blog]]></title>
+  <link href="http://joeyates.github.io/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://joeyates.github.io/"/>
+  <updated>2013-12-27T18:59:44+01:00</updated>
+  <id>http://joeyates.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby Bareword Assignment and Method Calls With Implicit Self]]></title>
+    <link href="http://joeyates.github.io/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/"/>
+    <updated>2012-01-16T18:52:00+01:00</updated>
+    <id>http://joeyates.github.io/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self</id>
+    <content type="html"><![CDATA[<h1>Problem</h1>
+
+<p>If I do this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Problem &ndash; problem.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">puts</span> <span class="n">foo</span>
+</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="mi">3</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>there is always the doubt whether I&rsquo;m accessing a local variable, or calling methods <code>foo</code> and <code>foo=</code>.</p>
+
+<h1>TL;DR</h1>
+
+<p>When you want to call an instance&rsquo;s own methods, use <code>self</code>:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>TL;DR &ndash; tldr.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">self</span><span class="o">.</span><span class="n">foo</span>             <span class="c1"># Calls foo</span>
+</span><span class='line'><span class="nb">self</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">bar</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>     <span class="c1"># Calls foo=</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<!--more-->
+
+
+<h1>Example 1</h1>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Example 1 &ndash; example_1.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">def</span> <span class="nf">example1</span>
+</span><span class='line'> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">example1</span> <span class="nb">method</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;example1 #=&gt; &amp;ldquo;example1 method&amp;rdquo;&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">example1</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">assigned</span> <span class="n">value</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;example1 #=&gt; &amp;ldquo;assigned value&amp;rdquo;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Here, we define a method, and then make an assignment. As we assign to a bareword, Ruby creates a new local variable.</p>
+
+<p>As soon as a value is assigned to the local variable, the method no longer gets called.</p>
+
+<h1>Example 2</h1>
+
+<p>But, what if we also have an assignment method?</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Example 2 &ndash; example_2.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">def</span> <span class="nf">example2</span>
+</span><span class='line'> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">example2</span> <span class="nb">method</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;def example2=(value)</span>
+</span><span class='line'><span class="sr"> puts &amp;ldquo;example2= called&amp;rdquo; # (this never gets called)</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">example2</span> <span class="c1">#=&gt; &amp;ldquo;example2 method&amp;rdquo;&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">example2</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">assigned</span> <span class="n">value</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;example2 #=&gt; &amp;ldquo;assigned value&amp;rdquo;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Adding the method <code>example2=</code> does not change things. When we assign to a bareword, Ruby takes it as assignment to a local variable.</p>
+
+<h1>Example with a Class</h1>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>x &ndash; x.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Foo</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt; attr_accessor :bar&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span> <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>   <span class="vi">@bar</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span class='line'> <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt; def method1</span>
+</span><span class='line'><span class="sr">   puts bar</span>
+</span><span class='line'><span class="sr"> end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span> <span class="k">def</span> <span class="nf">method2</span>
+</span><span class='line'>   <span class="n">bar</span> <span class="o">=</span> <span class="mi">99</span>
+</span><span class='line'>   <span class="nb">puts</span> <span class="n">bar</span>
+</span><span class='line'> <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt; def method3</span>
+</span><span class='line'><span class="sr">   bar = 99</span>
+</span><span class='line'><span class="sr">   puts self.bar</span>
+</span><span class='line'><span class="sr"> end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;foo = Foo.new&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">foo</span><span class="o">.</span><span class="n">bar</span>  <span class="c1">#=&gt; 42</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">method1</span> <span class="c1">#=&gt; 42</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">method2</span> <span class="c1">#=&gt; 99</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">method3</span> <span class="c1">#=&gt; 42</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><code>method2</code> is the problem case. <code>bar</code> is assigned to, creating a local variable, so subsequent calls to <code>bar</code> return 99.
+<code>method3</code> disambiguates by explicitly calling the <code>bar</code> method on <code>self</code>.</p>
+
+<h1>The Cause</h1>
+
+<p>There are two things going on here:</p>
+
+<ol>
+<li>bareword assignment creates local variables,</li>
+<li>local variables mask methods of the same name.</li>
+</ol>
+
+
+<h1>Refactoring Might Break Code</h1>
+
+<p>One solution is to use <code>self.method</code> only in cases where local variables mask methods. The problem with this approach is that code may be altered, introducing local variables, and so altering the behaviour of following code:</p>
+
+<h2>Original Code</h2>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>x &ndash; x.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'> <span class="kp">attr_accessor</span> <span class="ss">:bar</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt; def baz</span>
+</span><span class='line'><span class="sr">   puts bar</span>
+</span><span class='line'><span class="sr"> end</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">foo</span> <span class="o">=</span> <span class="no">Foo</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">bar</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">baz</span> <span class="c1">#=&gt; 42</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>Modified Code</h2>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>x &ndash; x.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:bar</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  def baz&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">bar</span> <span class="o">=</span> <span class="mi">99</span> <span class="c1"># &amp;lt;= variable assignment introduced</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">bar</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;foo = Foo.new</span>
+</span><span class='line'><span class="sr">foo.bar = 42</span>
+</span><span class='line'><span class="sr">foo.baz #=&gt; 99</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h1>Solution</h1>
+
+<p>The best solution is to always call instance methods on <code>self</code>.</p>
+]]></content>
+  </entry>
+  
+</feed>

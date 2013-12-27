@@ -1,0 +1,783 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Object Representation in C++ - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="Member variables Each C++ object needs to hold its instance data. But, there is often not a perfect match between the sum of the byte sizes of the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://joeyates.github.io/2010/05/12/object-representation-in-c">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:joeyates.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Object Representation in C++</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-12T00:00:00+02:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>Member variables</h1>
+
+<p>Each C++ object needs to hold its instance data. But, there is often not a perfect match between the sum of the byte sizes of the member variables and the size of an object: The space occupied will often be greater than the sum of the sizes of the member variables.</p>
+
+<p>The reasons are:</p>
+
+<ul>
+<li>compiler-specific alignment issues: in order to speed up access, a few bytes can be wasted for each instance to ensure that all the members are aligned on a word boundary,</li>
+<li>the presence of a pointer to the virtual function table,</li>
+<li>empty classes.</li>
+</ul>
+
+
+
+
+<!--more-->
+
+
+<h2>An empty class</h2>
+
+<p>An empty class has no member variables, but does not occupy 0 bytes of memory. The ISO standard mandates that objects of any class must occupy at least one byte.</p>
+
+<p>To show this, I&rsquo;ll call the following code (see the end for the code used to dump objects):</p>
+
+<figure class='code'><figcaption><span>An Empty Class - empty_class.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">A</span> <span class="p">{};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">A</span> <span class="n">a</span><span class="p">;</span>
+</span><span class='line'><span class="n">dump_instance</span><span class="p">(</span><span class="s">&quot;An empty class:&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The output shows the memory location of the instance, its size end content:<br />
+GCC:<br /></p>
+
+<pre>
+An empty class:
+  bfd3dfdf -> instance (1 byte):
+    00
+</pre>
+
+
+<p>Visual C++:<br /></p>
+
+<pre>
+An empty class:
+  0012ff5f -> instance (1 byte):
+    00
+</pre>
+
+
+<p></p></p>
+
+<p>
+In both cases, the instance of the empty class occupies 1 byte. And, in both cases, the byte seems to have been initialized to 0.
+</p>
+
+
+<h1>Classes with member variables</h1>
+
+
+<p>
+Next, I&#8217;ll do the same for a non-empty class with a single <code>int</code> member variable.
+(I&#8217;ll initialize member variables to make the dumps easier to read.)
+</p>
+
+
+
+
+<figure class='code'><figcaption><span>One Member Variable - member_variable.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">B</span> <span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="n">B</span><span class="p">()</span><span class="o">:</span> <span class="n">i</span><span class="p">(</span><span class="mh">0xbbbbbbbb</span><span class="p">)</span> <span class="p">{};</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">B</span> <span class="n">b</span><span class="p">;</span>
+</span><span class='line'><span class="n">dump_instance</span><span class="p">(</span><span class="s">&quot;A class with an int member:&quot;</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The memory occupied is exactly the size of the member (4 bytes):<br />
+GCC:<br /></p>
+
+<pre>
+A class with an int member:
+  bfa25e08 -> instance (4 bytes):
+    bb bb bb bb 
+</pre>
+
+
+<p>Visual C++:<br /></p>
+
+<pre>
+A class with an int member:
+  0012ff64 -> instance (4 bytes):
+    bb bb bb bb 
+</pre>
+
+
+<p></p></p>
+
+<p>
+This case is the simplest of all. You get exactly what you expect: a four byte type occupying 4 bytes.
+</p>
+
+
+<h2>Word alignment</h2>
+
+
+<p>
+char, a single-byte-sized type, gets word-aligned both by GCC and Visual C++. Notice that three uninitilised bytes follow the byte containing 0xaa:
+</p>
+
+
+
+
+<figure class='code'><figcaption><span>Word Alignment - word-alignment.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">C</span> <span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="n">C</span><span class="p">()</span><span class="o">:</span> <span class="n">ch</span><span class="p">(</span><span class="mh">0xaa</span><span class="p">),</span> <span class="n">i</span><span class="p">(</span><span class="mh">0xbbbbbbbb</span><span class="p">)</span> <span class="p">{};</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">C</span> <span class="n">c</span><span class="p">;</span>
+</span><span class='line'><span class="n">dump_instance</span><span class="p">(</span><span class="s">&quot;A class with char and int members:&quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>GCC:<br /></p>
+
+<pre>
+A class with char and int members:
+  bfd3dfcc -> instance (8 bytes):
+    aa 5e a2 bf bb bb bb bb 
+</pre>
+
+
+<p>Visual C++:<br /></p>
+
+<pre>
+A class with char and int members:
+  0012ff68 -> instance (8 bytes):
+    aa 77 40 00 bb bb bb bb 
+</pre>
+
+
+<p></p></p>
+
+<p>
+Both implementations allocate 8 bytes, wasting 3 bytes after the char, in order to word align the int.
+</p>
+
+
+<p>
+The same is true if the char follows the int:
+</p>
+
+
+
+
+<figure class='code'><figcaption><span>Word Alignment - word-alignment.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">D</span> <span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="n">D</span><span class="p">()</span><span class="o">:</span> <span class="n">i</span><span class="p">(</span><span class="mh">0xbbbbbbbb</span><span class="p">),</span> <span class="n">ch</span><span class="p">(</span><span class="mh">0xaa</span><span class="p">)</span> <span class="p">{};</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">D</span> <span class="n">d</span><span class="p">;</span>
+</span><span class='line'><span class="n">dump_instance</span><span class="p">(</span><span class="s">&quot;A class with int and char members:&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>GCC:<br /></p>
+
+<pre>
+A class with int and char members:
+  bfd3dfc4 -> instance (8 bytes):
+    bb bb bb bb aa ad 04 08 
+</pre>
+
+
+<p>Visual C++:<br /></p>
+
+<pre>
+A class with int and char members:
+  0012ff70 -> instance (8 bytes):
+    bb bb bb bb aa bf 40 00 
+</pre>
+
+
+<p></p></p>
+
+<h1>
+    Member functions</h1>
+
+
+<p>
+    Beyond data, the compiler needs to be able to call the object&#39;s functions. Member functions are shared between all instances of a class and so are only stored in one place.
+In the case of non-virtual member functions, nothing needs to be included in the class to allow name resolution.
+</p>
+
+
+
+
+<figure class='code'><figcaption><span>Member Functions - member_functions.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">NonVirtual</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">f</span><span class="p">()</span> <span class="p">{}</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="n">NonVirtual</span> <span class="n">nv</span><span class="p">;</span>
+</span><span class='line'><span class="n">dump_instance</span><span class="p">(</span><span class="s">&quot;A class with a single member function:&quot;</span><span class="p">,</span> <span class="n">nv</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>GCC:<br /></p>
+
+<pre>
+A class with a single member function:
+  bfbdeb5e -> instance (1 byte):
+    53 
+</pre>
+
+
+<p>Visual C++:<br /></p>
+
+<pre>
+A class with a single member function:
+  0012ff5f -> instance (1 byte):
+    00 
+</pre>
+
+
+<p></p></p>
+
+<p>
+This example is similar to the empty class above: having no member variables, and no virtual member functions (below), the compiler is forced to waste one byte, to comply with the standard&#8217;s mandate of not having zero-sized classes. Visual C++ seems to initialize the byte.
+</p>
+
+
+<h2>
+    Virtual member functions</h2>
+
+
+<p>
+    Object derivation means that the list member functions callable on an object must be prepared by the compiler. If a base class implements a functions and it is not overridden by a derived class, the derived class must use the base class&#39;s implementation. But, if a derived class overrides, then it is that implementation that must be used.</p>
+
+
+<p>
+The mechanism that compilers use to achieve this is not mandated by the C++ standard, but most implementations use the concept of the &quot;virtual function table&quot;. For every class that has virtual members, a table is created which maps function names to their implementations.
+If a class has virtual functions, the compiler creates a unique vtbl for the class. This vtbl has pointers to the implementations of the member functions.
+Each instance holds a pointer (vptr) to its class&#8217;s vtbl.
+In the case of virtual inheritance, the derived class has a vtbl, which has a mix of pointers to member functions: those overridden in the derived class and those inherited.
+</p>
+
+
+<p>
+
+
+<figure class='code'><figcaption><span>Virtusl Member Functions - virtual_member_functions.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">E</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">virtual</span> <span class="kt">void</span> <span class="n">f</span><span class="p">()</span> <span class="p">{}</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">E</span> <span class="n">e</span><span class="p">;</span>
+</span><span class='line'><span class="n">dump_instance</span><span class="p">(</span><span class="s">&quot;A class with a virtual member function:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// We supply the number of virtual methods</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+GCC:<br />
+<pre>
+A class with a virtual member function:
+  bfd3dfd4 -> instance (4 bytes):
+    f8 aa 04 08 
+    vtbl (0804aaf8 - 0804aafb) 1 entry:
+      0804aaf8 -> fptr 0:
+        08048cec 
+        08048cec -> implementation (first 16 bytes):
+          55 89 e5 5d c3 90 55 89 e5 8b 45 08 c7 00 e8 aa 
+</pre>
+Visual C++:<br />
+<pre>
+A class with a virtual member function:
+  0012ff60 -> instance (4 bytes):
+    e4 50 41 00 
+    vtbl (004150e4 - 004150e7) 1 entry:
+      004150e4 -> fptr 0:
+        00405370 
+        00405370 -> implementation (first 16 bytes):
+          c3 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 
+</pre>
+</p>
+
+
+<p>
+This class&#8217;s instances occupy 4 bytes, which hold the pointer to the class&#8217;s virtual function table.
+</p>
+
+
+
+
+<figure class='code'><figcaption><span>Virtual Member Functions - virtual_member_functions.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">F</span> <span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="n">F</span><span class="p">()</span> <span class="o">:</span> <span class="n">fdata</span><span class="p">(</span><span class="mh">0xffffffff</span><span class="p">)</span> <span class="p">{};</span> <span class="c1">// Initialize with easy-to-spot data to make dumps clearer</span>
+</span><span class='line'>  <span class="k">virtual</span> <span class="kt">int</span> <span class="n">f</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">fdata</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">F1</span> <span class="o">:</span> <span class="n">F</span> <span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="n">F1</span><span class="p">()</span> <span class="o">:</span> <span class="n">f1data</span><span class="p">(</span><span class="mh">0xf1f1f1f1</span><span class="p">)</span> <span class="p">{};</span> <span class="c1">// Initialize with easy-to-spot data to make dumps clearer</span>
+</span><span class='line'>  <span class="k">virtual</span> <span class="kt">int</span> <span class="n">f</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="mh">0x33333333</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">f1data</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">F1</span> <span class="n">f1</span><span class="p">;</span>
+</span><span class='line'><span class="n">dump_instance</span><span class="p">(</span><span class="s">&quot;A subclass of an abstract class:&quot;</span><span class="p">,</span> <span class="n">f1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>GCC:<br /></p>
+
+<pre>
+A subclass of an abstract class:
+  bfd3dfb8 -> instance (12 bytes):
+    d8 aa 04 08 ff ff ff ff f1 f1 f1 f1 
+    vtbl (0804aad8 - 0804aadb) 1 entry:
+      0804aad8 -> fptr 0:
+        08048d30 
+        08048d30 -> implementation (first 16 bytes):
+          55 89 e5 b8 33 33 33 33 5d c3 55 89 e5 8b 45 08 
+</pre>
+
+
+<p>Visual C++:<br /></p>
+
+<pre>
+A subclass of an abstract class:
+  0012ff78 -> instance (12 bytes):
+    e0 50 41 00 ff ff ff ff f1 f1 f1 f1 
+    vtbl (004150e0 - 004150e3) 1 entry:
+      004150e0 -> fptr 0:
+        00401140 
+        00401140 -> implementation (first 16 bytes):
+          b8 33 33 33 33 c3 90 90 90 90 90 90 90 90 90 90 
+</pre>
+
+
+<p></p></p>
+
+<p>
+Both compilers place the vtbl at the start of the instance memory, so a pointer to the instance is a pointer to a pointer to the vtbl. The instance data follows, laid out in &#8220;class derivation order&#8221;.
+</p>
+
+
+<h1>Object dumping code</h1>
+
+
+<p>
+    The examples in this article are <a href="http://github.com/joeyates/c-plus-plus-study/tree/master/01_binary_layout/">available from Github</a>.</p>
+
+
+<p>The function <code>dump_instance()</code> prints the memory occupied by the object.</p>
+
+<figure class='code'><figcaption><span>Dump Object Internals - dump_instance.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">dump_instance</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">title</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">,</span> <span class="kt">int</span> <span class="n">virtuals</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">title</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">stringstream</span> <span class="n">sstr</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sstr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;instance (&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">object_size</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;):&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">dump_memory</span><span class="p">((</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">sstr</span><span class="p">.</span><span class="n">str</span><span class="p">().</span><span class="n">c_str</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">virtuals</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">dump_vtable</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">virtuals</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The rest of the code is handles printing blocks of memory, and the virtual function table:</p>
+
+<figure class='code'><figcaption><span>Helpers - dump_helpers.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="c1">// output formatting helper</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">indent</span><span class="p">(</span><span class="kt">int</span> <span class="n">depth</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">depth</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;  &quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">dump_memory</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">items</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">title</span><span class="p">,</span> <span class="kt">int</span> <span class="n">depth</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">indent</span><span class="p">(</span><span class="n">depth</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%08x -&gt; %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span> <span class="n">p</span><span class="p">,</span> <span class="n">title</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// Make a format string that prints hex with correct number of leading zeroes</span>
+</span><span class='line'>  <span class="n">stringstream</span> <span class="n">sstr</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sstr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;%0&quot;</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;x &quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">string</span> <span class="n">format</span> <span class="o">=</span> <span class="n">sstr</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
+</span><span class='line'>  <span class="n">indent</span><span class="p">(</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">const</span> <span class="n">T</span> <span class="o">*</span> <span class="n">end</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="n">items</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">*</span> <span class="n">chunk</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span> <span class="n">chunk</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">;</span> <span class="o">++</span><span class="n">chunk</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="n">format</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="o">*</span><span class="n">chunk</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Pretend all pointers are to int to reduce number of casts</span>
+</span><span class='line'><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">dump_vtable</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">,</span> <span class="kt">int</span> <span class="n">virtuals</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// In memory, the first bytes of the instance are occupied by the vtable</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="o">*</span> <span class="n">vtbl</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">vtable_size</span> <span class="o">=</span> <span class="n">virtuals</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">indent</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;vtbl (%08x - %08x)&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">vtbl</span><span class="p">,</span> <span class="o">*</span><span class="n">vtbl</span> <span class="o">+</span> <span class="n">vtable_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot; %d entr%s:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">virtuals</span><span class="p">,</span> <span class="p">((</span><span class="n">virtuals</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="s">&quot;y&quot;</span> <span class="o">:</span> <span class="s">&quot;ies&quot;</span><span class="p">));</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">virtuals</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span> <span class="n">fptr</span> <span class="o">=</span> <span class="p">((</span><span class="kt">int</span> <span class="o">**</span><span class="p">)</span> <span class="n">vtbl</span><span class="p">)[</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">stringstream</span> <span class="n">sstr</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">sstr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;fptr &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">dump_memory</span><span class="p">(</span><span class="n">fptr</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sstr</span><span class="p">.</span><span class="n">str</span><span class="p">().</span><span class="n">c_str</span><span class="p">(),</span> <span class="mi">3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">dump_memory</span><span class="p">((</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="o">*</span><span class="n">fptr</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s">&quot;implementation (first 16 bytes):&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="n">string</span> <span class="n">object_size</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">stringstream</span> <span class="n">sstr</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sstr</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; byte&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">sstr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;s&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">sstr</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Notes</h1>
+
+<p>The text assumes a 32-bit, little-endian  machine.</p>
+
+<p>References:</p>
+
+<ul>
+<li>http://www2.research.att.com/~bs/bs_faq2.html#layout-obj</li>
+<li>http://www2.research.att.com/~bs/bs_faq2.html#sizeof-empty</li>
+<li>http://www.cprogramming.com/tutorial/size_of_class_object.html</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-12T00:00:00+02:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://joeyates.github.io/2010/05/12/object-representation-in-c/" data-via="" data-counturl="http://joeyates.github.io/2010/05/12/object-representation-in-c/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2010/05/08/cuil-fail/" title="Previous Post: Cuil Fail">&laquo; Cuil Fail</a>
+      
+      
+        <a class="basic-alignment right" href="/2010/05/26/googletest-hello-world/" title="Next Post: googletest Hello World">googletest Hello World &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/12/23/my-everyday-find-command/">My Everyday Find Command</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/">Ruby Bareword Assignment and Method Calls With Implicit Self</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/07/18/html-history-api/">HTML History API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes/">Overriding the Insertion Operator for C++ Template Classes</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/02/19/hello-gosu/">Hello Gosu!</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

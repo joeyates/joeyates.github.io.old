@@ -1,0 +1,545 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>A Beginner's Sinatra Tutorial - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="In the olden days your first program was probably in BASIC and was run from the command line, nowadays the equivalent is Web programming. Using &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://joeyates.github.io/2010/04/07/a-beginners-sinatra-tutorial">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:joeyates.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">A Beginner's Sinatra Tutorial</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-07T00:00:00+02:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>In the olden days your first program was probably in BASIC and was run from the command line, nowadays the equivalent is Web programming.</p>
+
+<p>Using Sinatra reminds me of my first programming experiences &ndash; you write a tiny bit of code, with no boilerplate and get to see a result.</p>
+
+<!--more-->
+
+
+<p>What follows owes a lot to the <a href="http://www.sinatrarb.com/intro.html">Sinatra README</a>.</p>
+
+<h1>Installation</h1>
+
+<p>On Linux, you&rsquo;ll need Ruby and Rubygems installed (if not you should find installation instructions easily enough via a Web search).</p>
+
+<p>Apart from Ruby, you&rsquo;ll need to use a text editor (e.g. GEdit) a Web browser and the Terminal (normally found in the Applications menu under Accessories).</p>
+
+<p>Next install Sinatra:</p>
+
+<pre><code>$ gem install sinatra
+</code></pre>
+
+<h1>1. Hello World!</h1>
+
+<figure class='code'><figcaption><span>A Minimal Sinatra App - minimal.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s1">&#39;1.9&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">get</span> <span class="s1">&#39;/&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="s1">&#39;Minimal Sinatra Hello World!&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, open a Terminal window and type:</p>
+
+<pre><code>ruby minimal.rb
+</code></pre>
+
+<p>Finally, go to this address: <a href="http://127.0.0.1:4567/"><a href="http://127.0.0.1:4567/">http://127.0.0.1:4567/</a></a></p>
+
+<p>To stop the program, go to the Terminal window and press Ctrl+C</p>
+
+<h3>2. Adding Structure: Sinatra::Base</h3>
+
+<p>It&rsquo;s useful to structure the program as a class.</p>
+
+<figure class='code'><figcaption><span>Sinatra::Base - sinatra_base.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s2">&quot;1.9&quot;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="s1">&#39;Hello World!&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">MyApp</span><span class="o">.</span><span class="n">run!</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Run it:</p>
+
+<pre><code>ruby sinatra_base.rb
+</code></pre>
+
+<h3>3. Structure: A Separate App File</h3>
+
+<p>Create two files:</p>
+
+<figure class='code'><figcaption><span>Application - my_app.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s2">&quot;1.9&quot;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="s1">&#39;Hello World from MyApp in separate file!&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Launcher - run_my_app.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;my_app&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">MyApp</span><span class="o">.</span><span class="n">run!</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Run it:</p>
+
+<pre><code>$ ruby run_my_app.rb
+</code></pre>
+
+<h1>4. Rackup</h1>
+
+<p>Instead of writing a script to start the app, we can use Rackup to launch the same script:</p>
+
+<p>Create a file &lsquo;config.ru&rsquo;:</p>
+
+<pre><code>require 'my_app'
+
+run MyApp.new
+</code></pre>
+
+<p>Run it:</p>
+
+<pre><code>rackup config.ru
+</code></pre>
+
+<p>This time the application is visible at <a href="http://127.0.0.1:9292"><a href="http://127.0.0.1:9292">http://127.0.0.1:9292</a></a></p>
+
+<p>If we want it to have the same address as before, we can run it like this:</p>
+
+<pre><code>rackup config.ru --port=4567
+</code></pre>
+
+<h3>5. Static Files</h3>
+
+<p>A Web application will often have dynamic content (what we&rsquo;ve created so far) and static content (e.g. images).</p>
+
+<p>Create a directory &lsquo;static&rsquo;, and create a file called index.html in containing:</p>
+
+<p>This is a static file.</p>
+
+<figure class='code'><figcaption><span>Static Files - my_app.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s2">&quot;1.9&quot;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">set</span> <span class="ss">:static</span><span class="p">,</span> <span class="kp">true</span>
+</span><span class='line'>  <span class="n">set</span> <span class="ss">:public</span><span class="p">,</span> <span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/static&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, if you run rackup, and go to <a href="http://127.0.0.1:4567/index.html"><a href="http://127.0.0.1:4567/index.html">http://127.0.0.1:4567/index.html</a></a> you will see the content.</p>
+
+<h1>6. Routes</h1>
+
+<figure class='code'><figcaption><span>English - static/routes.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;ul&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;named_via_params/foo&quot;</span><span class="nt">&gt;</span>Named parameters via params Hash<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;named_via_block_parameter/foo&quot;</span><span class="nt">&gt;</span>Named parameters via block parameters<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;splat/foo/bar/baz&quot;</span><span class="nt">&gt;</span>Multiple parameters via params[:splat]<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;splat_extension/myfile.txt&quot;</span><span class="nt">&gt;</span>Filename via params[:splat]<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;regexp_params_captures/foobar&quot;</span><span class="nt">&gt;</span>Using regular expression via params[:captures]<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;regexp_captures_via_block_parameter/foobar&quot;</span><span class="nt">&gt;</span>Using regular expression via block parameters<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'><span class="nt">&lt;/ul&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>English - route_examples.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s2">&quot;1.9&quot;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">set</span> <span class="ss">:static</span><span class="p">,</span> <span class="kp">true</span>
+</span><span class='line'>  <span class="n">set</span> <span class="ss">:public</span><span class="p">,</span> <span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/public&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/named_via_params/:argument&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="s2">&quot;</span>
+</span><span class='line'><span class="s2">Using: &#39;/named_via_params/:argument&#39;&lt;br/&gt;</span>
+</span><span class='line'><span class="s2">params[:argument] -&gt; </span><span class="si">#{</span><span class="n">params</span><span class="o">[</span><span class="ss">:argument</span><span class="o">]</span><span class="si">}</span><span class="s2"> (Try changing it)</span>
+</span><span class='line'><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/named_via_block_parameter/:argument&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">argument</span><span class="o">|</span>
+</span><span class='line'>    <span class="s2">&quot;</span>
+</span><span class='line'><span class="s2">Using: &#39;/named_via_block_parameter/:argument&#39;&lt;br/&gt;</span>
+</span><span class='line'><span class="s2">argument -&gt; </span><span class="si">#{</span><span class="n">argument</span><span class="si">}</span><span class="s2"></span>
+</span><span class='line'><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/splat/*/bar/*&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="s2">&quot;</span>
+</span><span class='line'><span class="s2">Using: &#39;/splat/*/bar/*&#39;&lt;br/&gt;</span>
+</span><span class='line'><span class="s2">params[:splat] -&gt; </span><span class="si">#{</span><span class="n">params</span><span class="o">[</span><span class="ss">:splat</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
+</span><span class='line'><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/splat_extension/*.*&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="s2">&quot;</span>
+</span><span class='line'><span class="s2">Using: &#39;/splat_extension/*.*&#39;&lt;br/&gt;</span>
+</span><span class='line'><span class="s2">filename -&gt; </span><span class="si">#{</span><span class="n">params</span><span class="o">[</span><span class="ss">:splat</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span><span class="si">}</span><span class="s2">&lt;br/&gt;</span>
+</span><span class='line'><span class="s2">extension -&gt; </span><span class="si">#{</span><span class="n">params</span><span class="o">[</span><span class="ss">:splat</span><span class="o">][</span><span class="mi">1</span><span class="o">]</span><span class="si">}</span><span class="s2"></span>
+</span><span class='line'><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span> <span class="sr">%r{/regexp_params_captures/([\w]+)}</span> <span class="k">do</span>
+</span><span class='line'>    <span class="s2">&quot;params[:captures].first -&gt; &#39;</span><span class="si">#{</span><span class="n">params</span><span class="o">[</span><span class="ss">:captures</span><span class="o">].</span><span class="n">first</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span> <span class="sr">%r{/regexp_captures_via_block_parameter/([\w]+)}</span> <span class="k">do</span> <span class="o">|</span><span class="n">c</span><span class="o">|</span>
+</span><span class='line'>    <span class="s2">&quot;c -&gt; &#39;</span><span class="si">#{</span><span class="n">c</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Go to <a href="http://127.0.0.1:4567/routes.html"><a href="http://127.0.0.1:4567/routes.html">http://127.0.0.1:4567/routes.html</a></a></p>
+
+<p>You will see a list of links which exemplify different types of route matching.</p>
+
+<h1>7. Templates</h1>
+
+<p>Create a &lsquo;views&rsquo; directory.</p>
+
+<figure class='code'><figcaption><span>The template - views/index.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">This is </span><span class="cp">&lt;%=</span> <span class="vi">@foo</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Templates - templates.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s2">&quot;1.9&quot;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;erb&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/template&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="vi">@foo</span> <span class="o">=</span> <span class="s1">&#39;erb&#39;</span>
+</span><span class='line'>    <span class="n">erb</span> <span class="ss">:index</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You should get the following on <a href="http://localhost:4567/template"><a href="http://localhost:4567/template">http://localhost:4567/template</a></a>:<br /></p>
+
+<p><img src="/images/sinatra-erb-template.png" title="Sinatra ERB Template" ></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-07T00:00:00+02:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://joeyates.github.io/2010/04/07/a-beginners-sinatra-tutorial/" data-via="" data-counturl="http://joeyates.github.io/2010/04/07/a-beginners-sinatra-tutorial/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2010/04/04/a-rails-programmers-first-django-application/" title="Previous Post: A Rails Programmer's First Django Application">&laquo; A Rails Programmer's First Django Application</a>
+      
+      
+        <a class="basic-alignment right" href="/2010/05/08/cuil-fail/" title="Next Post: Cuil Fail">Cuil Fail &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/12/23/my-everyday-find-command/">My Everyday Find Command</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/">Ruby Bareword Assignment and Method Calls With Implicit Self</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/07/18/html-history-api/">HTML History API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes/">Overriding the Insertion Operator for C++ Template Classes</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/02/19/hello-gosu/">Hello Gosu!</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

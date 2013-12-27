@@ -1,0 +1,3265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[My Octopress Blog]]></title>
+  <link href="http://joeyates.github.io/atom.xml" rel="self"/>
+  <link href="http://joeyates.github.io/"/>
+  <updated>2013-12-27T18:59:44+01:00</updated>
+  <id>http://joeyates.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[My Everyday Find Command]]></title>
+    <link href="http://joeyates.github.io/2012/12/23/my-everyday-find-command/"/>
+    <updated>2012-12-23T14:08:00+01:00</updated>
+    <id>http://joeyates.github.io/2012/12/23/my-everyday-find-command</id>
+    <content type="html"><![CDATA[<p>When I&rsquo;m searching for files, I use this function:</p>
+
+<script src="https://gist.github.com/4363381.js"></script>
+
+
+<p>It searches for files and directories with partial matches of the first parameter:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ f 26
+</span><span class='line'>./db/migrate/20121003094826_add_foo_to_bar.rb</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If I supply a second parameter, it is taken as the directory to search in:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ f 26 ..
+</span><span class='line'>../api/db/migrate/20121003094826_add_foo_to_bar.rb
+</span><span class='line'>../redmine/db/migrate/20091017212644_add_missing_indexes_to_messages.rb</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby Bareword Assignment and Method Calls With Implicit Self]]></title>
+    <link href="http://joeyates.github.io/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/"/>
+    <updated>2012-01-16T18:52:00+01:00</updated>
+    <id>http://joeyates.github.io/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self</id>
+    <content type="html"><![CDATA[<h1>Problem</h1>
+
+<p>If I do this:</p>
+
+<figure class='code'><figcaption><span>Problem - problem.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">puts</span> <span class="n">foo</span>
+</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="mi">3</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>there is always the doubt whether I&rsquo;m accessing a local variable, or calling methods <code>foo</code> and <code>foo=</code>.</p>
+
+<h1>TL;DR</h1>
+
+<p>When you want to call an instance&rsquo;s own methods, use <code>self</code>:</p>
+
+<figure class='code'><figcaption><span>TL;DR - tldr.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">self</span><span class="o">.</span><span class="n">foo</span>             <span class="c1"># Calls foo</span>
+</span><span class='line'><span class="nb">self</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>     <span class="c1"># Calls foo=</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!--more-->
+
+
+<h1>Example 1</h1>
+
+<figure class='code'><figcaption><span>Example 1 - example_1.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">def</span> <span class="nf">example1</span>
+</span><span class='line'> <span class="s1">&#39;example1 method&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">example1</span> <span class="c1">#=&gt; &quot;example1 method&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">example1</span> <span class="o">=</span> <span class="s1">&#39;assigned value&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">example1</span> <span class="c1">#=&gt; &quot;assigned value&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here, we define a method, and then make an assignment. As we assign to a bareword, Ruby creates a new local variable.</p>
+
+<p>As soon as a value is assigned to the local variable, the method no longer gets called.</p>
+
+<h1>Example 2</h1>
+
+<p>But, what if we also have an assignment method?</p>
+
+<figure class='code'><figcaption><span>Example 2 - example_2.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">def</span> <span class="nf">example2</span>
+</span><span class='line'> <span class="s1">&#39;example2 method&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">example2</span><span class="o">=</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</span><span class='line'> <span class="nb">puts</span> <span class="s2">&quot;example2= called&quot;</span> <span class="c1"># (this never gets called)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">example2</span> <span class="c1">#=&gt; &quot;example2 method&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">example2</span> <span class="o">=</span> <span class="s1">&#39;assigned value&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">example2</span> <span class="c1">#=&gt; &quot;assigned value&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Adding the method <code>example2=</code> does not change things. When we assign to a bareword, Ruby takes it as assignment to a local variable.</p>
+
+<h1>Example with a Class</h1>
+
+<figure class='code'><figcaption><span>x - x.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>
+</span><span class='line'> <span class="kp">attr_accessor</span> <span class="ss">:bar</span>
+</span><span class='line'>
+</span><span class='line'> <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>   <span class="vi">@bar</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span class='line'> <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'> <span class="k">def</span> <span class="nf">method1</span>
+</span><span class='line'>   <span class="nb">puts</span> <span class="n">bar</span>
+</span><span class='line'> <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'> <span class="k">def</span> <span class="nf">method2</span>
+</span><span class='line'>   <span class="n">bar</span> <span class="o">=</span> <span class="mi">99</span>
+</span><span class='line'>   <span class="nb">puts</span> <span class="n">bar</span>
+</span><span class='line'> <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'> <span class="k">def</span> <span class="nf">method3</span>
+</span><span class='line'>   <span class="n">bar</span> <span class="o">=</span> <span class="mi">99</span>
+</span><span class='line'>   <span class="nb">puts</span> <span class="nb">self</span><span class="o">.</span><span class="n">bar</span>
+</span><span class='line'> <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="no">Foo</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">bar</span>  <span class="c1">#=&gt; 42</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">method1</span> <span class="c1">#=&gt; 42</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">method2</span> <span class="c1">#=&gt; 99</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">method3</span> <span class="c1">#=&gt; 42</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>method2</code> is the problem case. <code>bar</code> is assigned to, creating a local variable, so subsequent calls to <code>bar</code> return 99.
+<code>method3</code> disambiguates by explicitly calling the <code>bar</code> method on <code>self</code>.</p>
+
+<h1>The Cause</h1>
+
+<p>There are two things going on here:</p>
+
+<ol>
+<li>bareword assignment creates local variables,</li>
+<li>local variables mask methods of the same name.</li>
+</ol>
+
+
+<h1>Refactoring Might Break Code</h1>
+
+<p>One solution is to use <code>self.method</code> only in cases where local variables mask methods. The problem with this approach is that code may be altered, introducing local variables, and so altering the behaviour of following code:</p>
+
+<h2>Original Code</h2>
+
+<figure class='code'><figcaption><span>x - x.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'> <span class="kp">attr_accessor</span> <span class="ss">:bar</span>
+</span><span class='line'>
+</span><span class='line'> <span class="k">def</span> <span class="nf">baz</span>
+</span><span class='line'>   <span class="nb">puts</span> <span class="n">bar</span>
+</span><span class='line'> <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="no">Foo</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">bar</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">baz</span> <span class="c1">#=&gt; 42</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Modified Code</h2>
+
+<figure class='code'><figcaption><span>x - x.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:bar</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">baz</span>
+</span><span class='line'>    <span class="n">bar</span> <span class="o">=</span> <span class="mi">99</span> <span class="c1"># &lt;= variable assignment introduced</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="n">bar</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="no">Foo</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">bar</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">baz</span> <span class="c1">#=&gt; 99</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Solution</h1>
+
+<p>The best solution is to always call instance methods on <code>self</code>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HTML History API]]></title>
+    <link href="http://joeyates.github.io/2011/07/18/html-history-api/"/>
+    <updated>2011-07-18T00:00:00+02:00</updated>
+    <id>http://joeyates.github.io/2011/07/18/html-history-api</id>
+    <content type="html"><![CDATA[<p><img src="http://joeyates.github.io/images/html5-history-api.png" title="The Example App" ></p>
+
+<p>
+The HTML5 history API allows AJAX-based sites to avoid &#8220;breaking the back button&#8221;. Every time you update the page, you store the new content is the window.history object. When the user presses the back button, you retrieve the current item from window.history and update the page with it.
+</p>
+
+
+
+
+<!--more-->
+
+
+
+
+<p>
+What follows is an &#8220;all-in-one page&#8221; Sinatra/jQuery program. You can find the code <a href="https://gist.github.com/1090336">here</a>.
+</p>
+
+
+<p>Run it like this:</p>
+
+<figure class='code'><figcaption><span>run the program - run.sh </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>  <span class="nv">$ </span>ruby history_api.rb
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The program allows you to browse back and forwards through numbered pages.</p>
+
+<p>When the first page is shown, the initial content of the container is stored in the history object:</p>
+
+<figure class='code'><figcaption><span>Replace State - replace_state.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">history</span><span class="p">.</span><span class="nx">replaceState</span><span class="p">(</span> <span class="nx">$</span><span class="p">(</span> <span class="s1">&#39;#container&#39;</span> <span class="p">).</span><span class="nx">html</span><span class="p">(),</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you select links, only the content of the &lsquo;container&rsquo; DIV gets updated. An AJAX call is made to get the content, which is stored in the history object:</p>
+
+<figure class='code'><figcaption><span>onClick Callback - on_click.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'>   <span class="kd">var</span> <span class="nx">anchor</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">href</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">data</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">history</span><span class="p">.</span><span class="nx">pushState</span><span class="p">(</span> <span class="nx">data</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">anchor</span><span class="p">.</span><span class="nx">href</span> <span class="p">);</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">(</span> <span class="s1">&#39;#container&#39;</span> <span class="p">).</span><span class="nx">html</span><span class="p">(</span> <span class="nx">data</span> <span class="p">);</span>
+</span><span class='line'>      <span class="nx">updateLinks</span><span class="p">(</span> <span class="nx">anchor</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span> <span class="s1">&#39;data-number&#39;</span> <span class="p">)</span> <span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span> <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Each time the back button is pressed, the content is retrieved and placed in the container:</p>
+
+<figure class='code'><figcaption><span>onpopstate - onpopstate.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">onpopstate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">event</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span> <span class="s1">&#39;#container&#39;</span> <span class="p">).</span><span class="nx">html</span><span class="p">(</span> <span class="nx">event</span><span class="p">.</span><span class="nx">state</span> <span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>
+Notice that pressing the forward and back buttons updates the page correctly without needing to call the server.
+</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Overriding the Insertion Operator for C++ Template Classes]]></title>
+    <link href="http://joeyates.github.io/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes/"/>
+    <updated>2011-03-06T00:00:00+01:00</updated>
+    <id>http://joeyates.github.io/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes</id>
+    <content type="html"><![CDATA[
+
+<figure class='code'><figcaption><span>Dump an Active Record object to Standard Out - dump_active_record_object.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">Person</span> <span class="n">person</span><span class="p">(</span> <span class="mi">123</span> <span class="p">);</span>
+</span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">person</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>While working on my <a href="https://github.com/joeyates/cpp-active-record/">C++ ActiveRecord implementation</a>, I had a few problems implementing the insertion operator for the main ActiveRecord::Base class.</p>
+
+<p>The class ActiveRecord::Base class is a template class, and the problem was how to correctly declare the operator.</p>
+
+<p>At the time I was unable to find examples on the Internet, so I thought I&rsquo;d provide my own.</p>
+
+<!--more-->
+
+
+<h1>The Insertion Operator</h1>
+
+<p>By &ldquo;insertion operator&rdquo; I mean</p>
+
+<figure class='code'><figcaption><span>Insertion Operator - insertion_operator.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span> <span class="n">ostream</span> <span class="o">&amp;</span><span class="n">out_stream</span><span class="p">,</span> <span class="k">const</span> <span class="n">C</span><span class="o">&amp;</span> <span class="n">c</span> <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is a global function that can called like this:</p>
+
+<figure class='code'><figcaption><span>Calling the Insertion Operator - calling_insertion_operator.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">c</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This operator allows you to output a string representation of your classes, which is very handy for debugging:</p>
+
+<figure class='code'><figcaption><span>Dumping Objects - dump_object.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">C</span> <span class="n">c</span><span class="p">;</span>
+</span><span class='line'><span class="n">c</span><span class="p">.</span><span class="n">do_stuff</span><span class="p">();</span>
+</span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">c</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>The Example</h1>
+
+<h2>A Class</h2>
+
+<p>Here&rsquo;s an example class which (rather reduntantly) wraps an STL std::list:</p>
+
+<figure class='code'><figcaption><span>MyList - my_list.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;list&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span> <span class="o">&lt;</span> <span class="k">class</span> <span class="nc">T</span> <span class="o">&gt;</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyList</span> <span class="p">{</span>
+</span><span class='line'> <span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="n">MyList</span><span class="p">()</span> <span class="p">{};</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">add</span><span class="p">(</span> <span class="n">T</span> <span class="n">item</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">data_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span> <span class="n">item</span> <span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">length</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">data_</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'> <span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="n">list</span><span class="o">&lt;</span> <span class="n">T</span> <span class="o">&gt;</span> <span class="n">data_</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Serialization</h2>
+
+<p>While debugging and testing, it would be handy to be able to output a string representation of an instance of this class.</p>
+
+<figure class='code'><figcaption><span>Using MyList - using_my_list.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">MyList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ints</span><span class="p">;</span>
+</span><span class='line'><span class="n">ints</span><span class="p">.</span><span class="n">add</span><span class="p">(</span> <span class="mi">42</span> <span class="p">);</span>
+</span><span class='line'><span class="n">ints</span><span class="p">.</span><span class="n">add</span><span class="p">(</span> <span class="mi">13</span> <span class="p">);</span>
+</span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ints</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Which should work like this:</p>
+
+<pre><code>$ ./my_list
+2 items:
+  42
+  13
+</code></pre>
+
+<h2>Implementation</h2>
+
+<p>Here&rsquo;s an implementation that just outputs the number of items:</p>
+
+<figure class='code'><figcaption><span>Insertion Operator for MyList - my_list_insertion_operator.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">template</span><span class="o">&lt;</span> <span class="k">class</span> <span class="nc">T</span> <span class="o">&gt;</span>
+</span><span class='line'><span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span> <span class="n">ostream</span> <span class="o">&amp;</span><span class="n">out_stream</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyList</span><span class="o">&lt;</span> <span class="n">T</span> <span class="o">&gt;&amp;</span> <span class="n">a_list</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">out_stream</span> <span class="o">&lt;&lt;</span> <span class="n">a_list</span><span class="p">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; items:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">out_stream</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, we want the operator to iterate over the list&lt;T&gt; member and output its values.</p>
+
+<p>The main sticking point for me here was the declaration of the iterator. The following is not sufficient:</p>
+
+<figure class='code'><figcaption><span>Incorrect MyList Iteration 1 - my_list_iteration1.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="k">for</span><span class="p">(</span> <span class="n">list</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">const_iterator</span> <span class="n">it</span> <span class="o">=</span> <span class="n">a_list</span><span class="p">.</span><span class="n">data_</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">it</span> <span class="o">!=</span> <span class="n">a_list</span><span class="p">.</span><span class="n">data_</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and produces this error message (with gcc):</p>
+
+<pre><code>to_ostream.cpp: In function 'std::ostream&amp; operator&lt;&lt;(std::ostream&amp;, const MyList&lt;T&gt;&amp;)':
+to_ostream.cpp:7: error: expected `;' before 'it'
+to_ostream.cpp:7: error: 'it' was not declared in this scope
+</code></pre>
+
+<p>What&rsquo;s missing is the <code>typename</code> keyword to tell the compiler that we&rsquo;re instantiating an iterator:</p>
+
+<figure class='code'><figcaption><span>MyList Iteration - my_list_iteration.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="k">for</span><span class="p">(</span> <span class="k">typename</span> <span class="n">list</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">const_iterator</span> <span class="n">it</span> <span class="o">=</span> <span class="n">a_list</span><span class="p">.</span><span class="n">data_</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">it</span> <span class="o">!=</span> <span class="n">a_list</span><span class="p">.</span><span class="n">data_</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here&rsquo;s the final implementation:</p>
+
+<figure class='code'><figcaption><span>MyList Insertion Operator - my_list_insertion_operator.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">template</span><span class="o">&lt;</span> <span class="k">class</span> <span class="nc">T</span> <span class="o">&gt;</span>
+</span><span class='line'><span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span> <span class="n">ostream</span> <span class="o">&amp;</span><span class="n">out_stream</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyList</span><span class="o">&lt;</span> <span class="n">T</span> <span class="o">&gt;&amp;</span> <span class="n">a_list</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">out_stream</span> <span class="o">&lt;&lt;</span> <span class="n">a_list</span><span class="p">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; items:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span> <span class="k">typename</span> <span class="n">list</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">const_iterator</span> <span class="n">it</span> <span class="o">=</span> <span class="n">a_list</span><span class="p">.</span><span class="n">data_</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">it</span> <span class="o">!=</span> <span class="n">a_list</span><span class="p">.</span><span class="n">data_</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">out_stream</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">it</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">out_stream</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The function also has to access the private <code>data_</code> member, which entails declaring it as a <code>friend</code>:</p>
+
+<figure class='code'><figcaption><span>Making the Insertion Operator a Friend - insertion_operator_friend.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">template</span> <span class="o">&lt;</span> <span class="k">class</span> <span class="nc">T</span> <span class="o">&gt;</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyList</span> <span class="p">{</span>
+</span><span class='line'> <span class="k">template</span><span class="o">&lt;</span> <span class="k">class</span> <span class="nc">T1</span> <span class="o">&gt;</span>
+</span><span class='line'> <span class="k">friend</span> <span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span> <span class="n">ostream</span> <span class="o">&amp;</span><span class="n">out_stream</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyList</span><span class="o">&lt;</span> <span class="n">T1</span> <span class="o">&gt;&amp;</span> <span class="n">a_list</span> <span class="p">);</span>
+</span><span class='line'> <span class="p">...</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here&rsquo;s the whole class with the operator:</p>
+
+<figure class='code'><figcaption><span>MyList - my_list.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;list&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span> <span class="o">&lt;</span> <span class="k">class</span> <span class="nc">T</span> <span class="o">&gt;</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyList</span> <span class="p">{</span>
+</span><span class='line'> <span class="k">template</span><span class="o">&lt;</span> <span class="k">class</span> <span class="nc">T1</span> <span class="o">&gt;</span>
+</span><span class='line'> <span class="k">friend</span> <span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span> <span class="n">ostream</span> <span class="o">&amp;</span><span class="n">out_stream</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyList</span><span class="o">&lt;</span> <span class="n">T1</span> <span class="o">&gt;&amp;</span> <span class="n">a_list</span> <span class="p">);</span>
+</span><span class='line'> <span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">add</span><span class="p">(</span> <span class="n">T</span> <span class="n">item</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">data_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span> <span class="n">item</span> <span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">length</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">data_</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'> <span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="n">list</span><span class="o">&lt;</span> <span class="n">T</span> <span class="o">&gt;</span> <span class="n">data_</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span><span class="o">&lt;</span> <span class="k">class</span> <span class="nc">T</span> <span class="o">&gt;</span>
+</span><span class='line'><span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span> <span class="n">ostream</span> <span class="o">&amp;</span><span class="n">out_stream</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyList</span><span class="o">&lt;</span> <span class="n">T</span> <span class="o">&gt;&amp;</span> <span class="n">a_list</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">out_stream</span> <span class="o">&lt;&lt;</span> <span class="n">a_list</span><span class="p">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; items:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span> <span class="k">typename</span> <span class="n">list</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">const_iterator</span> <span class="n">it</span> <span class="o">=</span> <span class="n">a_list</span><span class="p">.</span><span class="n">data_</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">it</span> <span class="o">!=</span> <span class="n">a_list</span><span class="p">.</span><span class="n">data_</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">out_stream</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">it</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">out_stream</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And here&rsquo;s an example of it&rsquo;s use:</p>
+
+<figure class='code'><figcaption><span>Using MyList - using_my_list.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;string&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="n">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">MyList</span><span class="o">&lt;</span> <span class="kt">int</span> <span class="o">&gt;</span> <span class="n">my_ints</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">my_ints</span><span class="p">.</span><span class="n">add</span><span class="p">(</span> <span class="mi">1</span> <span class="p">);</span>
+</span><span class='line'>  <span class="n">my_ints</span><span class="p">.</span><span class="n">add</span><span class="p">(</span> <span class="mi">2</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;myints&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">my_ints</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">MyList</span><span class="o">&lt;</span> <span class="n">string</span> <span class="o">&gt;</span> <span class="n">my_strings</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">my_strings</span><span class="p">.</span><span class="n">add</span><span class="p">(</span> <span class="s">&quot;hello&quot;</span> <span class="p">);</span>
+</span><span class='line'>  <span class="n">my_strings</span><span class="p">.</span><span class="n">add</span><span class="p">(</span> <span class="s">&quot;world&quot;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;mystrings&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">my_strings</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The output:</p>
+
+<pre><code>$ ./to_ostream 
+myints
+2 items:
+        1
+        2
+
+mystrings
+2 items:
+        hello
+        world
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hello Gosu!]]></title>
+    <link href="http://joeyates.github.io/2011/02/19/hello-gosu/"/>
+    <updated>2011-02-19T00:00:00+01:00</updated>
+    <id>http://joeyates.github.io/2011/02/19/hello-gosu</id>
+    <content type="html"><![CDATA[<p><img src="http://joeyates.github.io/images/hello_gosu.png" title="Hello Gosu!" ></p>
+
+<p>I&rsquo;m trying out <a href="http://www.libgosu.org/">Gosu</a>, which is a 2D game library written in C++ with Ruby bindings (<a href="https://secure.wikimedia.org/wikipedia/en/wiki/Gosu_%28library%29">Wikipedia article</a>).</p>
+
+<!--more-->
+
+
+<p>The <a href="http://www.libgosu.org/rdoc/files/README_txt.html">Ruby documentation</a> is sparse but sufficient.</p>
+
+<p>The gem is easy to install:</p>
+
+<pre><code>$ gem install gosu
+</code></pre>
+
+<p>A &lsquo;Hello World!&rsquo; app requires about 20 lines of code:<br /></p>
+
+<figure class='code'><figcaption><span>Hello World in Gosu - hello_world.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;gosu&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">HelloWindow</span> <span class="o">&lt;</span> <span class="ss">Gosu</span><span class="p">:</span><span class="ss">:Window</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="k">super</span><span class="p">(</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="kp">false</span> <span class="p">)</span>
+</span><span class='line'>    <span class="vi">@background_image</span> <span class="o">=</span> <span class="ss">Gosu</span><span class="p">:</span><span class="ss">:Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span> <span class="nb">self</span><span class="p">,</span> <span class="s1">&#39;hello_world.png&#39;</span> <span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">draw</span>
+</span><span class='line'>    <span class="vi">@background_image</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">button_down</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">close</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">HelloWindow</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">show</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Run it like this:</p>
+
+<pre><code>$ ruby hello_gosu.rb
+</code></pre>
+
+<p>The program creates the window shown at the start of this article.</p>
+
+<p>The complete code is in a <a href="https://github.com/joeyates/hello_gosu">GitHub repository</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Use 'G' as an Alias for 'Git' Without Losing Autocompletion]]></title>
+    <link href="http://joeyates.github.io/2010/08/29/use-g-as-an-alias-for-git-without-losing-autocompletion/"/>
+    <updated>2010-08-29T00:00:00+02:00</updated>
+    <id>http://joeyates.github.io/2010/08/29/use-g-as-an-alias-for-git-without-losing-autocompletion</id>
+    <content type="html"><![CDATA[<p>
+I&#8217;ve just started using a new kind of abbreviation system for Git:
+<ul>
+	<li>I use &#8216;g&#8217; instead of &#8216;git&#8217;,</li>
+	<li>I&#8217;ve set up bash autocompletion for &#8216;g&#8217;, just like &#8216;git&#8217;.</li>
+</ul>
+</p>
+
+<!--more-->
+
+<p>
+Previously, I used the following in my ~/.bashrc:<br/>
+<pre>
+...
+alias gts='git status'
+alias gtd='git diff'
+...
+</pre>
+The problem is that, by doing this, you lose autocompletion.
+</p>
+
+<h1>Setup</h1>
+
+<h2>Set Up &#8216;g&#8217; as an alias for &#8216;git&#8217;</h2>
+In ~/.bashrc:<br/>
+<p>
+<pre>
+...
+alias g='git'
+...
+</pre>
+</p>
+
+<h2>2. Locate the Bash Completion File for Git</h2>
+<p>
+Locate your bash_completion.d directory:
+<ul>
+	<li>On Linux, /etc/bash_completion.d</li>
+	<li>I&#8217;m using OS X with Mac Ports, so mine is at /opt/local/etc/bash_completion.d.</li>
+</ul>
+Ensure the directory contains <code>git-completion.bash</code>
+</p>
+
+<h2>3. Add Completion for &#8216;g&#8217;</h2>
+<p>
+Add the following to the end of <code>git-completion.bash</code>:
+<typo:code lang="shell">
+complete -o bashdefault -o default -o nospace -F _git g 2>/dev/null \
+        || complete -o default -o nospace -F _git g
+</typo:code>
+Now, if you type:<br/>
+<pre>
+$ g |&lt;TAB&gt;
+</pre>
+you should see autocompletion:
+<pre>
+$ g |
+add                 commit              init                request-pull 
+am                  config              instaweb            reset 
+annotate            describe            log                 revert
+...
+</pre>
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Rake::Builder]]></title>
+    <link href="http://joeyates.github.io/2010/08/29/rake-builder/"/>
+    <updated>2010-08-29T00:00:00+02:00</updated>
+    <id>http://joeyates.github.io/2010/08/29/rake-builder</id>
+    <content type="html"><![CDATA[
+
+<figure class='code'><figcaption><span>Use Rake::Builder as a Make Replacement - build.sh </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rake build
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I&rsquo;ve put together a rake-based system for building C and C++ projects.</p>
+
+<p>
+I&#8217;ve called it Rake::Builder, it&#8217;s available on GitHub <a href="http://github.com/joeyates/rake-builder">here</a>.
+</p>
+
+
+
+
+<!--more-->
+
+
+
+
+<h2>autoconf</h2>
+
+
+
+
+<p>
+Build systems are complicated by external dependencies: finding third-party headers and libraries. Often there is a specific configuration for each operating system and distribution.
+</p>
+
+
+
+
+<p>
+The standard system is GNU&#8217;s autoconf system, but it is a nightmare. At the most simple level, you distribute source code with a Makefile.<br/>
+The problem is that Makefiles are just pure dependency managers - if they don&#8217;t find what they need, they just fail.<br/>
+The solution to that problem is the use of <string>configure</strong>. Configure runs a series of compatibility tests, sniffs the host system and spits out a Makefile.<br/>
+So, with configure, the user then does the following:
+<typo:code lang="shell">
+$ ./configure
+$ make
+$ sudo make install
+</typo:code>
+</p>
+
+
+<p>But, configure itself is a long file, and it&rsquo;s is a program: about 6000 lines of shell code.</p>
+
+<p>A few lines:</p>
+
+<pre><code>ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext &gt;&amp;5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS &gt;&amp;5'
+</code></pre>
+
+<p>The solution to having to maintain configure? Generate it!</p>
+
+<p>With autotools, there is a seemingly eternal regress of configuration files and scripts generated by other scripts.</p>
+
+<p>This was my project&rsquo;s root directory listing before I gave up on autoconf:<br/></p>
+
+<pre><code>AUTHORS
+COPYING
+ChangeLog
+EXAMPLE
+INSTALL
+Makefile
+Makefile.am
+Makefile.in
+NEWS
+README
+aclocal.m4
+autom4te.cache
+config.h
+config.h.in
+config.log
+config.status
+configure
+configure.ac
+depcomp
+include
+install-sh
+missing
+objects
+src
+stamp-h1
+test
+</code></pre>
+
+<p>Fifteen of those files are involved in the mechanics of autoconf.</p>
+
+<p><img src="http://joeyates.github.io/images/autoconf.png" title="autoconf dependencies" ></p>
+
+<p>Autoconf doesn&rsquo;t really address the issue of building on various systems and adapting semi-automatically. You still have to add all the settings, but you have to learn where in a myriad of files these settings are to be placed.</p>
+
+<h2>Rake</h2>
+
+<p>Of the autoconf alternatives, rake seems to offer the cleanest solution. Rake itself was apparently created as a build system for C, but out of the box it&rsquo;s too generic: it&rsquo;s simply a dependency handling system.</p>
+
+<p>There are already a number of specializations of rake. In Rails projects, and Gem building, Rakefiles handle maintenance, testing, documentation building and packaging.</p>
+
+<figure class='code'><figcaption><span>Rake::Builder&#8217;s Rakefile - Rakefile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>spec = Gem::Specification.new do |s|
+</span><span class='line'>  s.name             = 'rake-builder'
+</span><span class='line'>  s.summary          = 'Rake for C/C++ Projects'
+</span><span class='line'>  s.description      = 'Provides Rake:Builder, a specific rake TaskLib for building C, C++, Objective-C and Objective-C++ projects'
+</span><span class='line'>  s.version          = Rake::Builder::VERSION::STRING
+</span><span class='line'>
+</span><span class='line'>  s.homepage         = 'http://github.com/joeyates/rake-builder'
+</span><span class='line'>  s.author           = 'My Name'
+</span><span class='line'>  s.email            = 'my.email@xmail.com'
+</span><span class='line'>
+</span><span class='line'>  s.files            = ADMIN_FILES +
+</span><span class='line'>                       SOURCE_FILES +
+</span><span class='line'>                       EXAMPLE_SOURCE_FILES +
+</span><span class='line'>                       EXAMPLE_EXTRA_FILES
+</span><span class='line'>  s.require_paths    = [ 'lib' ]
+</span><span class='line'>  s.add_dependency( 'rake', '>= 0.8.7' )
+</span><span class='line'>
+</span><span class='line'>  s.has_rdoc         = true
+</span><span class='line'>  s.rdoc_options     += RDOC_OPTS
+</span><span class='line'>  s.extra_rdoc_files = RDOC_FILES
+</span><span class='line'>
+</span><span class='line'>  s.test_files       = SPEC_FILES
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>
+Rake::Builder is my attempt to specialise rake to the task of building C and C++ projects.<br />
+I&#8217;ve got to version 0.0.11 and it now builds the following types of projects:
+<ul>
+    <li>C++,</li>
+    <li>QT C++,</li>
+    <li>C</li>
+    <li>Objective-C</li>
+</ul>
+</p>
+
+
+
+
+<p><p>
+This is an example with two build targets: a static library and a test executable, with the test project depending on the library:</p>
+
+<p><figure class='code'><figcaption><span>Rakefile for a C++ Library &ndash; Rakefile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>require &lsquo;rake/builder&rsquo;
+</span><span class='line'>
+</span><span class='line'>Rake::Builder.new do |builder|
+</span><span class='line'>  builder.target               = &lsquo;libactive_record_sqlite.a&rsquo;
+</span><span class='line'>  builder.source_search_paths  = [ &lsquo;src&rsquo; ]
+</span><span class='line'>  builder.header_search_paths  = [ &lsquo;include/<em>*/</em>.h&rsquo; ]
+</span><span class='line'>  builder.objects_path         = &lsquo;objects&rsquo;
+</span><span class='line'>  builder.include_paths        = [ &lsquo;include&rsquo; ]
+</span><span class='line'>  builder.library_dependencies = [ &lsquo;sqlite3&rsquo; ]
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>Rake::Builder.new do |builder|
+</span><span class='line'>  builder.task_namespace       = :test
+</span><span class='line'>  builder.target               = &lsquo;active_record_test&rsquo;
+</span><span class='line'>  builder.source_search_paths  = [ &lsquo;test&rsquo; ]
+</span><span class='line'>  builder.header_search_paths  = [ &lsquo;test&rsquo; ]
+</span><span class='line'>  builder.objects_path         = &lsquo;test/lib_objects&rsquo;
+</span><span class='line'>  builder.include_paths        = [ &lsquo;include&rsquo;, &lsquo;test&rsquo; ]
+</span><span class='line'>  builder.library_dependencies = [ &lsquo;sqlite3&rsquo;, &lsquo;gtest&rsquo;, &lsquo;gtest_main&rsquo;, &lsquo;active_record_sqlite&rsquo; ]
+</span><span class='line'>  builder.library_paths        = [ &lsquo;objects&rsquo; ]
+</span><span class='line'>  builder.target_prerequisites = [ :&lsquo;rake:build&rsquo; ]
+</span><span class='line'>  builder.default_task         = [ :run ]
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p>
+I&rsquo;m about to start using Rake::Builder on a sizable C++ project using QT, so I&rsquo;ll have a chance to see if it handles real world stuff without turning into autoconf.
+</p></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sinatra: A Real Site]]></title>
+    <link href="http://joeyates.github.io/2010/05/31/sinatra-a-real-site/"/>
+    <updated>2010-05-31T00:00:00+02:00</updated>
+    <id>http://joeyates.github.io/2010/05/31/sinatra-a-real-site</id>
+    <content type="html"><![CDATA[<p><img src="http://joeyates.github.io/images/sidcom.png" title="sidcom.me.uk" ></p>
+
+<h1>The Site</h1>
+
+
+<p>
+I have a young relative who draws a lot of comic strips, and thinking it would be nice if he could publish them, I looked around for an Open Source system.<br>
+I wanted something that was as near to XKCD as possible - latest comic, next/previous and random.<br>
+Not finding anything that was both pretty and ultra-simple, I decided to write my own.<br>
+The version for my relative is <a href="http://sidcom.me.uk/">here</a> -
+the system will be up on GitHub as soon as I finish making it configurable.<br>
+</p>
+
+
+
+
+<!--more-->
+
+
+
+
+<h1>Technologies</h1>
+
+
+<h2>Web Framework</h2>
+
+
+<p>
+If you&#8217;ve read the title of this post, you won&#8217;t be surprised to read that I chose <a href="http://www.sinatrarb.com/intro.html">Sinatra</a>.<br>
+</p>
+
+
+
+
+<h2>Database</h2>
+
+
+<p>
+I decided to use <a href="http://datamapper.org/">DataMapper</a> as the ORM.<br>
+I&#8217;m also using SQLite for both development and production.<br>
+</p>
+
+
+
+
+<h2>HTML and CSS</h2>
+
+
+<p>
+As will be clear from the example site, I didn&#8217;t work over hard on making a fresh graphic look -
+all I did was strip out a lot of HTML that was there to make rounded corners,
+and replaced it with Mozilla and WebKit specific rounding.<br>
+I then translated the HTML into <a href="http://haml-lang.com/">HAML</a> and
+the CSS into <a href="http://sass-lang.com/">SASS</a> (SCSS).<br>
+</p>
+
+
+
+
+<h1>Development</h1>
+
+
+<p>
+Documentation for Sinatra, DataMapper, HAML and SASS is quite good, so things went quite smoothly.
+What follows is a list of the phases I went through while developing (on Ubuntu), and especially the bits I had trouble with.<br>
+</p>
+
+
+
+
+<h1>DataMapper</h1>
+
+
+<h2>Installation</h2>
+
+
+<pre>
+  $ sudo gem install dm-core
+
+  $ sudo gem install data_objects
+  $ sudo gem install data_mapper
+  $ sudo gem install do_sqlite3
+</pre>
+
+
+
+
+<h2>Using DataMapper in Code</h2>
+
+
+
+
+<figure class='code'><figcaption><span>DataMapper Setup - comic.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="nb">require</span> <span class="s1">&#39;dm-core&#39;</span>
+</span><span class='line'>  <span class="nb">require</span> <span class="s1">&#39;data_mapper&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">DataMapper</span><span class="o">.</span><span class="n">setup</span><span class="p">({</span>
+</span><span class='line'>    <span class="ss">:adapter</span> <span class="o">=&gt;</span> <span class="s1">&#39;sqlite3&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">:host</span> <span class="o">=&gt;</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">:username</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">:password</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">:database</span> <span class="o">=&gt;</span> <span class="s1">&#39;db/sidcom_development&#39;</span>
+</span><span class='line'>  <span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">Comic</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="ss">DataMapper</span><span class="p">:</span><span class="ss">:Resource</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">property</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:text</span>
+</span><span class='line'>    <span class="n">property</span> <span class="ss">:permalink</span><span class="p">,</span> <span class="ss">:text</span>
+</span><span class='line'>    <span class="n">property</span> <span class="ss">:created_at</span><span class="p">,</span> <span class="ss">:datetime</span>
+</span><span class='line'>    <span class="n">property</span> <span class="ss">:updated_at</span><span class="p">,</span> <span class="ss">:datetime</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="no">Comic</span><span class="o">.</span><span class="n">auto_upgrade!</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The &lsquo;<code>Comic.auto_upgrade!</code>&rsquo; bit handles migrations &ndash;
+at startup, table columns are adjusted to match the declaration in the equivalent class.</p>
+
+<h1>Rack</h1>
+
+
+<h2>Authentication</h2>
+
+
+<p>
+This application has a &#8216;public&#8217; and an &#8216;admin&#8217; area, so I actually created two Sinatra Apps,
+wrapping one in <a href="http://rack.rubyforge.org/doc/Rack/Auth/Digest/MD5.html">Rack::Auth::Digest::MD5</a>.
+A local settings file holds user names and hashed (kinda salted) passwords.<br>
+</p>
+
+
+
+
+<h1>Sinatra</h1>
+
+
+<p>
+Sinatra apps have access to a number of <a href="http://yardoc.org/docs/sinatra-sinatra/Sinatra/Base">globals</a>, I used:<br>
+<ul>
+  <li>
+    <a href="http://rack.rubyforge.org/doc/classes/Rack/Request.html">request</a>,
+  </li>
+  <li>
+    params<br>
+  </li>
+</ul>
+</p>
+
+
+
+
+<h2>Helpers</h2>
+
+
+<p>
+This app being a little more complex than my first, I decided to implement some Rails-like helpers.<br>
+The most important helper is <code>url_for</code>.
+Sinatra - by design - includes routing in the structure of an app, so it cannot provide pre-cooked methods of the sort.<br>
+</p>
+
+
+
+
+<h1>HAML</h1>
+
+
+<p>
+I found HAML very easy to start using, what I didn&#8217;t immediately understand was:<br>
+<ul>
+  <li>
+    how to interpolate variables,
+  </li>
+  <li>
+    how to call functions,
+  </li>
+  <li>
+    and how to include partials.
+  </li>
+</ul>
+</p>
+
+
+<p>
+These are actually all the same problem, but it took me a while to realize that!<br>
+In HAML, you can interpolate the Ruby way (with &#8217;<code>#{...}</code>&#8217;) or the HAML way (with &#8217;<code>=</code>&#8217;).<br>
+</p>
+
+
+
+
+<h2>Variable Interpolation</h2>
+
+
+<p>
+Just use Ruby String interpolation:<br>
+</p>
+
+
+<pre>
+  %h1 Hello #{ @name }!
+</pre>
+
+
+
+
+<h2>Calling Functions</h2>
+
+
+<p>
+Use HAML evaluation syntax:<br>
+</p>
+
+
+<pre>
+  %h1
+    = @name
+    !
+</pre>
+
+
+
+
+<h2>HAML partials</h2>
+
+
+<p>
+Again, these can be evaluated as above:<br>
+</p>
+
+
+<pre>
+  = haml(:_my_partial, :layout =&gt; false)
+</pre>
+
+
+
+
+<h1>SASS</h1>
+
+
+<h2>Generating CSS</h2>
+
+
+<p>
+  I chose to keep my SCSS files in a subdirectory under my views directory, and generate CSS from them under the static path.
+</p>
+
+
+<p>
+During development, you need to keep the static versions up to date, and to do so, you just need to keep a process running as follows:<br>
+</p>
+
+
+<pre>
+  $ sass --watch views/stylesheets:static/stylesheets
+</pre>
+
+
+
+
+<h1>Conclusion</h1>
+
+
+<p>
+Sinatra handles small sites very well.
+The code can be kept DRY, and if you decide to, Sinatra projects can be quite easily transformed into Rails projects.<br>
+Actually, I have doubts whether it was worth doing this project in Sinatra -
+a stripped-down Rails 3 project would have been just as lightweight and easy to develop.
+But, then again, it&#8217;s useful to run a sytem through its paces, to have an idea what areas it can usefully be applied to.<br>
+</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Googletest Hello World]]></title>
+    <link href="http://joeyates.github.io/2010/05/26/googletest-hello-world/"/>
+    <updated>2010-05-26T00:00:00+02:00</updated>
+    <id>http://joeyates.github.io/2010/05/26/googletest-hello-world</id>
+    <content type="html"><![CDATA[<p>
+This is a quick run down of how to get started with using <a href="http://code.google.com/p/googletest/">googletest</a> on Ubuntu.
+</p>
+
+
+
+
+<!--more-->
+
+
+
+
+<h1>Preparation</h1>
+
+
+<p>
+Assuming you have a working GCC build environment, all you have to do is install the googletest packages:
+</p>
+
+
+
+
+<pre>
+  $ sudo apt-get install libgtest0 libgtest-dev
+</pre>
+
+
+
+
+<h1>Makefile</h1>
+
+
+<p>
+The only think of note about the Makefile is that it includes &#8216;libgtest_main&#8217; - which implements main() and calls RUN_ALL_TESTS()
+</p>
+
+
+
+
+<figure class='code'><figcaption><span>Makefile - Makefile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NAME = hello-world
+</span><span class='line'>
+</span><span class='line'>LIBS = -lgtest_main
+</span><span class='line'>
+</span><span class='line'>debug: all
+</span><span class='line'>run-debug:
+</span><span class='line'>  ./${NAME}
+</span><span class='line'>
+</span><span class='line'>all: $(NAME).o
+</span><span class='line'>  c++ -lstdc++ $(LIBS) -o $(NAME) $(NAME).o
+</span><span class='line'>
+</span><span class='line'>compile: $(NAME).o
+</span><span class='line'>
+</span><span class='line'>clean:
+</span><span class='line'>  find . -name '*.o' -exec rm -f {} ';'
+</span><span class='line'>  find . -name $(NAME) -exec rm -f {} ';'
+</span><span class='line'>
+</span><span class='line'>$(NAME).o: $(NAME).c++
+</span><span class='line'>  gcc -c -I. -o $(NAME).o $(NAME).c++
+</span><span class='line'>
+</span><span class='line'>.c++.o:
+</span><span class='line'>  gcc -c -I. -o $@ $&lt;</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<h1>Source</h1>
+
+
+<p>
+I&#8217;ve put everything into a single source file to keep things minimal:
+</p>
+
+
+
+
+<figure class='code'><figcaption><span>Hello World and Test - hello_world.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="c1">/////////////////////////////</span>
+</span><span class='line'><span class="c1">// In the header file</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#include &amp;lt;sstream&amp;gt;</span>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Salutation</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="k">static</span> <span class="n">string</span> <span class="n">greet</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">///////////////////////////////////////</span>
+</span><span class='line'><span class="c1">// In the class implementation file</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">string</span> <span class="n">Salutation</span><span class="o">::</span><span class="n">greet</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">ostringstream</span> <span class="n">s</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">s</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Hello &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;!&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">s</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">///////////////////////////////////////////</span>
+</span><span class='line'><span class="c1">// In the test file</span>
+</span><span class='line'><span class="cp">#include &amp;lt;gtest/gtest.h&amp;gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">TEST</span><span class="p">(</span><span class="n">SalutationTest</span><span class="p">,</span> <span class="n">Static</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">EXPECT_EQ</span><span class="p">(</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;Hello World!&quot;</span><span class="p">),</span> <span class="n">Salutation</span><span class="o">::</span><span class="n">greet</span><span class="p">(</span><span class="s">&quot;World&quot;</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<h1>Compilation</h1>
+
+
+<p>Just run:</p>
+
+
+<pre>
+  $ make
+</pre>
+
+
+
+
+<h1>Output</h1>
+
+
+<p>
+This test produces the following:
+</p>
+
+
+
+
+<pre>
+$ ./hello-world
+Running main() from gtest_main.cc
+[==========] Running 1 test from 1 test case.
+[----------] Global test environment set-up.
+[----------] 1 test from SalutationTest
+[ RUN      ] SalutationTest.Static
+[       OK ] SalutationTest.Static
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test case ran.
+[  PASSED  ] 1 test.
+</pre>
+
+
+
+
+<h1>Conclusion</h1>
+
+
+<p>
+It couldn&#8217;t really be much simpler!
+</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Object Representation in C++]]></title>
+    <link href="http://joeyates.github.io/2010/05/12/object-representation-in-c/"/>
+    <updated>2010-05-12T00:00:00+02:00</updated>
+    <id>http://joeyates.github.io/2010/05/12/object-representation-in-c</id>
+    <content type="html"><![CDATA[<h1>Member variables</h1>
+
+<p>Each C++ object needs to hold its instance data. But, there is often not a perfect match between the sum of the byte sizes of the member variables and the size of an object: The space occupied will often be greater than the sum of the sizes of the member variables.</p>
+
+<p>The reasons are:</p>
+
+<ul>
+<li>compiler-specific alignment issues: in order to speed up access, a few bytes can be wasted for each instance to ensure that all the members are aligned on a word boundary,</li>
+<li>the presence of a pointer to the virtual function table,</li>
+<li>empty classes.</li>
+</ul>
+
+
+
+
+<!--more-->
+
+
+<h2>An empty class</h2>
+
+<p>An empty class has no member variables, but does not occupy 0 bytes of memory. The ISO standard mandates that objects of any class must occupy at least one byte.</p>
+
+<p>To show this, I&rsquo;ll call the following code (see the end for the code used to dump objects):</p>
+
+<figure class='code'><figcaption><span>An Empty Class - empty_class.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">A</span> <span class="p">{};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">A</span> <span class="n">a</span><span class="p">;</span>
+</span><span class='line'><span class="n">dump_instance</span><span class="p">(</span><span class="s">&quot;An empty class:&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The output shows the memory location of the instance, its size end content:<br />
+GCC:<br /></p>
+
+<pre>
+An empty class:
+  bfd3dfdf -> instance (1 byte):
+    00
+</pre>
+
+
+<p>Visual C++:<br /></p>
+
+<pre>
+An empty class:
+  0012ff5f -> instance (1 byte):
+    00
+</pre>
+
+
+<p></p></p>
+
+<p>
+In both cases, the instance of the empty class occupies 1 byte. And, in both cases, the byte seems to have been initialized to 0.
+</p>
+
+
+<h1>Classes with member variables</h1>
+
+
+<p>
+Next, I&#8217;ll do the same for a non-empty class with a single <code>int</code> member variable.
+(I&#8217;ll initialize member variables to make the dumps easier to read.)
+</p>
+
+
+
+
+<figure class='code'><figcaption><span>One Member Variable - member_variable.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">B</span> <span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="n">B</span><span class="p">()</span><span class="o">:</span> <span class="n">i</span><span class="p">(</span><span class="mh">0xbbbbbbbb</span><span class="p">)</span> <span class="p">{};</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">B</span> <span class="n">b</span><span class="p">;</span>
+</span><span class='line'><span class="n">dump_instance</span><span class="p">(</span><span class="s">&quot;A class with an int member:&quot;</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The memory occupied is exactly the size of the member (4 bytes):<br />
+GCC:<br /></p>
+
+<pre>
+A class with an int member:
+  bfa25e08 -> instance (4 bytes):
+    bb bb bb bb 
+</pre>
+
+
+<p>Visual C++:<br /></p>
+
+<pre>
+A class with an int member:
+  0012ff64 -> instance (4 bytes):
+    bb bb bb bb 
+</pre>
+
+
+<p></p></p>
+
+<p>
+This case is the simplest of all. You get exactly what you expect: a four byte type occupying 4 bytes.
+</p>
+
+
+<h2>Word alignment</h2>
+
+
+<p>
+char, a single-byte-sized type, gets word-aligned both by GCC and Visual C++. Notice that three uninitilised bytes follow the byte containing 0xaa:
+</p>
+
+
+
+
+<figure class='code'><figcaption><span>Word Alignment - word-alignment.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">C</span> <span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="n">C</span><span class="p">()</span><span class="o">:</span> <span class="n">ch</span><span class="p">(</span><span class="mh">0xaa</span><span class="p">),</span> <span class="n">i</span><span class="p">(</span><span class="mh">0xbbbbbbbb</span><span class="p">)</span> <span class="p">{};</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">C</span> <span class="n">c</span><span class="p">;</span>
+</span><span class='line'><span class="n">dump_instance</span><span class="p">(</span><span class="s">&quot;A class with char and int members:&quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>GCC:<br /></p>
+
+<pre>
+A class with char and int members:
+  bfd3dfcc -> instance (8 bytes):
+    aa 5e a2 bf bb bb bb bb 
+</pre>
+
+
+<p>Visual C++:<br /></p>
+
+<pre>
+A class with char and int members:
+  0012ff68 -> instance (8 bytes):
+    aa 77 40 00 bb bb bb bb 
+</pre>
+
+
+<p></p></p>
+
+<p>
+Both implementations allocate 8 bytes, wasting 3 bytes after the char, in order to word align the int.
+</p>
+
+
+<p>
+The same is true if the char follows the int:
+</p>
+
+
+
+
+<figure class='code'><figcaption><span>Word Alignment - word-alignment.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">D</span> <span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="n">D</span><span class="p">()</span><span class="o">:</span> <span class="n">i</span><span class="p">(</span><span class="mh">0xbbbbbbbb</span><span class="p">),</span> <span class="n">ch</span><span class="p">(</span><span class="mh">0xaa</span><span class="p">)</span> <span class="p">{};</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">D</span> <span class="n">d</span><span class="p">;</span>
+</span><span class='line'><span class="n">dump_instance</span><span class="p">(</span><span class="s">&quot;A class with int and char members:&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>GCC:<br /></p>
+
+<pre>
+A class with int and char members:
+  bfd3dfc4 -> instance (8 bytes):
+    bb bb bb bb aa ad 04 08 
+</pre>
+
+
+<p>Visual C++:<br /></p>
+
+<pre>
+A class with int and char members:
+  0012ff70 -> instance (8 bytes):
+    bb bb bb bb aa bf 40 00 
+</pre>
+
+
+<p></p></p>
+
+<h1>
+    Member functions</h1>
+
+
+<p>
+    Beyond data, the compiler needs to be able to call the object&#39;s functions. Member functions are shared between all instances of a class and so are only stored in one place.
+In the case of non-virtual member functions, nothing needs to be included in the class to allow name resolution.
+</p>
+
+
+
+
+<figure class='code'><figcaption><span>Member Functions - member_functions.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">NonVirtual</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">f</span><span class="p">()</span> <span class="p">{}</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="n">NonVirtual</span> <span class="n">nv</span><span class="p">;</span>
+</span><span class='line'><span class="n">dump_instance</span><span class="p">(</span><span class="s">&quot;A class with a single member function:&quot;</span><span class="p">,</span> <span class="n">nv</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>GCC:<br /></p>
+
+<pre>
+A class with a single member function:
+  bfbdeb5e -> instance (1 byte):
+    53 
+</pre>
+
+
+<p>Visual C++:<br /></p>
+
+<pre>
+A class with a single member function:
+  0012ff5f -> instance (1 byte):
+    00 
+</pre>
+
+
+<p></p></p>
+
+<p>
+This example is similar to the empty class above: having no member variables, and no virtual member functions (below), the compiler is forced to waste one byte, to comply with the standard&#8217;s mandate of not having zero-sized classes. Visual C++ seems to initialize the byte.
+</p>
+
+
+<h2>
+    Virtual member functions</h2>
+
+
+<p>
+    Object derivation means that the list member functions callable on an object must be prepared by the compiler. If a base class implements a functions and it is not overridden by a derived class, the derived class must use the base class&#39;s implementation. But, if a derived class overrides, then it is that implementation that must be used.</p>
+
+
+<p>
+The mechanism that compilers use to achieve this is not mandated by the C++ standard, but most implementations use the concept of the &quot;virtual function table&quot;. For every class that has virtual members, a table is created which maps function names to their implementations.
+If a class has virtual functions, the compiler creates a unique vtbl for the class. This vtbl has pointers to the implementations of the member functions.
+Each instance holds a pointer (vptr) to its class&#8217;s vtbl.
+In the case of virtual inheritance, the derived class has a vtbl, which has a mix of pointers to member functions: those overridden in the derived class and those inherited.
+</p>
+
+
+<p>
+
+
+<figure class='code'><figcaption><span>Virtusl Member Functions - virtual_member_functions.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">E</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">virtual</span> <span class="kt">void</span> <span class="n">f</span><span class="p">()</span> <span class="p">{}</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">E</span> <span class="n">e</span><span class="p">;</span>
+</span><span class='line'><span class="n">dump_instance</span><span class="p">(</span><span class="s">&quot;A class with a virtual member function:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// We supply the number of virtual methods</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+GCC:<br />
+<pre>
+A class with a virtual member function:
+  bfd3dfd4 -> instance (4 bytes):
+    f8 aa 04 08 
+    vtbl (0804aaf8 - 0804aafb) 1 entry:
+      0804aaf8 -> fptr 0:
+        08048cec 
+        08048cec -> implementation (first 16 bytes):
+          55 89 e5 5d c3 90 55 89 e5 8b 45 08 c7 00 e8 aa 
+</pre>
+Visual C++:<br />
+<pre>
+A class with a virtual member function:
+  0012ff60 -> instance (4 bytes):
+    e4 50 41 00 
+    vtbl (004150e4 - 004150e7) 1 entry:
+      004150e4 -> fptr 0:
+        00405370 
+        00405370 -> implementation (first 16 bytes):
+          c3 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 
+</pre>
+</p>
+
+
+<p>
+This class&#8217;s instances occupy 4 bytes, which hold the pointer to the class&#8217;s virtual function table.
+</p>
+
+
+
+
+<figure class='code'><figcaption><span>Virtual Member Functions - virtual_member_functions.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">class</span> <span class="nc">F</span> <span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="n">F</span><span class="p">()</span> <span class="o">:</span> <span class="n">fdata</span><span class="p">(</span><span class="mh">0xffffffff</span><span class="p">)</span> <span class="p">{};</span> <span class="c1">// Initialize with easy-to-spot data to make dumps clearer</span>
+</span><span class='line'>  <span class="k">virtual</span> <span class="kt">int</span> <span class="n">f</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">fdata</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">F1</span> <span class="o">:</span> <span class="n">F</span> <span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="n">F1</span><span class="p">()</span> <span class="o">:</span> <span class="n">f1data</span><span class="p">(</span><span class="mh">0xf1f1f1f1</span><span class="p">)</span> <span class="p">{};</span> <span class="c1">// Initialize with easy-to-spot data to make dumps clearer</span>
+</span><span class='line'>  <span class="k">virtual</span> <span class="kt">int</span> <span class="n">f</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="mh">0x33333333</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">f1data</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">F1</span> <span class="n">f1</span><span class="p">;</span>
+</span><span class='line'><span class="n">dump_instance</span><span class="p">(</span><span class="s">&quot;A subclass of an abstract class:&quot;</span><span class="p">,</span> <span class="n">f1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>GCC:<br /></p>
+
+<pre>
+A subclass of an abstract class:
+  bfd3dfb8 -> instance (12 bytes):
+    d8 aa 04 08 ff ff ff ff f1 f1 f1 f1 
+    vtbl (0804aad8 - 0804aadb) 1 entry:
+      0804aad8 -> fptr 0:
+        08048d30 
+        08048d30 -> implementation (first 16 bytes):
+          55 89 e5 b8 33 33 33 33 5d c3 55 89 e5 8b 45 08 
+</pre>
+
+
+<p>Visual C++:<br /></p>
+
+<pre>
+A subclass of an abstract class:
+  0012ff78 -> instance (12 bytes):
+    e0 50 41 00 ff ff ff ff f1 f1 f1 f1 
+    vtbl (004150e0 - 004150e3) 1 entry:
+      004150e0 -> fptr 0:
+        00401140 
+        00401140 -> implementation (first 16 bytes):
+          b8 33 33 33 33 c3 90 90 90 90 90 90 90 90 90 90 
+</pre>
+
+
+<p></p></p>
+
+<p>
+Both compilers place the vtbl at the start of the instance memory, so a pointer to the instance is a pointer to a pointer to the vtbl. The instance data follows, laid out in &#8220;class derivation order&#8221;.
+</p>
+
+
+<h1>Object dumping code</h1>
+
+
+<p>
+    The examples in this article are <a href="http://github.com/joeyates/c-plus-plus-study/tree/master/01_binary_layout/">available from Github</a>.</p>
+
+
+<p>The function <code>dump_instance()</code> prints the memory occupied by the object.</p>
+
+<figure class='code'><figcaption><span>Dump Object Internals - dump_instance.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">dump_instance</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">title</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">,</span> <span class="kt">int</span> <span class="n">virtuals</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">title</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">stringstream</span> <span class="n">sstr</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sstr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;instance (&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">object_size</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;):&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">dump_memory</span><span class="p">((</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">sstr</span><span class="p">.</span><span class="n">str</span><span class="p">().</span><span class="n">c_str</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">virtuals</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">dump_vtable</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">virtuals</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The rest of the code is handles printing blocks of memory, and the virtual function table:</p>
+
+<figure class='code'><figcaption><span>Helpers - dump_helpers.cpp </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="c1">// output formatting helper</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">indent</span><span class="p">(</span><span class="kt">int</span> <span class="n">depth</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">depth</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;  &quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">dump_memory</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">items</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">title</span><span class="p">,</span> <span class="kt">int</span> <span class="n">depth</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">indent</span><span class="p">(</span><span class="n">depth</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%08x -&gt; %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span> <span class="n">p</span><span class="p">,</span> <span class="n">title</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// Make a format string that prints hex with correct number of leading zeroes</span>
+</span><span class='line'>  <span class="n">stringstream</span> <span class="n">sstr</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sstr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;%0&quot;</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;x &quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">string</span> <span class="n">format</span> <span class="o">=</span> <span class="n">sstr</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
+</span><span class='line'>  <span class="n">indent</span><span class="p">(</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">const</span> <span class="n">T</span> <span class="o">*</span> <span class="n">end</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="n">items</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">*</span> <span class="n">chunk</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span> <span class="n">chunk</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">;</span> <span class="o">++</span><span class="n">chunk</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="n">format</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="o">*</span><span class="n">chunk</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Pretend all pointers are to int to reduce number of casts</span>
+</span><span class='line'><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">dump_vtable</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">,</span> <span class="kt">int</span> <span class="n">virtuals</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// In memory, the first bytes of the instance are occupied by the vtable</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="o">*</span> <span class="n">vtbl</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">vtable_size</span> <span class="o">=</span> <span class="n">virtuals</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">indent</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;vtbl (%08x - %08x)&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">vtbl</span><span class="p">,</span> <span class="o">*</span><span class="n">vtbl</span> <span class="o">+</span> <span class="n">vtable_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot; %d entr%s:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">virtuals</span><span class="p">,</span> <span class="p">((</span><span class="n">virtuals</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="s">&quot;y&quot;</span> <span class="o">:</span> <span class="s">&quot;ies&quot;</span><span class="p">));</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">virtuals</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span> <span class="n">fptr</span> <span class="o">=</span> <span class="p">((</span><span class="kt">int</span> <span class="o">**</span><span class="p">)</span> <span class="n">vtbl</span><span class="p">)[</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">stringstream</span> <span class="n">sstr</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">sstr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;fptr &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">dump_memory</span><span class="p">(</span><span class="n">fptr</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sstr</span><span class="p">.</span><span class="n">str</span><span class="p">().</span><span class="n">c_str</span><span class="p">(),</span> <span class="mi">3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">dump_memory</span><span class="p">((</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="o">*</span><span class="n">fptr</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s">&quot;implementation (first 16 bytes):&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="n">string</span> <span class="n">object_size</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">stringstream</span> <span class="n">sstr</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sstr</span> <span class="o">&lt;&lt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; byte&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">sstr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;s&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">sstr</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Notes</h1>
+
+<p>The text assumes a 32-bit, little-endian  machine.</p>
+
+<p>References:</p>
+
+<ul>
+<li>http://www2.research.att.com/~bs/bs_faq2.html#layout-obj</li>
+<li>http://www2.research.att.com/~bs/bs_faq2.html#sizeof-empty</li>
+<li>http://www.cprogramming.com/tutorial/size_of_class_object.html</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Cuil Fail]]></title>
+    <link href="http://joeyates.github.io/2010/05/08/cuil-fail/"/>
+    <updated>2010-05-08T00:00:00+02:00</updated>
+    <id>http://joeyates.github.io/2010/05/08/cuil-fail</id>
+    <content type="html"><![CDATA[<p>Cuil was launched as a search engine in <a href="http://en.wikipedia.org/wiki/Cuil#History">July 2008</a>.</p>
+
+<p><img src="http://joeyates.github.io/images/cuilfail-tunnel-lewes.jpg" title="Cuilfail Tunnel in Lewes, United Kingdom" ></p>
+
+<!--more-->
+
+
+<p>A month earlier, East Sussex county council had tried to <a href="http://www.eastsussex.gov.uk/yourcouncil/pressoffice/pressreleases/2008/06/2007.htm">warn them</a> of the inevitable outcome if they were to proceed.</p>
+
+<p>The warning was not heeded.</p>
+
+<p>A spokesman said that traffic is now at record levels (for the tunnel, that is).</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Beginner's Sinatra Tutorial]]></title>
+    <link href="http://joeyates.github.io/2010/04/07/a-beginners-sinatra-tutorial/"/>
+    <updated>2010-04-07T00:00:00+02:00</updated>
+    <id>http://joeyates.github.io/2010/04/07/a-beginners-sinatra-tutorial</id>
+    <content type="html"><![CDATA[<p>In the olden days your first program was probably in BASIC and was run from the command line, nowadays the equivalent is Web programming.</p>
+
+<p>Using Sinatra reminds me of my first programming experiences &ndash; you write a tiny bit of code, with no boilerplate and get to see a result.</p>
+
+<!--more-->
+
+
+<p>What follows owes a lot to the <a href="http://www.sinatrarb.com/intro.html">Sinatra README</a>.</p>
+
+<h1>Installation</h1>
+
+<p>On Linux, you&rsquo;ll need Ruby and Rubygems installed (if not you should find installation instructions easily enough via a Web search).</p>
+
+<p>Apart from Ruby, you&rsquo;ll need to use a text editor (e.g. GEdit) a Web browser and the Terminal (normally found in the Applications menu under Accessories).</p>
+
+<p>Next install Sinatra:</p>
+
+<pre><code>$ gem install sinatra
+</code></pre>
+
+<h1>1. Hello World!</h1>
+
+<figure class='code'><figcaption><span>A Minimal Sinatra App - minimal.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s1">&#39;1.9&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">get</span> <span class="s1">&#39;/&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="s1">&#39;Minimal Sinatra Hello World!&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, open a Terminal window and type:</p>
+
+<pre><code>ruby minimal.rb
+</code></pre>
+
+<p>Finally, go to this address: <a href="http://127.0.0.1:4567/"><a href="http://127.0.0.1:4567/">http://127.0.0.1:4567/</a></a></p>
+
+<p>To stop the program, go to the Terminal window and press Ctrl+C</p>
+
+<h3>2. Adding Structure: Sinatra::Base</h3>
+
+<p>It&rsquo;s useful to structure the program as a class.</p>
+
+<figure class='code'><figcaption><span>Sinatra::Base - sinatra_base.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s2">&quot;1.9&quot;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="s1">&#39;Hello World!&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">MyApp</span><span class="o">.</span><span class="n">run!</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Run it:</p>
+
+<pre><code>ruby sinatra_base.rb
+</code></pre>
+
+<h3>3. Structure: A Separate App File</h3>
+
+<p>Create two files:</p>
+
+<figure class='code'><figcaption><span>Application - my_app.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s2">&quot;1.9&quot;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="s1">&#39;Hello World from MyApp in separate file!&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Launcher - run_my_app.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;my_app&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">MyApp</span><span class="o">.</span><span class="n">run!</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Run it:</p>
+
+<pre><code>$ ruby run_my_app.rb
+</code></pre>
+
+<h1>4. Rackup</h1>
+
+<p>Instead of writing a script to start the app, we can use Rackup to launch the same script:</p>
+
+<p>Create a file &lsquo;config.ru&rsquo;:</p>
+
+<pre><code>require 'my_app'
+
+run MyApp.new
+</code></pre>
+
+<p>Run it:</p>
+
+<pre><code>rackup config.ru
+</code></pre>
+
+<p>This time the application is visible at <a href="http://127.0.0.1:9292"><a href="http://127.0.0.1:9292">http://127.0.0.1:9292</a></a></p>
+
+<p>If we want it to have the same address as before, we can run it like this:</p>
+
+<pre><code>rackup config.ru --port=4567
+</code></pre>
+
+<h3>5. Static Files</h3>
+
+<p>A Web application will often have dynamic content (what we&rsquo;ve created so far) and static content (e.g. images).</p>
+
+<p>Create a directory &lsquo;static&rsquo;, and create a file called index.html in containing:</p>
+
+<p>This is a static file.</p>
+
+<figure class='code'><figcaption><span>Static Files - my_app.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s2">&quot;1.9&quot;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">set</span> <span class="ss">:static</span><span class="p">,</span> <span class="kp">true</span>
+</span><span class='line'>  <span class="n">set</span> <span class="ss">:public</span><span class="p">,</span> <span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/static&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, if you run rackup, and go to <a href="http://127.0.0.1:4567/index.html"><a href="http://127.0.0.1:4567/index.html">http://127.0.0.1:4567/index.html</a></a> you will see the content.</p>
+
+<h1>6. Routes</h1>
+
+<figure class='code'><figcaption><span>English - static/routes.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;ul&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;named_via_params/foo&quot;</span><span class="nt">&gt;</span>Named parameters via params Hash<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;named_via_block_parameter/foo&quot;</span><span class="nt">&gt;</span>Named parameters via block parameters<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;splat/foo/bar/baz&quot;</span><span class="nt">&gt;</span>Multiple parameters via params[:splat]<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;splat_extension/myfile.txt&quot;</span><span class="nt">&gt;</span>Filename via params[:splat]<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;regexp_params_captures/foobar&quot;</span><span class="nt">&gt;</span>Using regular expression via params[:captures]<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;regexp_captures_via_block_parameter/foobar&quot;</span><span class="nt">&gt;</span>Using regular expression via block parameters<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'><span class="nt">&lt;/ul&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>English - route_examples.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s2">&quot;1.9&quot;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">set</span> <span class="ss">:static</span><span class="p">,</span> <span class="kp">true</span>
+</span><span class='line'>  <span class="n">set</span> <span class="ss">:public</span><span class="p">,</span> <span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/public&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/named_via_params/:argument&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="s2">&quot;</span>
+</span><span class='line'><span class="s2">Using: &#39;/named_via_params/:argument&#39;&lt;br/&gt;</span>
+</span><span class='line'><span class="s2">params[:argument] -&gt; </span><span class="si">#{</span><span class="n">params</span><span class="o">[</span><span class="ss">:argument</span><span class="o">]</span><span class="si">}</span><span class="s2"> (Try changing it)</span>
+</span><span class='line'><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/named_via_block_parameter/:argument&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">argument</span><span class="o">|</span>
+</span><span class='line'>    <span class="s2">&quot;</span>
+</span><span class='line'><span class="s2">Using: &#39;/named_via_block_parameter/:argument&#39;&lt;br/&gt;</span>
+</span><span class='line'><span class="s2">argument -&gt; </span><span class="si">#{</span><span class="n">argument</span><span class="si">}</span><span class="s2"></span>
+</span><span class='line'><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/splat/*/bar/*&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="s2">&quot;</span>
+</span><span class='line'><span class="s2">Using: &#39;/splat/*/bar/*&#39;&lt;br/&gt;</span>
+</span><span class='line'><span class="s2">params[:splat] -&gt; </span><span class="si">#{</span><span class="n">params</span><span class="o">[</span><span class="ss">:splat</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
+</span><span class='line'><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/splat_extension/*.*&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="s2">&quot;</span>
+</span><span class='line'><span class="s2">Using: &#39;/splat_extension/*.*&#39;&lt;br/&gt;</span>
+</span><span class='line'><span class="s2">filename -&gt; </span><span class="si">#{</span><span class="n">params</span><span class="o">[</span><span class="ss">:splat</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span><span class="si">}</span><span class="s2">&lt;br/&gt;</span>
+</span><span class='line'><span class="s2">extension -&gt; </span><span class="si">#{</span><span class="n">params</span><span class="o">[</span><span class="ss">:splat</span><span class="o">][</span><span class="mi">1</span><span class="o">]</span><span class="si">}</span><span class="s2"></span>
+</span><span class='line'><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span> <span class="sr">%r{/regexp_params_captures/([\w]+)}</span> <span class="k">do</span>
+</span><span class='line'>    <span class="s2">&quot;params[:captures].first -&gt; &#39;</span><span class="si">#{</span><span class="n">params</span><span class="o">[</span><span class="ss">:captures</span><span class="o">].</span><span class="n">first</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span> <span class="sr">%r{/regexp_captures_via_block_parameter/([\w]+)}</span> <span class="k">do</span> <span class="o">|</span><span class="n">c</span><span class="o">|</span>
+</span><span class='line'>    <span class="s2">&quot;c -&gt; &#39;</span><span class="si">#{</span><span class="n">c</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Go to <a href="http://127.0.0.1:4567/routes.html"><a href="http://127.0.0.1:4567/routes.html">http://127.0.0.1:4567/routes.html</a></a></p>
+
+<p>You will see a list of links which exemplify different types of route matching.</p>
+
+<h1>7. Templates</h1>
+
+<p>Create a &lsquo;views&rsquo; directory.</p>
+
+<figure class='code'><figcaption><span>The template - views/index.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">This is </span><span class="cp">&lt;%=</span> <span class="vi">@foo</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Templates - templates.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s2">&quot;1.9&quot;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;erb&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/template&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="vi">@foo</span> <span class="o">=</span> <span class="s1">&#39;erb&#39;</span>
+</span><span class='line'>    <span class="n">erb</span> <span class="ss">:index</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You should get the following on <a href="http://localhost:4567/template"><a href="http://localhost:4567/template">http://localhost:4567/template</a></a>:<br /></p>
+
+<p><img src="http://joeyates.github.io/images/sinatra-erb-template.png" title="Sinatra ERB Template" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Rails Programmer's First Django Application]]></title>
+    <link href="http://joeyates.github.io/2010/04/04/a-rails-programmers-first-django-application/"/>
+    <updated>2010-04-04T00:00:00+02:00</updated>
+    <id>http://joeyates.github.io/2010/04/04/a-rails-programmers-first-django-application</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve seen many comparisons of Rails with Django, its Python counterpart.</p>
+
+<h1>The Application</h1>
+
+<p>I decided to use Django to write <a href="http://titusd.co.uk/snape/timeline/">a small local history application: the story of Snape in East Sussex</a>.</p>
+
+<p><img src="http://joeyates.github.io/images/snape-timeline.png" title="The public timeline" ></p>
+
+<p>The front and of the application uses a <a href="http://code.google.com/p/simile-widgets/wiki/Timeline">SIMILE timeline</a> to display dates.</p>
+
+<!--more-->
+
+
+<h1>Personal Impressions about Django</h1>
+
+<h2>Apps</h2>
+
+<p>The main thing I was looking forward to while writing the app was modularity. In fact, in the and I made two apps: the specific Snape application and a generic timeline app.</p>
+
+<h2>Creating the Database</h2>
+
+<p>In Rails, you launch script/generate Model and you obtain a database and a series of migrations, which form a chronology of development of the database.</p>
+
+<p>In Django, you describe the database fields in your model.py file and the run &lsquo;<code>manage.py syncdb</code>&rsquo;.</p>
+
+<p>The advantage of the Django system is that the model holds authoritative information about the fields in the database.</p>
+
+<p>The great disadvantage is that there are no TABLE ALTERing migrations &ndash; you have to dump the table creation SQL and manually construct and run TABLE ALTER commands.</p>
+
+<h2>Settings</h2>
+
+<p>Django&rsquo;s settings file (settings.py) more or less has to be site specific. So that means you have to decide what to check in to your version control system. Some people seem to use a &lsquo;settings.py.default&rsquo; which they then copy to settings.py and alter tho the needs of a specific machine.</p>
+
+<p>I chose to keep site specific stuff in a set of JSON files, named after the local machine (see <a href="http://gnuvince.wordpress.com/2007/03/15/local-settings-in-django/">http://gnuvince.wordpress.com/2007/03/15/local-settings-in-django/</a>). It woks quite well, but in Rails as I commonly have a single development machine and a single production one, I am able to avoid the whole problem thanks to config/environments/[development|production].rb</p>
+
+<h2>Static Content</h2>
+
+<p>There is a difference between how one handles static files in development and production. Most people seem to use a hack in the urls.py file, indicating where to get static content if in DEBUG mode, whereas in production mode you are supposed to set up Apache aliases for the various directories.</p>
+
+<p>The logic here is that Django should not get involved in serving static content (quite rightly), but it certainly makes setup more laborious. One can achieve a happy medium in Rails using <code>X-SendFile</code> &ndash; Rails gets the request and then punts serving to Apache.</p>
+
+<h2>Generating URLs</h2>
+
+<p>There is an equivalent to Rails&#8217; <code>url_for</code> which is available inside Django templates, it&rsquo;s the filter <code>{ % url %}</code>. Unfortunately, the first time I wanted to create a URL was actually in Python code &ndash; I wanted to redirect. I was unable to find a way to use url from Python code. There is <code>get_absolute_url</code>, which can be implemented inside the model, but it&rsquo;s only for instances.</p>
+
+<h1>Overall</h1>
+
+<p>I think Django is fairly straightforward for the Rails programmer. The fact that you get a &lsquo;free&rsquo; admin backend (similar to ActiveScaffold), is certainly handy. There are a lot of sources of online information and tutorials, so it&rsquo;s quite easy to get up and running. The main impression I got was of a small framework &ndash; while Rails covers a great range of functionality, I felt I came up against Django limitations rather quickly. That may be due to not looking in the right places, but my Google searches showed that a lot of other people were asking the same questions.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Editing Javascript in Emacs]]></title>
+    <link href="http://joeyates.github.io/2010/04/02/editing-javascript-in-emacs/"/>
+    <updated>2010-04-02T00:00:00+02:00</updated>
+    <id>http://joeyates.github.io/2010/04/02/editing-javascript-in-emacs</id>
+    <content type="html"><![CDATA[<p>
+	Steve Yegge of Google has created a new Javascript mode &#8216;js2-mode&#8217; for Emacs.</p>
+<p>
+	It works very well as it uses true parsing, not heuristics, to analyse code.</p>
+
+<!--more-->
+
+<p>
+	<a href="http://code.google.com/p/js2-mode/wiki/InstallationInstructions">Installation</a></p>
+<ul>
+	<li>
+		Download http://js2-mode.googlecode.com/files/js2-20090723b.el</li>
+	<li>
+		Rename the file as js2-mode.el</li>
+	<li>
+		Move it to a directory in your <a href="http://www.gnu.org/software/emacs/emacs-faq.html#Changing-load_002dpath">&#8216;load-path&#8217;</a> (~/.emacs.d/ should work),</li>
+	<li>
+		Compile it:
+		<ul>
+			<li>
+				Start Emacs,</li>
+			<li>
+				Run the following command:</li>
+		</ul>
+	</li>
+</ul>
+<pre>M-x byte-compile-file
+js2-mode.el
+</pre>
+<h4>
+	Use</h4>
+<p>
+	Add the following to your .emacs file:</p>
+<pre>  (require 'js2-mode)
+  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+</pre>
+<p>
+	This associates all Javascript files with JS2 mode.</p>
+<p>
+	Some features of the mode are:</p>
+<ul>
+	<li>
+		Highlighting of syntax errors and doubtful structures, e.g. missing &#8216;;&#8217;, and undeclared variables,</li>
+	<li>
+		The auto-indentation system works.</li>
+</ul>
+<p>
+	I often make Javascript files dynamic in Rails projects, and the only feature I would wish for is for handling of Ruby ERB tags - currently they completely confuse the parser.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Show Your Git Branch Name in Your GNU Screen Status Line]]></title>
+    <link href="http://joeyates.github.io/2010/03/09/show-your-git-branch-name-in-your-gnu-screen-status-line/"/>
+    <updated>2010-03-09T00:00:00+01:00</updated>
+    <id>http://joeyates.github.io/2010/03/09/show-your-git-branch-name-in-your-gnu-screen-status-line</id>
+    <content type="html"><![CDATA[<h1>Git Branch Prompt</h1>
+
+<p><a href="http://github.com/guides/put-your-git-branch-name-in-your-shell-prompt">Many</a> <a href="http://github.com/lvv/git-prompt/">people</a> <a href="http://www.jukie.net/bart/blog/20080404105620">have</a> written about showing the current git branch in your shell prompt.</p>
+
+<p>There is even the Bash function <a href="http://repo.or.cz/w/git.git?a=blob_plain;f=contrib/completion/git-completion.bash">__git_ps1</a> provided in the main Git repo.</p>
+
+<p>I prefer to show info like the current time and current git branch in a GNU screen status line.</p>
+
+<!--more-->
+
+
+<h1>Screen Status</h1>
+
+<p>As I use screen constantly, I decided to take a different route: put the current branch name in my screen status line.</p>
+
+<h1>Changing the Screen Current Directory</h1>
+
+<p>When you start screen, it remembers the current directory. Issuing &lsquo;cd&rsquo; commands inside a shell does not change the value. The only way to change it is to issue a <code>screen</code> <code>chdir</code> command.</p>
+
+<p>In order to know the current branch in a particular screen window, I needed to make screen&rsquo;s current directory change to follow the shell it is presenting.</p>
+
+<p>I added the following to my .bashrc:</p>
+
+<figure class='code'><figcaption><span>set_screen_path function - .bashrc.sh </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="k">function </span>set_screen_path<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  screen -X chdir <span class="s2">&quot;`pwd`&quot;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">case</span> <span class="nv">$TERM</span> in
+</span><span class='line'>screen*<span class="o">)</span>
+</span><span class='line'>  <span class="nv">PROMPT_COMMAND</span><span class="o">=</span>set_screen_path
+</span><span class='line'>  ;;
+</span><span class='line'><span class="k">esac</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is Bash specific, but similar code should work in other shells.</p>
+
+<h1>git-current-branch</h1>
+
+<p>Next, I created the following shell script:</p>
+
+<figure class='code'><figcaption><span>Return the Current Git Path - git-current-branch.sh </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'>
+</span><span class='line'>git branch 2&gt;/dev/null | grep <span class="s1">&#39;*&#39;</span> | sed <span class="s1">&#39;s/\* //&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>.screenrc</h1>
+
+<p>And finally, I added a &lsquo;backtick&rsquo; command to my .screenrc file:</p>
+
+<pre><code>startup_message off
+
+backtick 1 0 1 git-current-branch
+
+hardstatus alwayslastline "%-w%{.bw}%n %t%{-}%+w %-45= %1`"
+
+screen -t bash 0
+screen -t edit 1
+select 0
+</code></pre>
+
+<p>The important line is:</p>
+
+<pre><code>backtick 1 0 1 git-current-branch
+</code></pre>
+
+<p>which creates a &lsquo;<a href="http://www.gnu.org/software/screen/manual/html_node/Backtick.html">backtick command</a>&rsquo; (number 1) which calls <code>git-current-branch</code> once a second via <code>%1`</code> in the hardstatus line.</p>
+
+<h1>The Result</h1>
+
+<p><img src="http://joeyates.github.io/images/GnuScreenShowingCurrentGitBranch.png" width="341" height="153"></p>
+
+<h1>Conclusion</h1>
+
+<p>This system is not perfect as the shell only notifies screen of its directory when a new prompt is created.</p>
+
+<p>The result is that if you switch screens, the status line doesn&rsquo;t get updated until after you issue a command.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Sunrise and Sunset Time Calculator]]></title>
+    <link href="http://joeyates.github.io/2010/03/09/a-sunrise-and-sunset-time-calculator/"/>
+    <updated>2010-03-09T00:00:00+01:00</updated>
+    <id>http://joeyates.github.io/2010/03/09/a-sunrise-and-sunset-time-calculator</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve released the <a href="http://rubygems.org/gems/ruby-sun-times">ruby-sun-times gem</a>, which calculates sunrise and sunset times according to date and location.</p>
+
+<!--more-->
+
+
+<h1>The Project</h1>
+
+<p>The project is hosted on <a href="http://github.com/joeyates/ruby-sun-times">GitHub</a>.</p>
+
+<p>The gem is available from <a href="http://rubygems.org/gems/ruby-sun-times">here</a>.</p>
+
+<h1>Using ruby-sun-times</h1>
+
+<pre><code>$ irb
+&gt;&gt; require 'rubygems'
+=&gt; true
+&gt;&gt; require 'sun_times'
+=&gt; true
+&gt;&gt; SunTimes.set( Date.today, 44, 11 ).localtime
+=&gt; Tue Mar 09 18:14:08 +0100 2010
+</code></pre>
+
+<p>So, the sun will be setting round here at 6:14 PM local time.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[I18n Internationalization Without Rails]]></title>
+    <link href="http://joeyates.github.io/2010/03/04/i18n-internationalization-without-rails/"/>
+    <updated>2010-03-04T00:00:00+01:00</updated>
+    <id>http://joeyates.github.io/2010/03/04/i18n-internationalization-without-rails</id>
+    <content type="html"><![CDATA[<p>I searched the Internet in vain for examples of using the Ruby <a href="http://rubygems.org/gems/i18n">i18n gem</a> outside of Rails apps.</p>
+
+<!--more-->
+
+
+<p>Below is a minimal example: the aim is (as usual) to produce a greeting &ndash; this time in English and Italian.</p>
+
+<h1>Installation</h1>
+
+<pre><code>$ gem install i18n
+</code></pre>
+
+<h1>The <code>t</code> method</h1>
+
+<p>The most common use of i18n is via <code>I18n.translate</code> which has an abbreviated alias <code>I18n.t</code>.</p>
+
+<h1>Translations</h1>
+
+<figure class='code'><figcaption><span>English - en.yml </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">en</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">hello world</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Hello World!</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Italian - it.yml </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">it</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">hello world</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Ciao Mondo!</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>These translations can be accessed as follows:</p>
+
+<pre><code>I18n.t( 'hello world' )
+</code></pre>
+
+<p>That will use the current locale setting. You can change it as follows:</p>
+
+<pre><code>I18n.locale = :it
+</code></pre>
+
+<h1>The Program</h1>
+
+<p>After loading the <code>i18n</code> gem, set up <code>I18n.load_path</code> before attempting to retrieve any transaltions.</p>
+
+<figure class='code'><figcaption><span>Use the Translations - salutation.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s1">&#39;1.9&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;i18n&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">I18n</span><span class="o">.</span><span class="n">load_path</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;en.yml&#39;</span><span class="p">,</span> <span class="s1">&#39;it.yml&#39;</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">puts</span> <span class="s1">&#39;In English...&#39;</span>
+</span><span class='line'><span class="no">I18n</span><span class="o">.</span><span class="n">locale</span> <span class="o">=</span> <span class="ss">:en</span>
+</span><span class='line'><span class="nb">puts</span> <span class="no">I18n</span><span class="o">.</span><span class="n">t</span><span class="p">(</span><span class="s1">&#39;hello world&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">puts</span> <span class="s1">&#39;In Italian...&#39;</span>
+</span><span class='line'><span class="no">I18n</span><span class="o">.</span><span class="n">locale</span> <span class="o">=</span> <span class="ss">:it</span>
+</span><span class='line'><span class="nb">puts</span> <span class="no">I18n</span><span class="o">.</span><span class="n">t</span><span class="p">(</span><span class="s1">&#39;hello world&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The result:</p>
+
+<pre><code>$ ruby salutation.rb
+In English...
+Hello World!
+In Italian...
+Ciao Mondo!
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Setting Up PostGIS]]></title>
+    <link href="http://joeyates.github.io/2010/02/22/setting-up-postgis/"/>
+    <updated>2010-02-22T00:00:00+01:00</updated>
+    <id>http://joeyates.github.io/2010/02/22/setting-up-postgis</id>
+    <content type="html"><![CDATA[<h1>
+    Install</h1>
+
+
+<p>
+    You can install PostGIS as a package or from sources. Sometimes the version available from Linux distributions is a bit out of step with the PostgreSQL version that gets installed (i.e. Ubuntu currently installs PostgreSQL 8.4, but only has PostGIS 8.3)</p>
+
+
+
+
+<!--more-->
+
+
+
+
+<h2>From Sources</h2>
+
+
+
+
+<p>
+    <a href="http://postgis.refractions.net/download/">Choose which version to download</a></p>
+
+
+
+
+<pre>$ wget http://postgis.refractions.net/download/postgis-1.4.1.tar.gz
+$ tar -xkzf postgis-1.4.1.tar.gz
+$ cd postgis-1.4.1
+$ ./configure
+$ make
+$ sudo make install
+</pre>
+
+
+<p>
+    On my system (Ubuntu), the net result is that you get various files copied into /usr/share/postgresql/8.4/contrib:</p>
+
+
+<pre>$ ls /usr/share/postgresql/8.4/contrib
+postgis.sql                   postgis_upgrade_13_to_14.sql  postgis_upgrade.sql  uninstall_postgis.sql
+postgis_upgrade_12_to_14.sql  postgis_upgrade_14_minor.sql  spatial_ref_sys.sql</pre>
+
+
+<h1>
+    Create a PostGIS Template Database</h1>
+
+
+<p>
+    If you create a specific template with PostGIS, and use it instead of template1 (the default) template, you will be able to create PostGIS-enabled databases more quickly.</p>
+
+
+<pre>$ sudo -u postgres createdb template_postgis -E UTF-8
+</pre>
+
+
+<p>
+    Set the Template Flag</p>
+
+
+<pre>UPDATE pg_database SET datistemplate = TRUE WHERE datname = 'template_postgis';</pre>
+
+
+<p>
+    Make sure pl/pgsql is installed:</p>
+
+
+<pre>$ sudo -u postgres createlang -d template_postgis plpgsql</pre>
+
+
+<p>
+    Insert PostGIS functions and tables:</p>
+
+
+<pre>$ sudo -u postgres psql template_postgis < /usr/share/postgresql/8.4/contrib/postgis.sql
+$ sudo -u postgres psql template_postgis < /usr/share/postgresql/8.4/contrib/spatial_ref_sys.sql
+</pre>
+
+
+<h4>
+    Correct Permissions</h4>
+
+
+<p>
+    The PostGIS tables need to be writeable by the owner of the database:</p>
+
+
+<pre>$ sudo -u postgres psql template_postgis
+# GRANT ALL ON geometry_columns TO PUBLIC;
+# GRANT ALL ON spatial_ref_sys TO PUBLIC;
+</pre>
+
+
+<h1>
+    Create a PostGIS-Enabled Database</h1>
+
+
+<pre>$ sudo -u postgres createuser [USER NAME]
+Shall the new role be a superuser? (y/n) n
+Shall the new role be allowed to create databases? (y/n) n
+Shall the new role be allowed to create more new roles? (y/n) n
+$ sudo -u postgres createdb [DATABASE NAME] -O [USER NAME] -T template_postgis</pre>
+
+
+<h1>
+    Check it Works</h1>
+
+
+<pre>$ psql -U [USER NAME] [DATABASE NAME]
+</pre>
+
+
+<p>
+    First let&#8217;s create a &#8216;locations&#8217; table:</p>
+
+
+<pre># CREATE TABLE locations (id serial, name character varying);
+# SELECT AddGeometryColumn('', 'locations', 'geom', 32661, 'POINT', 2);
+</pre>
+
+
+<p>
+    Insert a record:</p>
+
+
+<pre># INSERT INTO "locations" ("name", "geom") VALUES(E'Tokyo International Airport', ST_GeomFromText('POINT(139.783333 35.55)', 32661)) RETURNING "id";
+ id
+----
+  1
+(1 row)
+
+INSERT 0 1</pre>
+
+
+<p>
+    Find all results in a given box:</p>
+
+
+<pre># SELECT * FROM "locations" WHERE ("locations"."geom" && SetSRID(E'BOX3D(130.0 30.0, 140.0 40.0)'::box3d, 32661));
+ id |            name             |                        geom
+----+-----------------------------+----------------------------------------------------
+  1 | Tokyo International Airport | 0101000020957F0000151C5E10117961406666666666C64140
+(1 row)</pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[JRuby on Rails]]></title>
+    <link href="http://joeyates.github.io/2010/02/22/jruby-on-rails/"/>
+    <updated>2010-02-22T00:00:00+01:00</updated>
+    <id>http://joeyates.github.io/2010/02/22/jruby-on-rails</id>
+    <content type="html"><![CDATA[<h1>Which Java Version?</h1>
+
+<p>JRuby is normally run on the &ldquo;official&rdquo; Sun (now Oracle) Java. Some people seem to be able to get it to run on GNU Java (GCJ), but I suggest sticking with Sun Java to get you started.</p>
+
+<h1>Which Type of Installation?</h1>
+
+<p>First of all you should decide where to install JRuby &ndash; do you want to install it for all system users or just for your own user?</p>
+
+<!--more-->
+
+
+<h1>Download</h1>
+
+<p>Download the latest JRuby from <a href="http://jruby.org/download"><a href="http://jruby.org/download">http://jruby.org/download</a></a>.</p>
+
+<pre><code>$ wget http://jruby.kenai.com/downloads/1.4.0/jruby-bin-1.4.0.tar.gz
+$ tar -xkzf jruby-bin-1.4.0.tar.gz
+</code></pre>
+
+<h2>Personal Installation</h2>
+
+<pre><code>$ cd ~/bin
+$ cp -r ../jruby-1.4.0 .
+</code></pre>
+
+<p>Make a symlink to simplify things in the future when we upgrade to a new version:</p>
+
+<pre><code>$ ln -s jruby-1.4.0 jruby
+</code></pre>
+
+<p>Add the following line to your ~/.bashrc to add JRuby executables to your %PATH:</p>
+
+<pre><code>export PATH=~/bin/jruby/bin:$PATH
+</code></pre>
+
+<h2>System-wide Installation</h2>
+
+<pre><code>$ sudo cp jruby-1.4.0 /usr/local/lib
+$ sudo ln -s /usr/local/lib/jruby-1.4.0 /usr/local/lib/jruby
+</code></pre>
+
+<h1>Gems</h1>
+
+<p>List installed gems:</p>
+
+<pre><code>$ jruby -S gem list
+</code></pre>
+
+<p>Install a gem (in a personal installation):</p>
+
+<pre><code>$ jruby -S gem install rails
+</code></pre>
+
+<p>Install a gem (in a system-wide installation):</p>
+
+<pre><code>$ sudo /usr/local/lib/jruby/bin/jruby -S gem install rails
+</code></pre>
+
+<h1>Modifying your Rails Project</h1>
+
+<p>You need to look at the list of dependencies of your project, principally the gems, and make sure they are available for JRuby.</p>
+
+<p>Gems written in pure Ruby work &lsquo;out of the box&rsquo; with JRuby. But you&rsquo;ll need to find replacecements for gems which are written in whole or in part in C.</p>
+
+<p>One example of this is RMagick (the Ruby interface to the ImageMagick/GraphicsMagick packages). Ruby on Rails which run on MRI Ruby and use RMagick will have to use RMagick4J under JRuby.</p>
+
+<p>If your Ruby on Rails application has no gem dependency problems, you should be able to run it by changing the name of the database adapter:</p>
+
+<figure class='code'><figcaption><span>Dynamic Database Setup According to Ruby Platform  - config/database.yml </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">&lt;% if RUBY_PLATFORM =~ /java/ %&gt;</span>
+</span><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+</span><span class='line'><span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">jdbcsqlite3</span>
+</span><span class='line'><span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">db/development.db</span>
+</span><span class='line'><span class="l-Scalar-Plain">&lt;% else %&gt;</span>
+</span><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+</span><span class='line'><span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">sqlite3</span>
+</span><span class='line'><span class="l-Scalar-Plain">dbfile</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">db/development.db</span>
+</span><span class='line'><span class="l-Scalar-Plain">&lt;% end %&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here I have made use of the fact that Rails runs config/database.yml through ERB before loading it.</p>
+
+<p>Once the database adapter setting has changed, you should be able to run</p>
+
+<pre><code>$ ./script/server
+</code></pre>
+
+<p>Packaging your application for a servlet container can be done with the <a href="http://rubygems.org/gems/warbler">warbler gem</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Handling Multiple Versions of Ruby]]></title>
+    <link href="http://joeyates.github.io/2010/02/22/handling-multiple-versions-of-ruby/"/>
+    <updated>2010-02-22T00:00:00+01:00</updated>
+    <id>http://joeyates.github.io/2010/02/22/handling-multiple-versions-of-ruby</id>
+    <content type="html"><![CDATA[<p>
+	Currenly, I am developing with 3 different versions of Ruby:</p>
+<ol>
+	<li>
+		MRI Ruby 1.8.7</li>
+	<li>
+		MRI Ruby 1.9.1</li>
+	<li>
+		JRuby 1.4.0</li>
+</ol>
+<p>
+	I need a quick way to switch betwwen the three main Ruby executables, and the related other programs (gem, irb, etc).</p>
+<p>I have set up Debian Alternatives to handle the job.</p>
+
+<!--more-->
+
+<h2>
+	Alternatives with Ruby</h2>
+<p>
+	The programs I want to switch are:</p>
+<ul>
+	<li>
+		ruby</li>
+	<li>
+		gem</li>
+	<li>
+		irb</li>
+	<li>
+		ri</li>
+	<li>
+		rake</li>
+	<li>
+		rails</li>
+</ul>
+<h2>
+	Ruby MRI 1.8 and 1.9</h2>
+<p>
+	If you compiled your own ruby 1.8 and 1.9, make sure you indicate the version:</p>
+<pre>$ ./configure --program-suffix=1.9
+</pre>
+<h2>
+	Install JRuby</h2>
+<p>
+	See my <a href="http://titusd.co.uk/2010/02/22/jruby-on-rails">other post</a>.</p>
+<h2>
+	Create Links from /etc/alternatives to /usr/bin</h2>
+<pre>$ cd /usr/bin
+$ sudo ln -s /etc/alternatives/ruby
+$ sudo ln -s /etc/alternatives/irb
+$ sudo ln -s /etc/alternatives/ri
+$ sudo ln -s /etc/alternatives/rake
+$ sudo ln -s /etc/alternatives/gem</pre>
+<h2>
+	Create Ruby Alternatives</h2>
+<pre>$ sudo update-alternatives \
+  --install  /usr/bin/ruby  ruby  /usr/local/bin/ruby1.9   30 \
+  --slave    /usr/bin/irb   irb   /usr/local/bin/irb1.9       \
+  --slave    /usr/bin/gem   gem   /usr/local/bin/gem1.9       \
+  --slave    /usr/bin/ri    ri    /usr/local/bin/ri1.9        \
+  --slave    /usr/bin/rails rails /usr/local/bin/rails1.9     \
+  --slave    /usr/bin/rake  rake  /usr/local/bin/rake1.9
+
+$ sudo update-alternatives \
+  --install  /usr/bin/ruby  ruby  /usr/bin/ruby1.8   20 \
+  --slave    /usr/bin/irb   irb   /usr/bin/irb1.8       \
+  --slave    /usr/bin/ri    ri    /usr/bin/ri1.8        \
+  --slave    /usr/bin/gem   gem   /usr/bin/gem1.8       \
+  --slave    /usr/bin/rails rails /usr/bin/rails1.8     \
+  --slave    /usr/bin/rake  rake  /usr/bin/rake1.8
+
+$ sudo update-alternatives \
+  --install  /usr/bin/ruby  ruby  /usr/local/lib/jruby/bin/jruby   10 \
+  --slave    /usr/bin/irb   irb   /usr/local/lib/jruby/bin/jirb       \
+  --slave    /usr/bin/ri    ri    /usr/local/lib/jruby/bin/ri         \
+  --slave    /usr/bin/rails rails /usr/local/lib/jruby/bin/rails      \
+  --slave    /usr/bin/gem   gem   /usr/local/lib/jruby/bin/gem        \
+  --slave    /usr/bin/rake  rake  /usr/local/lib/jruby/bin/rake
+</pre>
+<h2>
+	Check the result</h2>
+<pre>$ update-alternatives --display ruby
+ruby - auto mode
+ link currently points to /usr/local/bin/ruby1.9
+/usr/bin/ruby1.8 - priority 20
+ slave gem: /usr/bin/gem1.8
+ slave irb: /usr/bin/irb1.8
+ slave rails: /usr/bin/rails1.8
+ slave rake: /usr/bin/rake1.8
+ slave ri: /usr/bin/ri1.8
+/usr/local/bin/ruby1.9 - priority 30
+ slave gem: /usr/local/bin/gem1.9
+ slave irb: /usr/local/bin/irb1.9
+ slave rails: /usr/local/bin/rails1.9
+ slave rake: /usr/local/bin/rake1.9
+ slave ri: /usr/local/bin/ri1.9
+/usr/local/lib/jruby/bin/jruby - priority 10
+ slave gem: /usr/local/lib/jruby/bin/gem
+ slave irb: /usr/local/lib/jruby/bin/jirb
+ slave rails: /usr/local/lib/jruby/bin/rails
+ slave rake: /usr/local/lib/jruby/bin/rake
+ slave ri: /usr/local/lib/jruby/bin/ri
+Current `best' version is /usr/local/bin/ruby1.9.
+</pre>
+<h2>
+	Switch versions</h2>
+<pre>$ sudo update-alternatives --config ruby
+There are 3 choices for the alternative ruby (providing /usr/bin/ruby).
+
+  Selection    Path                            Priority   Status
+------------------------------------------------------------
+* 0            /usr/local/bin/ruby1.9           30        auto mode
+  1            /usr/bin/ruby1.8                 20        manual mode
+  2            /usr/local/bin/ruby1.9           30        manual mode
+  3            /usr/local/lib/jruby/bin/jruby   10        manual mode
+
+Press enter to keep the current choice[*], or type selection number: 1
+Using '/usr/bin/ruby1.8' to provide 'ruby'.
+</pre>
+]]></content>
+  </entry>
+  
+</feed>

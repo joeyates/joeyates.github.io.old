@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>A Rails Programmer's First Django Application - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="I&rsquo;ve seen many comparisons of Rails with Django, its Python counterpart. The Application I decided to use Django to write a small local history &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://joeyates.github.io/2010/04/04/a-rails-programmers-first-django-application">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:joeyates.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">A Rails Programmer's First Django Application</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-04T00:00:00+02:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&rsquo;ve seen many comparisons of Rails with Django, its Python counterpart.</p>
+
+<h1>The Application</h1>
+
+<p>I decided to use Django to write <a href="http://titusd.co.uk/snape/timeline/">a small local history application: the story of Snape in East Sussex</a>.</p>
+
+<p><img src="/images/snape-timeline.png" title="The public timeline" ></p>
+
+<p>The front and of the application uses a <a href="http://code.google.com/p/simile-widgets/wiki/Timeline">SIMILE timeline</a> to display dates.</p>
+
+<!--more-->
+
+
+<h1>Personal Impressions about Django</h1>
+
+<h2>Apps</h2>
+
+<p>The main thing I was looking forward to while writing the app was modularity. In fact, in the and I made two apps: the specific Snape application and a generic timeline app.</p>
+
+<h2>Creating the Database</h2>
+
+<p>In Rails, you launch script/generate Model and you obtain a database and a series of migrations, which form a chronology of development of the database.</p>
+
+<p>In Django, you describe the database fields in your model.py file and the run &lsquo;<code>manage.py syncdb</code>&rsquo;.</p>
+
+<p>The advantage of the Django system is that the model holds authoritative information about the fields in the database.</p>
+
+<p>The great disadvantage is that there are no TABLE ALTERing migrations &ndash; you have to dump the table creation SQL and manually construct and run TABLE ALTER commands.</p>
+
+<h2>Settings</h2>
+
+<p>Django&rsquo;s settings file (settings.py) more or less has to be site specific. So that means you have to decide what to check in to your version control system. Some people seem to use a &lsquo;settings.py.default&rsquo; which they then copy to settings.py and alter tho the needs of a specific machine.</p>
+
+<p>I chose to keep site specific stuff in a set of JSON files, named after the local machine (see <a href="http://gnuvince.wordpress.com/2007/03/15/local-settings-in-django/">http://gnuvince.wordpress.com/2007/03/15/local-settings-in-django/</a>). It woks quite well, but in Rails as I commonly have a single development machine and a single production one, I am able to avoid the whole problem thanks to config/environments/[development|production].rb</p>
+
+<h2>Static Content</h2>
+
+<p>There is a difference between how one handles static files in development and production. Most people seem to use a hack in the urls.py file, indicating where to get static content if in DEBUG mode, whereas in production mode you are supposed to set up Apache aliases for the various directories.</p>
+
+<p>The logic here is that Django should not get involved in serving static content (quite rightly), but it certainly makes setup more laborious. One can achieve a happy medium in Rails using <code>X-SendFile</code> &ndash; Rails gets the request and then punts serving to Apache.</p>
+
+<h2>Generating URLs</h2>
+
+<p>There is an equivalent to Rails&#8217; <code>url_for</code> which is available inside Django templates, it&rsquo;s the filter <code>{ % url %}</code>. Unfortunately, the first time I wanted to create a URL was actually in Python code &ndash; I wanted to redirect. I was unable to find a way to use url from Python code. There is <code>get_absolute_url</code>, which can be implemented inside the model, but it&rsquo;s only for instances.</p>
+
+<h1>Overall</h1>
+
+<p>I think Django is fairly straightforward for the Rails programmer. The fact that you get a &lsquo;free&rsquo; admin backend (similar to ActiveScaffold), is certainly handy. There are a lot of sources of online information and tutorials, so it&rsquo;s quite easy to get up and running. The main impression I got was of a small framework &ndash; while Rails covers a great range of functionality, I felt I came up against Django limitations rather quickly. That may be due to not looking in the right places, but my Google searches showed that a lot of other people were asking the same questions.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-04T00:00:00+02:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://joeyates.github.io/2010/04/04/a-rails-programmers-first-django-application/" data-via="" data-counturl="http://joeyates.github.io/2010/04/04/a-rails-programmers-first-django-application/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2010/04/02/editing-javascript-in-emacs/" title="Previous Post: Editing Javascript in Emacs">&laquo; Editing Javascript in Emacs</a>
+      
+      
+        <a class="basic-alignment right" href="/2010/04/07/a-beginners-sinatra-tutorial/" title="Next Post: A Beginner's Sinatra Tutorial">A Beginner's Sinatra Tutorial &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/12/23/my-everyday-find-command/">My Everyday Find Command</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/">Ruby Bareword Assignment and Method Calls With Implicit Self</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/07/18/html-history-api/">HTML History API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes/">Overriding the Insertion Operator for C++ Template Classes</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/02/19/hello-gosu/">Hello Gosu!</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
