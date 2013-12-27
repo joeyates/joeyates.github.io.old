@@ -1,0 +1,68 @@
+--- 
+layout: post
+typo_id: 88
+title: Use 'g' as an Alias for 'git' without Losing Autocompletion
+---
+<p>
+I've just started using a new kind of abbreviation system for Git:
+<ul>
+	<li>I use 'g' instead of 'git',</li>
+	<li>I've set up bash autocompletion for 'g', just like 'git'.</li>
+</ul>
+</p>
+
+<!--more-->
+
+<p>
+Previously, I used the following in my ~/.bashrc:<br/>
+<pre>
+...
+alias gts='git status'
+alias gtd='git diff'
+...
+</pre>
+The problem is that, by doing this, you lose autocompletion.
+</p>
+
+<h1>Setup</h1>
+
+<h2>Set Up 'g' as an alias for 'git'</h2>
+In ~/.bashrc:<br/>
+<p>
+<pre>
+...
+alias g='git'
+...
+</pre>
+</p>
+
+<h2>2. Locate the Bash Completion File for Git</h2>
+<p>
+Locate your bash_completion.d directory:
+<ul>
+	<li>On Linux, /etc/bash_completion.d</li>
+	<li>I'm using OS X with Mac Ports, so mine is at /opt/local/etc/bash_completion.d.</li>
+</ul>
+Ensure the directory contains <code>git-completion.bash</code>
+</p>
+
+<h2>3. Add Completion for 'g'</h2>
+<p>
+Add the following to the end of <code>git-completion.bash</code>:
+<typo:code lang="shell">
+complete -o bashdefault -o default -o nospace -F _git g 2>/dev/null \
+        || complete -o default -o nospace -F _git g
+</typo:code>
+Now, if you type:<br/>
+<pre>
+$ g |&lt;TAB&gt;
+</pre>
+you should see autocompletion:
+<pre>
+$ g |
+add                 commit              init                request-pull 
+am                  config              instaweb            reset 
+annotate            describe            log                 revert
+...
+</pre>
+</p>

@@ -1,0 +1,27 @@
+--- 
+layout: post
+typo_id: 11
+title: Managing multiple GNU screen sessions
+---
+<p>I use <a href="http://www.gnu.org/software/screen/">GNU screen</a> constantly: locally and on remote servers.</p>
+
+<p>I have often found myself wanting to save a remote session for one site, and either switch to another session on the same computer, or go back to the same session later. Ctrl+A Ctrl+D does detach the session, but I've always thought you were limited to one.</p>
+
+<!--more-->
+
+<p>
+	After re-reading the manpage, I realized that the functionality I needed was available.</p>
+<p>
+	All you have to do is to set the 'Session name', which can be done in two ways:</p>
+<p>
+	1. at the moment you create the session:</p>
+<pre>$ screen -S my_session_name
+</pre>
+<p>
+	2. from inside the sceen session via the following <a href="http://www.gnu.org/software/screen/manual/html_node/Session-Name.html">command</a>:</p>
+<pre>Ctrl + A, :sessionname my_session_name
+</pre>
+<p>
+	You can re-attach to the session as follows:</p>
+<pre>$ screen -r my_session_name
+</pre>

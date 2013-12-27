@@ -1,0 +1,16 @@
+--- 
+layout: post
+typo_id: 68
+title: Cuil Fail
+---
+Cuil was launched as a search engine in <a href="http://en.wikipedia.org/wiki/Cuil#History">July 2008</a>.
+
+{% img /images/cuilfail-tunnel-lewes.jpg Cuilfail Tunnel in Lewes, United Kingdom %}
+
+<!--more-->
+
+A month earlier, East Sussex county council had tried to <a href="http://www.eastsussex.gov.uk/yourcouncil/pressoffice/pressreleases/2008/06/2007.htm">warn them</a> of the inevitable outcome if they were to proceed.
+
+The warning was not heeded.
+
+A spokesman said that traffic is now at record levels (for the tunnel, that is).

@@ -1,0 +1,123 @@
+--- 
+layout: post
+typo_id: 15
+title: Handling Multiple Versions of Ruby
+---
+<p>
+	Currenly, I am developing with 3 different versions of Ruby:</p>
+<ol>
+	<li>
+		MRI Ruby 1.8.7</li>
+	<li>
+		MRI Ruby 1.9.1</li>
+	<li>
+		JRuby 1.4.0</li>
+</ol>
+<p>
+	I need a quick way to switch betwwen the three main Ruby executables, and the related other programs (gem, irb, etc).</p>
+<p>I have set up Debian Alternatives to handle the job.</p>
+
+<!--more-->
+
+<h2>
+	Alternatives with Ruby</h2>
+<p>
+	The programs I want to switch are:</p>
+<ul>
+	<li>
+		ruby</li>
+	<li>
+		gem</li>
+	<li>
+		irb</li>
+	<li>
+		ri</li>
+	<li>
+		rake</li>
+	<li>
+		rails</li>
+</ul>
+<h2>
+	Ruby MRI 1.8 and 1.9</h2>
+<p>
+	If you compiled your own ruby 1.8 and 1.9, make sure you indicate the version:</p>
+<pre>$ ./configure --program-suffix=1.9
+</pre>
+<h2>
+	Install JRuby</h2>
+<p>
+	See my <a href="http://titusd.co.uk/2010/02/22/jruby-on-rails">other post</a>.</p>
+<h2>
+	Create Links from /etc/alternatives to /usr/bin</h2>
+<pre>$ cd /usr/bin
+$ sudo ln -s /etc/alternatives/ruby
+$ sudo ln -s /etc/alternatives/irb
+$ sudo ln -s /etc/alternatives/ri
+$ sudo ln -s /etc/alternatives/rake
+$ sudo ln -s /etc/alternatives/gem</pre>
+<h2>
+	Create Ruby Alternatives</h2>
+<pre>$ sudo update-alternatives \
+  --install  /usr/bin/ruby  ruby  /usr/local/bin/ruby1.9   30 \
+  --slave    /usr/bin/irb   irb   /usr/local/bin/irb1.9       \
+  --slave    /usr/bin/gem   gem   /usr/local/bin/gem1.9       \
+  --slave    /usr/bin/ri    ri    /usr/local/bin/ri1.9        \
+  --slave    /usr/bin/rails rails /usr/local/bin/rails1.9     \
+  --slave    /usr/bin/rake  rake  /usr/local/bin/rake1.9
+
+$ sudo update-alternatives \
+  --install  /usr/bin/ruby  ruby  /usr/bin/ruby1.8   20 \
+  --slave    /usr/bin/irb   irb   /usr/bin/irb1.8       \
+  --slave    /usr/bin/ri    ri    /usr/bin/ri1.8        \
+  --slave    /usr/bin/gem   gem   /usr/bin/gem1.8       \
+  --slave    /usr/bin/rails rails /usr/bin/rails1.8     \
+  --slave    /usr/bin/rake  rake  /usr/bin/rake1.8
+
+$ sudo update-alternatives \
+  --install  /usr/bin/ruby  ruby  /usr/local/lib/jruby/bin/jruby   10 \
+  --slave    /usr/bin/irb   irb   /usr/local/lib/jruby/bin/jirb       \
+  --slave    /usr/bin/ri    ri    /usr/local/lib/jruby/bin/ri         \
+  --slave    /usr/bin/rails rails /usr/local/lib/jruby/bin/rails      \
+  --slave    /usr/bin/gem   gem   /usr/local/lib/jruby/bin/gem        \
+  --slave    /usr/bin/rake  rake  /usr/local/lib/jruby/bin/rake
+</pre>
+<h2>
+	Check the result</h2>
+<pre>$ update-alternatives --display ruby
+ruby - auto mode
+ link currently points to /usr/local/bin/ruby1.9
+/usr/bin/ruby1.8 - priority 20
+ slave gem: /usr/bin/gem1.8
+ slave irb: /usr/bin/irb1.8
+ slave rails: /usr/bin/rails1.8
+ slave rake: /usr/bin/rake1.8
+ slave ri: /usr/bin/ri1.8
+/usr/local/bin/ruby1.9 - priority 30
+ slave gem: /usr/local/bin/gem1.9
+ slave irb: /usr/local/bin/irb1.9
+ slave rails: /usr/local/bin/rails1.9
+ slave rake: /usr/local/bin/rake1.9
+ slave ri: /usr/local/bin/ri1.9
+/usr/local/lib/jruby/bin/jruby - priority 10
+ slave gem: /usr/local/lib/jruby/bin/gem
+ slave irb: /usr/local/lib/jruby/bin/jirb
+ slave rails: /usr/local/lib/jruby/bin/rails
+ slave rake: /usr/local/lib/jruby/bin/rake
+ slave ri: /usr/local/lib/jruby/bin/ri
+Current `best' version is /usr/local/bin/ruby1.9.
+</pre>
+<h2>
+	Switch versions</h2>
+<pre>$ sudo update-alternatives --config ruby
+There are 3 choices for the alternative ruby (providing /usr/bin/ruby).
+
+  Selection    Path                            Priority   Status
+------------------------------------------------------------
+* 0            /usr/local/bin/ruby1.9           30        auto mode
+  1            /usr/bin/ruby1.8                 20        manual mode
+  2            /usr/local/bin/ruby1.9           30        manual mode
+  3            /usr/local/lib/jruby/bin/jruby   10        manual mode
+
+Press enter to keep the current choice[*], or type selection number: 1
+Using '/usr/bin/ruby1.8' to provide 'ruby'.
+</pre>

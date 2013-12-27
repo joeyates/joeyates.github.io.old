@@ -1,0 +1,53 @@
+--- 
+layout: post
+typo_id: 10
+title: Editing Javascript in Emacs
+---
+<p>
+	Steve Yegge of Google has created a new Javascript mode 'js2-mode' for Emacs.</p>
+<p>
+	It works very well as it uses true parsing, not heuristics, to analyse code.</p>
+
+<!--more-->
+
+<p>
+	<a href="http://code.google.com/p/js2-mode/wiki/InstallationInstructions">Installation</a></p>
+<ul>
+	<li>
+		Download http://js2-mode.googlecode.com/files/js2-20090723b.el</li>
+	<li>
+		Rename the file as js2-mode.el</li>
+	<li>
+		Move it to a directory in your <a href="http://www.gnu.org/software/emacs/emacs-faq.html#Changing-load_002dpath">'load-path'</a> (~/.emacs.d/ should work),</li>
+	<li>
+		Compile it:
+		<ul>
+			<li>
+				Start Emacs,</li>
+			<li>
+				Run the following command:</li>
+		</ul>
+	</li>
+</ul>
+<pre>M-x byte-compile-file
+js2-mode.el
+</pre>
+<h4>
+	Use</h4>
+<p>
+	Add the following to your .emacs file:</p>
+<pre>  (require 'js2-mode)
+  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+</pre>
+<p>
+	This associates all Javascript files with JS2 mode.</p>
+<p>
+	Some features of the mode are:</p>
+<ul>
+	<li>
+		Highlighting of syntax errors and doubtful structures, e.g. missing ';', and undeclared variables,</li>
+	<li>
+		The auto-indentation system works.</li>
+</ul>
+<p>
+	I often make Javascript files dynamic in Rails projects, and the only feature I would wish for is for handling of Ruby ERB tags - currently they completely confuse the parser.</p>
