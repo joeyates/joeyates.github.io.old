@@ -4,7 +4,7 @@
   <title><![CDATA[Joe Yates' Blog]]></title>
   <link href="http://joeyates.github.io/atom.xml" rel="self"/>
   <link href="http://joeyates.github.io/"/>
-  <updated>2013-12-29T14:03:11+01:00</updated>
+  <updated>2013-12-29T14:34:37+01:00</updated>
   <id>http://joeyates.github.io/</id>
   <author>
     <name><![CDATA[Joe Yates]]></name>
@@ -20,25 +20,67 @@
     <id>http://joeyates.github.io/2012/12/23/my-everyday-find-command</id>
     <content type="html"><![CDATA[<p>When I&rsquo;m searching for files, I use this function:</p>
 
-<script src="https://gist.github.com/4363381.js"></script>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># f - everyday find</span>
+</span><span class='line'><span class="c"># usage:</span>
+</span><span class='line'><span class="c">#   f filename_fragment [path]</span>
+</span><span class='line'><span class="c"># skips whatever you list in _exclude_matches</span>
+</span><span class='line'><span class="nv">_exclude_matches</span><span class="o">=(</span>bundle .git *.pyc<span class="o">)</span>
+</span><span class='line'><span class="nv">_excludes</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+</span><span class='line'><span class="k">for </span>_match in <span class="nv">$_exclude_matches</span>; <span class="k">do</span>
+</span><span class='line'><span class="k">  </span><span class="nv">_excludes</span><span class="o">=</span><span class="s2">&quot;${_excludes}-name &#39;$_match&#39; -prune -o &quot;</span>
+</span><span class='line'><span class="k">done</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">eval</span> <span class="s2">&quot;</span>
+</span><span class='line'><span class="s2">function my_everyday_find() {</span>
+</span><span class='line'><span class="s2">  find \$2 \</span>
+</span><span class='line'><span class="s2">    $_excludes \</span>
+</span><span class='line'><span class="s2">    -name \&quot;*\$1*\&quot;    \</span>
+</span><span class='line'><span class="s2">    -print;</span>
+</span><span class='line'><span class="s2">}</span>
+</span><span class='line'><span class="s2">&quot;</span>
+</span><span class='line'><span class="nb">unset </span>_exclude_matches _excludes _match
+</span><span class='line'><span class="nb">alias </span><span class="nv">f</span><span class="o">=</span>my_everyday_find
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>It searches for files and directories with partial matches of the first parameter:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ f 26
-</span><span class='line'>./db/migrate/20121003094826_add_foo_to_bar.rb</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>f 26
+</span><span class='line'>./db/migrate/20121003094826_add_foo_to_bar.rb
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>If I supply a second parameter, it is taken as the directory to search in:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ f 26 ..
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>f 26 ..
 </span><span class='line'>../api/db/migrate/20121003094826_add_foo_to_bar.rb
-</span><span class='line'>../redmine/db/migrate/20091017212644_add_missing_indexes_to_messages.rb</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>../redmine/db/migrate/20091017212644_add_missing_indexes_to_messages.rb
+</span></code></pre></td></tr></table></div></figure>
 
 
 

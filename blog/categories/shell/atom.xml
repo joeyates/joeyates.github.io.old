@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Shell | Joe Yates' Blog]]></title>
+  <link href="http://joeyates.github.io/blog/categories/shell/atom.xml" rel="self"/>
+  <link href="http://joeyates.github.io/"/>
+  <updated>2013-12-29T14:34:37+01:00</updated>
+  <id>http://joeyates.github.io/</id>
+  <author>
+    <name><![CDATA[Joe Yates]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[My Everyday Find Command]]></title>
+    <link href="http://joeyates.github.io/2012/12/23/my-everyday-find-command/"/>
+    <updated>2012-12-23T14:08:00+01:00</updated>
+    <id>http://joeyates.github.io/2012/12/23/my-everyday-find-command</id>
+    <content type="html"><![CDATA[<p>When I&rsquo;m searching for files, I use this function:</p>
+
+<p>```bash</p>
+
+<h1>f &ndash; everyday find</h1>
+
+<h1>usage:</h1>
+
+<h1>f filename_fragment [path]</h1>
+
+<h1>skips whatever you list in _exclude_matches</h1>
+
+<p><em>exclude_matches=(bundle .git *.pyc)
+</em>excludes=&lsquo;&rsquo;
+for <em>match in $</em>exclude_matches; do
+  <em>excludes=&ldquo;${</em>excludes}-name &lsquo;$_match&rsquo; -prune -o &rdquo;
+done</p>
+
+<p>eval &ldquo;
+function my_everyday_find() {
+  find \$2 \</p>
+
+<pre><code>$_excludes \
+-name \"*\$1*\"    \
+-print;
+</code></pre>
+
+<p>}
+&ldquo;
+unset <em>exclude_matches </em>excludes _match
+alias f=my_everyday_find
+```</p>
+
+<p>It searches for files and directories with partial matches of the first parameter:
+<code>bash
+$ f 26
+./db/migrate/20121003094826_add_foo_to_bar.rb
+</code></p>
+
+<p>If I supply a second parameter, it is taken as the directory to search in:
+<code>bash
+$ f 26 ..
+../api/db/migrate/20121003094826_add_foo_to_bar.rb
+../redmine/db/migrate/20091017212644_add_missing_indexes_to_messages.rb
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>
