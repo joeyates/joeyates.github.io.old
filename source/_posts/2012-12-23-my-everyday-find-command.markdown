@@ -3,7 +3,8 @@ layout: post
 title: "My Everyday find Command"
 date: 2012-12-23 14:08
 comments: true
-categories: 
+description: a shell funtion to quickly search for files
+categories: shell
 ---
 When I'm searching for files, I use this function:
 
