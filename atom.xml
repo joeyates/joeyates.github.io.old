@@ -4,7 +4,7 @@
   <title><![CDATA[Joe Yates' Blog]]></title>
   <link href="http://joeyates.github.io/atom.xml" rel="self"/>
   <link href="http://joeyates.github.io/"/>
-  <updated>2013-12-29T14:34:37+01:00</updated>
+  <updated>2013-12-29T14:57:15+01:00</updated>
   <id>http://joeyates.github.io/</id>
   <author>
     <name><![CDATA[Joe Yates]]></name>
@@ -12,6 +12,42 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Instant Sinatra Starter]]></title>
+    <link href="http://joeyates.github.io/2013/12/29/instant-sinatra-starter/"/>
+    <updated>2013-12-29T14:36:04+01:00</updated>
+    <id>http://joeyates.github.io/2013/12/29/instant-sinatra-starter</id>
+    <content type="html"><![CDATA[<p>I was asked to write a book about Sinatra, to be published by Packt Publishing.</p>
+
+<p><img src="http://joeyates.github.io/images/SinatraStarterCover.png" alt="Instant Sinatra Starter" /></p>
+
+<p>The book is called &ldquo;Instant Sinatra Starter&rdquo; and is part of Packtpub&rsquo;s Instant series.</p>
+
+<p>Although the book is very short &ndash; the final version is 48 pages &ndash; it took about six
+months from initial planning to publication.</p>
+
+<p>My target audience is people who have a little programming experience, so it doesn&rsquo;t
+aim to teach you programming in general, or Ruby specifically.</p>
+
+<p>The main section of the book follows the steps you need to develop an address book
+application.</p>
+
+<p>The topics covered are:</p>
+
+<ul>
+<li>Sinatra setup,</li>
+<li>Templating (using Slim),</li>
+<li>Getting an app online using Heroku,</li>
+<li>GET and POST requests,</li>
+<li>Integration testing,</li>
+<li>Database access.</li>
+</ul>
+
+
+<p>The code from the book is <a href="https://github.com/joeyates/sinatra-address-book">available on GitHub</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[My Everyday Find Command]]></title>
@@ -3175,132 +3211,6 @@ $ sudo ln -s /usr/local/lib/jruby-1.4.0 /usr/local/lib/jruby
 </code></pre>
 
 <p>Packaging your application for a servlet container can be done with the <a href="http://rubygems.org/gems/warbler">warbler gem</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Handling Multiple Versions of Ruby]]></title>
-    <link href="http://joeyates.github.io/2010/02/22/handling-multiple-versions-of-ruby/"/>
-    <updated>2010-02-22T00:00:00+01:00</updated>
-    <id>http://joeyates.github.io/2010/02/22/handling-multiple-versions-of-ruby</id>
-    <content type="html"><![CDATA[<p>
-	Currenly, I am developing with 3 different versions of Ruby:</p>
-<ol>
-	<li>
-		MRI Ruby 1.8.7</li>
-	<li>
-		MRI Ruby 1.9.1</li>
-	<li>
-		JRuby 1.4.0</li>
-</ol>
-<p>
-	I need a quick way to switch betwwen the three main Ruby executables, and the related other programs (gem, irb, etc).</p>
-<p>I have set up Debian Alternatives to handle the job.</p>
-
-<!--more-->
-
-<h2>
-	Alternatives with Ruby</h2>
-<p>
-	The programs I want to switch are:</p>
-<ul>
-	<li>
-		ruby</li>
-	<li>
-		gem</li>
-	<li>
-		irb</li>
-	<li>
-		ri</li>
-	<li>
-		rake</li>
-	<li>
-		rails</li>
-</ul>
-<h2>
-	Ruby MRI 1.8 and 1.9</h2>
-<p>
-	If you compiled your own ruby 1.8 and 1.9, make sure you indicate the version:</p>
-<pre>$ ./configure --program-suffix=1.9
-</pre>
-<h2>
-	Install JRuby</h2>
-<p>
-	See my <a href="http://titusd.co.uk/2010/02/22/jruby-on-rails">other post</a>.</p>
-<h2>
-	Create Links from /etc/alternatives to /usr/bin</h2>
-<pre>$ cd /usr/bin
-$ sudo ln -s /etc/alternatives/ruby
-$ sudo ln -s /etc/alternatives/irb
-$ sudo ln -s /etc/alternatives/ri
-$ sudo ln -s /etc/alternatives/rake
-$ sudo ln -s /etc/alternatives/gem</pre>
-<h2>
-	Create Ruby Alternatives</h2>
-<pre>$ sudo update-alternatives \
-  --install  /usr/bin/ruby  ruby  /usr/local/bin/ruby1.9   30 \
-  --slave    /usr/bin/irb   irb   /usr/local/bin/irb1.9       \
-  --slave    /usr/bin/gem   gem   /usr/local/bin/gem1.9       \
-  --slave    /usr/bin/ri    ri    /usr/local/bin/ri1.9        \
-  --slave    /usr/bin/rails rails /usr/local/bin/rails1.9     \
-  --slave    /usr/bin/rake  rake  /usr/local/bin/rake1.9
-
-$ sudo update-alternatives \
-  --install  /usr/bin/ruby  ruby  /usr/bin/ruby1.8   20 \
-  --slave    /usr/bin/irb   irb   /usr/bin/irb1.8       \
-  --slave    /usr/bin/ri    ri    /usr/bin/ri1.8        \
-  --slave    /usr/bin/gem   gem   /usr/bin/gem1.8       \
-  --slave    /usr/bin/rails rails /usr/bin/rails1.8     \
-  --slave    /usr/bin/rake  rake  /usr/bin/rake1.8
-
-$ sudo update-alternatives \
-  --install  /usr/bin/ruby  ruby  /usr/local/lib/jruby/bin/jruby   10 \
-  --slave    /usr/bin/irb   irb   /usr/local/lib/jruby/bin/jirb       \
-  --slave    /usr/bin/ri    ri    /usr/local/lib/jruby/bin/ri         \
-  --slave    /usr/bin/rails rails /usr/local/lib/jruby/bin/rails      \
-  --slave    /usr/bin/gem   gem   /usr/local/lib/jruby/bin/gem        \
-  --slave    /usr/bin/rake  rake  /usr/local/lib/jruby/bin/rake
-</pre>
-<h2>
-	Check the result</h2>
-<pre>$ update-alternatives --display ruby
-ruby - auto mode
- link currently points to /usr/local/bin/ruby1.9
-/usr/bin/ruby1.8 - priority 20
- slave gem: /usr/bin/gem1.8
- slave irb: /usr/bin/irb1.8
- slave rails: /usr/bin/rails1.8
- slave rake: /usr/bin/rake1.8
- slave ri: /usr/bin/ri1.8
-/usr/local/bin/ruby1.9 - priority 30
- slave gem: /usr/local/bin/gem1.9
- slave irb: /usr/local/bin/irb1.9
- slave rails: /usr/local/bin/rails1.9
- slave rake: /usr/local/bin/rake1.9
- slave ri: /usr/local/bin/ri1.9
-/usr/local/lib/jruby/bin/jruby - priority 10
- slave gem: /usr/local/lib/jruby/bin/gem
- slave irb: /usr/local/lib/jruby/bin/jirb
- slave rails: /usr/local/lib/jruby/bin/rails
- slave rake: /usr/local/lib/jruby/bin/rake
- slave ri: /usr/local/lib/jruby/bin/ri
-Current `best' version is /usr/local/bin/ruby1.9.
-</pre>
-<h2>
-	Switch versions</h2>
-<pre>$ sudo update-alternatives --config ruby
-There are 3 choices for the alternative ruby (providing /usr/bin/ruby).
-
-  Selection    Path                            Priority   Status
-------------------------------------------------------------
-* 0            /usr/local/bin/ruby1.9           30        auto mode
-  1            /usr/bin/ruby1.8                 20        manual mode
-  2            /usr/local/bin/ruby1.9           30        manual mode
-  3            /usr/local/lib/jruby/bin/jruby   10        manual mode
-
-Press enter to keep the current choice[*], or type selection number: 1
-Using '/usr/bin/ruby1.8' to provide 'ruby'.
-</pre>
 ]]></content>
   </entry>
   

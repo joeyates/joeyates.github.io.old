@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Debian Alternatives - Joe Yates' Blog</title>
+  <title>Category: Sinatra - Joe Yates' Blog</title>
   <meta name="author" content="Joe Yates">
 
   
-  <meta name="description" content="The Debian Alternatives system manages groups of symlinks, which can be modified en-masse. For each program that it has to manage, Alternatives &hellip;">
+  <meta name="description" content="Category: Sinatra">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://joeyates.github.io/2010/02/22/debian-alternatives">
+  <link rel="canonical" href="http://joeyates.github.ioblog/categories/sinatra">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Joe Yates' Blog" type="application/atom+xml">
@@ -64,134 +64,35 @@
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">Debian Alternatives</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-02-22T00:00:00+01:00" pubdate data-updated="true"></time>
-        
-      </p>
+    <h1 class="entry-title">Category: Sinatra</h1>
     
   </header>
+  
+  <div id="blog-archives" class="category">
 
 
-<div class="entry-content"><p>The Debian <a href="http://www.debian-administration.org/articles/91">Alternatives</a> system manages groups of symlinks, which can be modified en-masse.</p>
 
-<p>For each program that it has to manage, Alternatives expects there to be a symlink from /usr/bin to /etc/alternatives/[PROGRAM NAME].</p>
+  
+  <h2>2013</h2>
 
-<!--more-->
+<article>
+  
+<h1><a href="/2013/12/29/instant-sinatra-starter/">Instant Sinatra Starter</a></h1>
+<time datetime="2013-12-29T14:36:04+01:00" pubdate><span class='month'>Dec</span> <span class='day'>29</span> <span class='year'>2013</span></time>
+
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/ruby/'>Ruby</a>, <a class='category' href='/blog/categories/sinatra/'>Sinatra</a></span>
+</footer>
 
 
-<p>For example, with vi, on my system:</p>
+</article>
 
-<pre><code>$ which vi
-/usr/bin/vi
-
-$ ls -ll /usr/bin/vi
-lrwxrwxrwx 1 root root 20 2009-11-03 15:33 /usr/bin/vi -&amp;gt; /etc/alternatives/vi
-
-$ ls -l /etc/alternatives/vi
-lrwxrwxrwx 1 root root 16 2009-11-03 15:33 /etc/alternatives/vi -&amp;gt; /usr/bin/vim.nox
-
-$ ls -l /usr/bin/vim.nox
--rwxr-xr-x 1 root root 1825312 2009-09-21 13:23 /usr/bin/vim.nox
-</code></pre>
-
-<p>So, on my system, the command &#39;vi&#39; starts /usr/bin/vim.nox via 2 symlinks.</p>
-
-<h1>Commands</h1>
-
-<h2>List Main Programs</h2>
-
-<pre><code>$ update-alternatives --get-selections
-</code></pre>
-
-<h2>Show setup for a certain program</h2>
-
-<pre><code>$ update-alternatives --display vi
-vi - auto mode
- link currently points to /usr/bin/vim.nox
-/usr/bin/vim.nox - priority 40
- slave vi.1.gz: /usr/share/man/man1/vim.1.gz
- slave vi.fr.1.gz: /usr/share/man/fr/man1/vim.1.gz
- slave vi.it.1.gz: /usr/share/man/it/man1/vim.1.gz
- slave vi.pl.1.gz: /usr/share/man/pl/man1/vim.1.gz
- slave vi.ru.1.gz: /usr/share/man/ru/man1/vim.1.gz
-/usr/bin/vim.tiny - priority 10
- slave vi.1.gz: /usr/share/man/man1/vim.1.gz
- slave vi.fr.1.gz: /usr/share/man/fr/man1/vim.1.gz
- slave vi.it.1.gz: /usr/share/man/it/man1/vim.1.gz
- slave vi.pl.1.gz: /usr/share/man/pl/man1/vim.1.gz
- slave vi.ru.1.gz: /usr/share/man/ru/man1/vim.1.gz
- Current `best&amp;#39; version is /usr/bin/vim.nox.
-</code></pre>
-
-<h2>Set Up a Program</h2>
-
-<pre><code>$ sudo update-alternatives --install /usr/bin/[SYMLINK] [TITLE] /PATH/TO/PROGRAM 10
-</code></pre>
 </div>
 
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">Joe Yates</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-02-22T00:00:00+01:00" pubdate data-updated="true"></time>
-      
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://joeyates.github.io/2010/02/22/debian-alternatives/" data-via="" data-counturl="http://joeyates.github.io/2010/02/22/debian-alternatives/" >Tweet</a>
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/2010/02/21/shared-git-repositories/" title="Previous Post: Shared Git Repositories">&laquo; Shared Git Repositories</a>
-      
-      
-        <a class="basic-alignment right" href="/2010/02/22/handling-multiple-versions-of-ruby/" title="Next Post: Handling Multiple Versions of Ruby">Handling Multiple Versions of Ruby &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
 </div>

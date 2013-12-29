@@ -115,15 +115,19 @@
         <lastmod>2013-12-29T14:33:14+01:00</lastmod>
     </url>
     <url>
+        <loc>http://joeyates.github.io/2013/12/29/instant-sinatra-starter/</loc>
+        <lastmod>2013-12-29T14:56:18+01:00</lastmod>
+    </url>
+    <url>
         <loc>http://joeyates.github.io/robots.txt</loc>
         <lastmod>2013-12-27T18:52:58+01:00</lastmod>
     </url>
     <url>
         <loc>http://joeyates.github.io/</loc>
-        <lastmod>2013-12-29T14:33:14+01:00</lastmod>
+        <lastmod>2013-12-29T14:56:18+01:00</lastmod>
     </url>
     <url>
         <loc>http://joeyates.github.io/blog/archives/</loc>
-        <lastmod>2013-12-29T14:33:14+01:00</lastmod>
+        <lastmod>2013-12-29T14:56:18+01:00</lastmod>
     </url>
 </urlset>

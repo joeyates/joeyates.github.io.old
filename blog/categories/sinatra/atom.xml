@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Ruby | Joe Yates' Blog]]></title>
-  <link href="http://joeyates.github.io/blog/categories/ruby/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Sinatra | Joe Yates' Blog]]></title>
+  <link href="http://joeyates.github.io/blog/categories/sinatra/atom.xml" rel="self"/>
   <link href="http://joeyates.github.io/"/>
   <updated>2013-12-29T14:57:15+01:00</updated>
   <id>http://joeyates.github.io/</id>
