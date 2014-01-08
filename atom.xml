@@ -4,7 +4,7 @@
   <title><![CDATA[Joe Yates' Blog]]></title>
   <link href="http://joeyates.github.io/atom.xml" rel="self"/>
   <link href="http://joeyates.github.io/"/>
-  <updated>2014-01-08T13:25:47+01:00</updated>
+  <updated>2014-01-08T13:27:58+01:00</updated>
   <id>http://joeyates.github.io/</id>
   <author>
     <name><![CDATA[Joe Yates]]></name>
@@ -70,42 +70,6 @@ otherwise you get a page not found message:</p>
 </span><span class='line'>  <span class="p">(</span><span class="nf">route/not-found</span> <span class="s">&quot;Not Found&quot;</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Instant Sinatra Starter]]></title>
-    <link href="http://joeyates.github.io/2013/12/29/instant-sinatra-starter/"/>
-    <updated>2013-12-29T14:36:04+01:00</updated>
-    <id>http://joeyates.github.io/2013/12/29/instant-sinatra-starter</id>
-    <content type="html"><![CDATA[<p>I was asked to write a book about Sinatra, to be published by Packt Publishing.</p>
-
-<p><img src="http://joeyates.github.io/images/SinatraStarterCover.png" alt="Instant Sinatra Starter" /></p>
-
-<p>The book is called &ldquo;Instant Sinatra Starter&rdquo; and is part of Packtpub&rsquo;s Instant series.</p>
-
-<p>Although the book is very short &ndash; the final version is 48 pages &ndash; it took about six
-months from initial planning to publication.</p>
-
-<p>My target audience is people who have a little programming experience, so it doesn&rsquo;t
-aim to teach you programming in general, or Ruby specifically.</p>
-
-<p>The main section of the book follows the steps you need to develop an address book
-application.</p>
-
-<p>The topics covered are:</p>
-
-<ul>
-<li>Sinatra setup,</li>
-<li>Templating (using Slim),</li>
-<li>Getting an app online using Heroku,</li>
-<li>GET and POST requests,</li>
-<li>Integration testing,</li>
-<li>Database access.</li>
-</ul>
-
-
-<p>The code from the book is <a href="https://github.com/joeyates/sinatra-address-book">available on GitHub</a>.</p>
 ]]></content>
   </entry>
   
@@ -3165,6 +3129,112 @@ INSERT 0 1</pre>
   1 | Tokyo International Airport | 0101000020957F0000151C5E10117961406666666666C64140
 (1 row)</pre>
 
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[JRuby on Rails]]></title>
+    <link href="http://joeyates.github.io/2010/02/22/jruby-on-rails/"/>
+    <updated>2010-02-22T00:00:00+01:00</updated>
+    <id>http://joeyates.github.io/2010/02/22/jruby-on-rails</id>
+    <content type="html"><![CDATA[<h1>Which Java Version?</h1>
+
+<p>JRuby is normally run on the &ldquo;official&rdquo; Sun (now Oracle) Java. Some people seem to be able to get it to run on GNU Java (GCJ), but I suggest sticking with Sun Java to get you started.</p>
+
+<h1>Which Type of Installation?</h1>
+
+<p>First of all you should decide where to install JRuby &ndash; do you want to install it for all system users or just for your own user?</p>
+
+<!--more-->
+
+
+<h1>Download</h1>
+
+<p>Download the latest JRuby from <a href="http://jruby.org/download"><a href="http://jruby.org/download">http://jruby.org/download</a></a>.</p>
+
+<pre><code>$ wget http://jruby.kenai.com/downloads/1.4.0/jruby-bin-1.4.0.tar.gz
+$ tar -xkzf jruby-bin-1.4.0.tar.gz
+</code></pre>
+
+<h2>Personal Installation</h2>
+
+<pre><code>$ cd ~/bin
+$ cp -r ../jruby-1.4.0 .
+</code></pre>
+
+<p>Make a symlink to simplify things in the future when we upgrade to a new version:</p>
+
+<pre><code>$ ln -s jruby-1.4.0 jruby
+</code></pre>
+
+<p>Add the following line to your ~/.bashrc to add JRuby executables to your %PATH:</p>
+
+<pre><code>export PATH=~/bin/jruby/bin:$PATH
+</code></pre>
+
+<h2>System-wide Installation</h2>
+
+<pre><code>$ sudo cp jruby-1.4.0 /usr/local/lib
+$ sudo ln -s /usr/local/lib/jruby-1.4.0 /usr/local/lib/jruby
+</code></pre>
+
+<h1>Gems</h1>
+
+<p>List installed gems:</p>
+
+<pre><code>$ jruby -S gem list
+</code></pre>
+
+<p>Install a gem (in a personal installation):</p>
+
+<pre><code>$ jruby -S gem install rails
+</code></pre>
+
+<p>Install a gem (in a system-wide installation):</p>
+
+<pre><code>$ sudo /usr/local/lib/jruby/bin/jruby -S gem install rails
+</code></pre>
+
+<h1>Modifying your Rails Project</h1>
+
+<p>You need to look at the list of dependencies of your project, principally the gems, and make sure they are available for JRuby.</p>
+
+<p>Gems written in pure Ruby work &lsquo;out of the box&rsquo; with JRuby. But you&rsquo;ll need to find replacecements for gems which are written in whole or in part in C.</p>
+
+<p>One example of this is RMagick (the Ruby interface to the ImageMagick/GraphicsMagick packages). Ruby on Rails which run on MRI Ruby and use RMagick will have to use RMagick4J under JRuby.</p>
+
+<p>If your Ruby on Rails application has no gem dependency problems, you should be able to run it by changing the name of the database adapter:</p>
+
+<figure class='code'><figcaption><span>Dynamic Database Setup According to Ruby Platform  - config/database.yml </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">&lt;% if RUBY_PLATFORM =~ /java/ %&gt;</span>
+</span><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+</span><span class='line'><span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">jdbcsqlite3</span>
+</span><span class='line'><span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">db/development.db</span>
+</span><span class='line'><span class="l-Scalar-Plain">&lt;% else %&gt;</span>
+</span><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+</span><span class='line'><span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">sqlite3</span>
+</span><span class='line'><span class="l-Scalar-Plain">dbfile</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">db/development.db</span>
+</span><span class='line'><span class="l-Scalar-Plain">&lt;% end %&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here I have made use of the fact that Rails runs config/database.yml through ERB before loading it.</p>
+
+<p>Once the database adapter setting has changed, you should be able to run</p>
+
+<pre><code>$ ./script/server
+</code></pre>
+
+<p>Packaging your application for a servlet container can be done with the <a href="http://rubygems.org/gems/warbler">warbler gem</a>.</p>
 ]]></content>
   </entry>
   
