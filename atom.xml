@@ -4,7 +4,7 @@
   <title><![CDATA[Joe Yates' Blog]]></title>
   <link href="http://joeyates.github.io/atom.xml" rel="self"/>
   <link href="http://joeyates.github.io/"/>
-  <updated>2013-12-29T14:57:15+01:00</updated>
+  <updated>2014-01-08T13:25:47+01:00</updated>
   <id>http://joeyates.github.io/</id>
   <author>
     <name><![CDATA[Joe Yates]]></name>
@@ -12,6 +12,66 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Compojure]]></title>
+    <link href="http://joeyates.github.io/2013/12/30/compojure/"/>
+    <updated>2013-12-30T22:44:31+01:00</updated>
+    <id>http://joeyates.github.io/2013/12/30/compojure</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m interested in alternatives to Ruby for Web programming. As I like Clojure,
+Compojure seems an obvious first choice.</p>
+
+<p>I&rsquo;ve put together a basic CRUD application: an address book.
+You can try it out on Heroku, and the source code is available on GitHub.</p>
+
+<h1>Phase 1: Hello World!</h1>
+
+<p>The first batch of files are:</p>
+
+<ul>
+<li>README</li>
+<li><a href="https://github.com/joeyates/compojure-address-book/blob/d3d1d7f2cd307302db038b0b9ecb21270d1f1702/Procfile">Procfile</a> &ndash; To launch the program on Heroku,</li>
+<li><a href="https://github.com/joeyates/compojure-address-book/blob/d3d1d7f2cd307302db038b0b9ecb21270d1f1702/project.clj">project.clj</a> &ndash; The program is a Leiningen project. This file has a project
+description, lists dependencies and indicates the licence,</li>
+<li><a href="https://github.com/joeyates/compojure-address-book/blob/d3d1d7f2cd307302db038b0b9ecb21270d1f1702/src/compojure_address_book/core.clj">src/compojure_address_book/core.clj</a> &ndash; Prints out &lsquo;Hello World!&rsquo;</li>
+</ul>
+
+
+<p>The entry point is <code>-main</code>, which passes the application instance to Jetty
+application server, along with the port it is to be served on.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">-main</span> <span class="p">[</span><span class="o">&amp;</span> <span class="nv">args</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">port</span> <span class="p">(</span><span class="nf">Integer/parseInt</span> <span class="p">(</span><span class="nb">get </span><span class="p">(</span><span class="nf">System/getenv</span><span class="p">)</span> <span class="s">&quot;PORT&quot;</span> <span class="s">&quot;8080&quot;</span><span class="p">))]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">run-jetty</span> <span class="nv">app</span> <span class="p">{</span><span class="ss">:port</span> <span class="nv">port</span><span class="p">})))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The definition of the application instance basically instantiates a site handler
+with the routes we expect:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">app</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">handler/site</span> <span class="nv">app-routes</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We define one real route &lsquo;/&rsquo;, which gets you a &lsquo;Hello World&rsquo; response,
+otherwise you get a page not found message:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defroutes</span> <span class="nv">app-routes</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">GET</span> <span class="s">&quot;/&quot;</span> <span class="p">[]</span> <span class="s">&quot;Hello World&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">route/not-found</span> <span class="s">&quot;Not Found&quot;</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Instant Sinatra Starter]]></title>
@@ -3105,112 +3165,6 @@ INSERT 0 1</pre>
   1 | Tokyo International Airport | 0101000020957F0000151C5E10117961406666666666C64140
 (1 row)</pre>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[JRuby on Rails]]></title>
-    <link href="http://joeyates.github.io/2010/02/22/jruby-on-rails/"/>
-    <updated>2010-02-22T00:00:00+01:00</updated>
-    <id>http://joeyates.github.io/2010/02/22/jruby-on-rails</id>
-    <content type="html"><![CDATA[<h1>Which Java Version?</h1>
-
-<p>JRuby is normally run on the &ldquo;official&rdquo; Sun (now Oracle) Java. Some people seem to be able to get it to run on GNU Java (GCJ), but I suggest sticking with Sun Java to get you started.</p>
-
-<h1>Which Type of Installation?</h1>
-
-<p>First of all you should decide where to install JRuby &ndash; do you want to install it for all system users or just for your own user?</p>
-
-<!--more-->
-
-
-<h1>Download</h1>
-
-<p>Download the latest JRuby from <a href="http://jruby.org/download"><a href="http://jruby.org/download">http://jruby.org/download</a></a>.</p>
-
-<pre><code>$ wget http://jruby.kenai.com/downloads/1.4.0/jruby-bin-1.4.0.tar.gz
-$ tar -xkzf jruby-bin-1.4.0.tar.gz
-</code></pre>
-
-<h2>Personal Installation</h2>
-
-<pre><code>$ cd ~/bin
-$ cp -r ../jruby-1.4.0 .
-</code></pre>
-
-<p>Make a symlink to simplify things in the future when we upgrade to a new version:</p>
-
-<pre><code>$ ln -s jruby-1.4.0 jruby
-</code></pre>
-
-<p>Add the following line to your ~/.bashrc to add JRuby executables to your %PATH:</p>
-
-<pre><code>export PATH=~/bin/jruby/bin:$PATH
-</code></pre>
-
-<h2>System-wide Installation</h2>
-
-<pre><code>$ sudo cp jruby-1.4.0 /usr/local/lib
-$ sudo ln -s /usr/local/lib/jruby-1.4.0 /usr/local/lib/jruby
-</code></pre>
-
-<h1>Gems</h1>
-
-<p>List installed gems:</p>
-
-<pre><code>$ jruby -S gem list
-</code></pre>
-
-<p>Install a gem (in a personal installation):</p>
-
-<pre><code>$ jruby -S gem install rails
-</code></pre>
-
-<p>Install a gem (in a system-wide installation):</p>
-
-<pre><code>$ sudo /usr/local/lib/jruby/bin/jruby -S gem install rails
-</code></pre>
-
-<h1>Modifying your Rails Project</h1>
-
-<p>You need to look at the list of dependencies of your project, principally the gems, and make sure they are available for JRuby.</p>
-
-<p>Gems written in pure Ruby work &lsquo;out of the box&rsquo; with JRuby. But you&rsquo;ll need to find replacecements for gems which are written in whole or in part in C.</p>
-
-<p>One example of this is RMagick (the Ruby interface to the ImageMagick/GraphicsMagick packages). Ruby on Rails which run on MRI Ruby and use RMagick will have to use RMagick4J under JRuby.</p>
-
-<p>If your Ruby on Rails application has no gem dependency problems, you should be able to run it by changing the name of the database adapter:</p>
-
-<figure class='code'><figcaption><span>Dynamic Database Setup According to Ruby Platform  - config/database.yml </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">&lt;% if RUBY_PLATFORM =~ /java/ %&gt;</span>
-</span><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
-</span><span class='line'><span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">jdbcsqlite3</span>
-</span><span class='line'><span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">db/development.db</span>
-</span><span class='line'><span class="l-Scalar-Plain">&lt;% else %&gt;</span>
-</span><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
-</span><span class='line'><span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">sqlite3</span>
-</span><span class='line'><span class="l-Scalar-Plain">dbfile</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">db/development.db</span>
-</span><span class='line'><span class="l-Scalar-Plain">&lt;% end %&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here I have made use of the fact that Rails runs config/database.yml through ERB before loading it.</p>
-
-<p>Once the database adapter setting has changed, you should be able to run</p>
-
-<pre><code>$ ./script/server
-</code></pre>
-
-<p>Packaging your application for a servlet container can be done with the <a href="http://rubygems.org/gems/warbler">warbler gem</a>.</p>
 ]]></content>
   </entry>
   
