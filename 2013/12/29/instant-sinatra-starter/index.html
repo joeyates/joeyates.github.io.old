@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Compojure - Joe Yates' Blog</title>
+  <title>Instant Sinatra Starter - Joe Yates' Blog</title>
   <meta name="author" content="Joe Yates">
 
   
-  <meta name="description" content="I&rsquo;m interested in alternatives to Ruby for Web programming. As I like Clojure,
-Compojure seems an obvious first choice. I&rsquo;ve put together &hellip;">
+  <meta name="description" content="I was asked to write a book about Sinatra, to be published by Packt Publishing. The book is called &ldquo;Instant Sinatra Starter&rdquo; and is part &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@ Compojure seems an obvious first choice. I&rsquo;ve put together &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://joeyates.github.io/2013/12/30/compojure">
+  <link rel="canonical" href="http://joeyates.github.io/2013/12/29/instant-sinatra-starter">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Joe Yates' Blog" type="application/atom+xml">
@@ -69,7 +68,7 @@ Compojure seems an obvious first choice. I&rsquo;ve put together &hellip;">
   
   <header>
     
-      <h1 class="entry-title">Compojure</h1>
+      <h1 class="entry-title">Instant Sinatra Starter</h1>
     
     
       <p class="meta">
@@ -85,65 +84,41 @@ Compojure seems an obvious first choice. I&rsquo;ve put together &hellip;">
   
 
 
-<time datetime="2013-12-30T22:44:31+01:00" pubdate data-updated="true">Dec 30<span>th</span>, 2013</time>
+<time datetime="2013-12-29T14:36:04+01:00" pubdate data-updated="true">Dec 29<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I&rsquo;m interested in alternatives to Ruby for Web programming. As I like Clojure,
-Compojure seems an obvious first choice.</p>
+<div class="entry-content"><p>I was asked to write a book about Sinatra, to be published by Packt Publishing.</p>
 
-<p>I&rsquo;ve put together a basic CRUD application: an address book.
-You can try it out on Heroku, and the source code is available on GitHub.</p>
+<p><img src="/images/SinatraStarterCover.png" alt="Instant Sinatra Starter" /></p>
 
-<h1>Phase 1: Hello World!</h1>
+<p>The book is called &ldquo;Instant Sinatra Starter&rdquo; and is part of Packtpub&rsquo;s Instant series.</p>
 
-<p>The first batch of files are:</p>
+<p>Although the book is very short &ndash; the final version is 48 pages &ndash; it took about six
+months from initial planning to publication.</p>
+
+<p>My target audience is people who have a little programming experience, so it doesn&rsquo;t
+aim to teach you programming in general, or Ruby specifically.</p>
+
+<p>The main section of the book follows the steps you need to develop an address book
+application.</p>
+
+<p>The topics covered are:</p>
 
 <ul>
-<li>README</li>
-<li><a href="https://github.com/joeyates/compojure-address-book/blob/d3d1d7f2cd307302db038b0b9ecb21270d1f1702/Procfile">Procfile</a> &ndash; To launch the program on Heroku,</li>
-<li><a href="https://github.com/joeyates/compojure-address-book/blob/d3d1d7f2cd307302db038b0b9ecb21270d1f1702/project.clj">project.clj</a> &ndash; The program is a Leiningen project. This file has a project
-description, lists dependencies and indicates the licence,</li>
-<li><a href="https://github.com/joeyates/compojure-address-book/blob/d3d1d7f2cd307302db038b0b9ecb21270d1f1702/src/compojure_address_book/core.clj">src/compojure_address_book/core.clj</a> &ndash; Prints out &lsquo;Hello World!&rsquo;</li>
+<li>Sinatra setup,</li>
+<li>Templating (using Slim),</li>
+<li>Getting an app online using Heroku,</li>
+<li>GET and POST requests,</li>
+<li>Integration testing,</li>
+<li>Database access.</li>
 </ul>
 
 
-<p>The entry point is <code>-main</code>, which passes the application instance to Jetty
-application server, along with the port it is to be served on.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">-main</span> <span class="p">[</span><span class="o">&amp;</span> <span class="nv">args</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">port</span> <span class="p">(</span><span class="nf">Integer/parseInt</span> <span class="p">(</span><span class="nb">get </span><span class="p">(</span><span class="nf">System/getenv</span><span class="p">)</span> <span class="s">&quot;PORT&quot;</span> <span class="s">&quot;8080&quot;</span><span class="p">))]</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">run-jetty</span> <span class="nv">app</span> <span class="p">{</span><span class="ss">:port</span> <span class="nv">port</span><span class="p">})))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The definition of the application instance basically instantiates a site handler
-with the routes we expect:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">app</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">handler/site</span> <span class="nv">app-routes</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We define one real route &lsquo;/&rsquo;, which gets you a &lsquo;Hello World&rsquo; response,
-otherwise you get a page not found message:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defroutes</span> <span class="nv">app-routes</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">GET</span> <span class="s">&quot;/&quot;</span> <span class="p">[]</span> <span class="s">&quot;Hello World&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">route/not-found</span> <span class="s">&quot;Not Found&quot;</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<p>The code from the book is <a href="https://github.com/joeyates/sinatra-address-book">available on GitHub</a>.</p>
 </div>
 
 
@@ -166,12 +141,12 @@ otherwise you get a page not found message:</p>
   
 
 
-<time datetime="2013-12-30T22:44:31+01:00" pubdate data-updated="true">Dec 30<span>th</span>, 2013</time>
+<time datetime="2013-12-29T14:36:04+01:00" pubdate data-updated="true">Dec 29<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/clojure/'>clojure</a>, <a class='category' href='/blog/categories/web/'>web</a>
+    <a class='category' href='/blog/categories/ruby/'>Ruby</a>, <a class='category' href='/blog/categories/sinatra/'>Sinatra</a>
   
 </span>
 
@@ -180,7 +155,7 @@ otherwise you get a page not found message:</p>
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://joeyates.github.io/2013/12/30/compojure/" data-via="" data-counturl="http://joeyates.github.io/2013/12/30/compojure/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://joeyates.github.io/2013/12/29/instant-sinatra-starter/" data-via="" data-counturl="http://joeyates.github.io/2013/12/29/instant-sinatra-starter/" >Tweet</a>
   
   
   
@@ -219,7 +194,7 @@ otherwise you get a page not found message:</p>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/2013/12/30/compojure/">Compojure</a>
+        <a href="/2013/12/29/instant-sinatra-starter/">Instant Sinatra Starter</a>
       </li>
     
       <li class="post">

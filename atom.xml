@@ -4,7 +4,7 @@
   <title><![CDATA[Joe Yates' Blog]]></title>
   <link href="http://joeyates.github.io/atom.xml" rel="self"/>
   <link href="http://joeyates.github.io/"/>
-  <updated>2014-01-08T13:27:58+01:00</updated>
+  <updated>2014-01-08T13:28:48+01:00</updated>
   <id>http://joeyates.github.io/</id>
   <author>
     <name><![CDATA[Joe Yates]]></name>
@@ -14,62 +14,38 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Compojure]]></title>
-    <link href="http://joeyates.github.io/2013/12/30/compojure/"/>
-    <updated>2013-12-30T22:44:31+01:00</updated>
-    <id>http://joeyates.github.io/2013/12/30/compojure</id>
-    <content type="html"><![CDATA[<p>I&rsquo;m interested in alternatives to Ruby for Web programming. As I like Clojure,
-Compojure seems an obvious first choice.</p>
+    <title type="html"><![CDATA[Instant Sinatra Starter]]></title>
+    <link href="http://joeyates.github.io/2013/12/29/instant-sinatra-starter/"/>
+    <updated>2013-12-29T14:36:04+01:00</updated>
+    <id>http://joeyates.github.io/2013/12/29/instant-sinatra-starter</id>
+    <content type="html"><![CDATA[<p>I was asked to write a book about Sinatra, to be published by Packt Publishing.</p>
 
-<p>I&rsquo;ve put together a basic CRUD application: an address book.
-You can try it out on Heroku, and the source code is available on GitHub.</p>
+<p><img src="http://joeyates.github.io/images/SinatraStarterCover.png" alt="Instant Sinatra Starter" /></p>
 
-<h1>Phase 1: Hello World!</h1>
+<p>The book is called &ldquo;Instant Sinatra Starter&rdquo; and is part of Packtpub&rsquo;s Instant series.</p>
 
-<p>The first batch of files are:</p>
+<p>Although the book is very short &ndash; the final version is 48 pages &ndash; it took about six
+months from initial planning to publication.</p>
+
+<p>My target audience is people who have a little programming experience, so it doesn&rsquo;t
+aim to teach you programming in general, or Ruby specifically.</p>
+
+<p>The main section of the book follows the steps you need to develop an address book
+application.</p>
+
+<p>The topics covered are:</p>
 
 <ul>
-<li>README</li>
-<li><a href="https://github.com/joeyates/compojure-address-book/blob/d3d1d7f2cd307302db038b0b9ecb21270d1f1702/Procfile">Procfile</a> &ndash; To launch the program on Heroku,</li>
-<li><a href="https://github.com/joeyates/compojure-address-book/blob/d3d1d7f2cd307302db038b0b9ecb21270d1f1702/project.clj">project.clj</a> &ndash; The program is a Leiningen project. This file has a project
-description, lists dependencies and indicates the licence,</li>
-<li><a href="https://github.com/joeyates/compojure-address-book/blob/d3d1d7f2cd307302db038b0b9ecb21270d1f1702/src/compojure_address_book/core.clj">src/compojure_address_book/core.clj</a> &ndash; Prints out &lsquo;Hello World!&rsquo;</li>
+<li>Sinatra setup,</li>
+<li>Templating (using Slim),</li>
+<li>Getting an app online using Heroku,</li>
+<li>GET and POST requests,</li>
+<li>Integration testing,</li>
+<li>Database access.</li>
 </ul>
 
 
-<p>The entry point is <code>-main</code>, which passes the application instance to Jetty
-application server, along with the port it is to be served on.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">-main</span> <span class="p">[</span><span class="o">&amp;</span> <span class="nv">args</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">port</span> <span class="p">(</span><span class="nf">Integer/parseInt</span> <span class="p">(</span><span class="nb">get </span><span class="p">(</span><span class="nf">System/getenv</span><span class="p">)</span> <span class="s">&quot;PORT&quot;</span> <span class="s">&quot;8080&quot;</span><span class="p">))]</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">run-jetty</span> <span class="nv">app</span> <span class="p">{</span><span class="ss">:port</span> <span class="nv">port</span><span class="p">})))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The definition of the application instance basically instantiates a site handler
-with the routes we expect:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">app</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">handler/site</span> <span class="nv">app-routes</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We define one real route &lsquo;/&rsquo;, which gets you a &lsquo;Hello World&rsquo; response,
-otherwise you get a page not found message:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defroutes</span> <span class="nv">app-routes</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">GET</span> <span class="s">&quot;/&quot;</span> <span class="p">[]</span> <span class="s">&quot;Hello World&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">route/not-found</span> <span class="s">&quot;Not Found&quot;</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<p>The code from the book is <a href="https://github.com/joeyates/sinatra-address-book">available on GitHub</a>.</p>
 ]]></content>
   </entry>
   
