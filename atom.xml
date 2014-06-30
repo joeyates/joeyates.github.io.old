@@ -4,7 +4,7 @@
   <title><![CDATA[Joe Yates' Blog]]></title>
   <link href="http://joeyates.github.io/atom.xml" rel="self"/>
   <link href="http://joeyates.github.io/"/>
-  <updated>2014-02-27T09:07:47+01:00</updated>
+  <updated>2014-06-30T10:40:38+02:00</updated>
   <id>http://joeyates.github.io/</id>
   <author>
     <name><![CDATA[Joe Yates]]></name>
@@ -12,6 +12,271 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to Forward Blocks in Ruby]]></title>
+    <link href="http://joeyates.github.io/2014/06/30/how-to-forward-blocks-in-ruby/"/>
+    <updated>2014-06-30T09:51:19+02:00</updated>
+    <id>http://joeyates.github.io/2014/06/30/how-to-forward-blocks-in-ruby</id>
+    <content type="html"><![CDATA[<h1>TL;DR</h1>
+
+<p>Use <code>Proc.new</code></p>
+
+<h1>Calling Enumerators &ndash; normal use</h1>
+
+<p>You&rsquo;re writing some code which calls an Enumerator &ndash; a function that
+makes repeated calls to the block of code that you provide.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">yield_me_2_things</span>
+</span><span class='line'>  <span class="k">yield</span> <span class="s1">&#39;Thing 1&#39;</span>
+</span><span class='line'>  <span class="k">yield</span> <span class="s1">&#39;Thing 2&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">yield_me_2_things</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">x</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will print:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Thing</span> <span class="mi">1</span>
+</span><span class='line'><span class="no">Thing</span> <span class="mi">2</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The values are supplied by <code>yield_me_2_things</code> and the printing is done in
+the block, <code>{ |x| puts }</code>, that is passed to that method.</p>
+
+<h1>Generalize</h1>
+
+<p>I can now make a generalized method, to handle any number of things:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">yield_me_n_things</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</span><span class='line'>  <span class="mi">1</span><span class="o">.</span><span class="n">upto</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">thing</span> <span class="o">=</span> <span class="s2">&quot;Thing </span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">yield</span> <span class="n">thing</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">yield_me_n_things</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">x</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&hellip;the output is the same.</p>
+
+<h1>An alternative: use a block</h1>
+
+<p>I could equally have implemented the method using a <code>&amp;block</code> parameter &ndash;
+for the caller, it makes no difference:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">call_this_block_with_n_things</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+</span><span class='line'>  <span class="mi">1</span><span class="o">.</span><span class="n">upto</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">thing</span> <span class="o">=</span> <span class="s2">&quot;Thing </span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="n">block</span><span class="o">.</span><span class="n">call</span> <span class="n">thing</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">call_this_block_with_n_things</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">x</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&hellip;the output is the same.</p>
+
+<h1>The problem</h1>
+
+<p>What if I want one Enumerator to call another?</p>
+
+<p>What if I want to keep the specific version (<code>yield_me_2_things</code>)
+but just make it call the generalized method?</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">enumerate_n_things</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="c1"># How do I receive the block?</span>
+</span><span class='line'>  <span class="mi">1</span><span class="o">.</span><span class="n">upto</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">thing</span> <span class="o">=</span> <span class="s2">&quot;Thing </span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="c1"># How do I call the block?</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">enumerate_2_things</span>
+</span><span class='line'>  <span class="n">enumerate_n_things</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># How do I forward the block?</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">enumerate_2_things</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">x</span> <span class="p">}</span>
+</span><span class='line'><span class="n">enumerate_2_things</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">x</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>How should I write the two methods, while keeping both usable indipendently?</p>
+
+<h1>Attempt 1: Forward using yield</h1>
+
+<p>With <code>yield</code>, you don&rsquo;t explicitly receive the block, you just call it.
+Does that work across two levels? I.e., does the block get passed to method I call?</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">enumerate_n_things</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</span><span class='line'>  <span class="mi">1</span><span class="o">.</span><span class="n">upto</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">thing</span> <span class="o">=</span> <span class="s2">&quot;Thing </span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">yield</span> <span class="n">thing</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">enumerate_2_things</span>
+</span><span class='line'>  <span class="n">enumerate_n_things</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">enumerate_2_things</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">x</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>No, doesn&rsquo;t work, <code>enumerate_n_things</code> doesn&rsquo;t receive a block.</p>
+
+<p>I get this error:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">no</span> <span class="n">block</span> <span class="n">given</span> <span class="p">(</span><span class="k">yield</span><span class="p">)</span> <span class="p">(</span><span class="no">LocalJumpError</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Attempt 2: Forward using a block</h1>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">enumerate_n_things</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">block</span><span class="p">)</span> <span class="c1"># Note: no &#39;&amp;&#39;</span>
+</span><span class='line'>  <span class="mi">1</span><span class="o">.</span><span class="n">upto</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">thing</span> <span class="o">=</span> <span class="s2">&quot;Thing </span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="n">block</span><span class="o">.</span><span class="n">call</span> <span class="n">thing</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">enumerate_2_things</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">enumerate_n_things</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">block</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">enumerate_2_things</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">x</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Prints:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Thing</span> <span class="mi">1</span>
+</span><span class='line'><span class="no">Thing</span> <span class="mi">2</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But we can no longer pass a block to the generalized method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">enumerate_n_things</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">x</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>enumerate_n_things</code> now expects the block as a normal parameter.</p>
+
+<p>I get this error:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">wrong</span> <span class="n">number</span> <span class="n">of</span> <span class="n">arguments</span> <span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="mi">2</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Solution: Proc.new</h1>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">enumerate_n_things</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">block</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span><span class='line'>  <span class="mi">1</span><span class="o">.</span><span class="n">upto</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">thing</span> <span class="o">=</span> <span class="s2">&quot;Thing </span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="n">block</span><span class="o">.</span><span class="n">call</span> <span class="n">thing</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">enumerate_2_things</span><span class="p">(</span><span class="nb">proc</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">enumerate_n_things</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">block</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">enumerate_2_things</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">x</span> <span class="p">}</span>
+</span><span class='line'><span class="n">enumerate_n_things</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">x</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Both calls now work!</p>
+
+<p><code>Proc.new</code> transforms any block passed to a method into a Proc.
+If we use that as the default value for a block parameter we can
+call methods directly with blocks, or forward blocks between
+enumerators.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Instant Sinatra Starter]]></title>
@@ -3105,112 +3370,6 @@ INSERT 0 1</pre>
   1 | Tokyo International Airport | 0101000020957F0000151C5E10117961406666666666C64140
 (1 row)</pre>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[JRuby on Rails]]></title>
-    <link href="http://joeyates.github.io/2010/02/22/jruby-on-rails/"/>
-    <updated>2010-02-22T00:00:00+01:00</updated>
-    <id>http://joeyates.github.io/2010/02/22/jruby-on-rails</id>
-    <content type="html"><![CDATA[<h1>Which Java Version?</h1>
-
-<p>JRuby is normally run on the &ldquo;official&rdquo; Sun (now Oracle) Java. Some people seem to be able to get it to run on GNU Java (GCJ), but I suggest sticking with Sun Java to get you started.</p>
-
-<h1>Which Type of Installation?</h1>
-
-<p>First of all you should decide where to install JRuby &ndash; do you want to install it for all system users or just for your own user?</p>
-
-<!--more-->
-
-
-<h1>Download</h1>
-
-<p>Download the latest JRuby from <a href="http://jruby.org/download"><a href="http://jruby.org/download">http://jruby.org/download</a></a>.</p>
-
-<pre><code>$ wget http://jruby.kenai.com/downloads/1.4.0/jruby-bin-1.4.0.tar.gz
-$ tar -xkzf jruby-bin-1.4.0.tar.gz
-</code></pre>
-
-<h2>Personal Installation</h2>
-
-<pre><code>$ cd ~/bin
-$ cp -r ../jruby-1.4.0 .
-</code></pre>
-
-<p>Make a symlink to simplify things in the future when we upgrade to a new version:</p>
-
-<pre><code>$ ln -s jruby-1.4.0 jruby
-</code></pre>
-
-<p>Add the following line to your ~/.bashrc to add JRuby executables to your %PATH:</p>
-
-<pre><code>export PATH=~/bin/jruby/bin:$PATH
-</code></pre>
-
-<h2>System-wide Installation</h2>
-
-<pre><code>$ sudo cp jruby-1.4.0 /usr/local/lib
-$ sudo ln -s /usr/local/lib/jruby-1.4.0 /usr/local/lib/jruby
-</code></pre>
-
-<h1>Gems</h1>
-
-<p>List installed gems:</p>
-
-<pre><code>$ jruby -S gem list
-</code></pre>
-
-<p>Install a gem (in a personal installation):</p>
-
-<pre><code>$ jruby -S gem install rails
-</code></pre>
-
-<p>Install a gem (in a system-wide installation):</p>
-
-<pre><code>$ sudo /usr/local/lib/jruby/bin/jruby -S gem install rails
-</code></pre>
-
-<h1>Modifying your Rails Project</h1>
-
-<p>You need to look at the list of dependencies of your project, principally the gems, and make sure they are available for JRuby.</p>
-
-<p>Gems written in pure Ruby work &lsquo;out of the box&rsquo; with JRuby. But you&rsquo;ll need to find replacecements for gems which are written in whole or in part in C.</p>
-
-<p>One example of this is RMagick (the Ruby interface to the ImageMagick/GraphicsMagick packages). Ruby on Rails which run on MRI Ruby and use RMagick will have to use RMagick4J under JRuby.</p>
-
-<p>If your Ruby on Rails application has no gem dependency problems, you should be able to run it by changing the name of the database adapter:</p>
-
-<figure class='code'><figcaption><span>Dynamic Database Setup According to Ruby Platform  - config/database.yml </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">&lt;% if RUBY_PLATFORM =~ /java/ %&gt;</span>
-</span><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
-</span><span class='line'><span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">jdbcsqlite3</span>
-</span><span class='line'><span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">db/development.db</span>
-</span><span class='line'><span class="l-Scalar-Plain">&lt;% else %&gt;</span>
-</span><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
-</span><span class='line'><span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">sqlite3</span>
-</span><span class='line'><span class="l-Scalar-Plain">dbfile</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">db/development.db</span>
-</span><span class='line'><span class="l-Scalar-Plain">&lt;% end %&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here I have made use of the fact that Rails runs config/database.yml through ERB before loading it.</p>
-
-<p>Once the database adapter setting has changed, you should be able to run</p>
-
-<pre><code>$ ./script/server
-</code></pre>
-
-<p>Packaging your application for a servlet container can be done with the <a href="http://rubygems.org/gems/warbler">warbler gem</a>.</p>
 ]]></content>
   </entry>
   

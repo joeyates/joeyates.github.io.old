@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Joe Yates' Blog]]></title>
   <link href="http://joeyates.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://joeyates.github.io/"/>
-  <updated>2014-02-27T09:07:47+01:00</updated>
+  <updated>2014-06-30T10:40:38+02:00</updated>
   <id>http://joeyates.github.io/</id>
   <author>
     <name><![CDATA[Joe Yates]]></name>
@@ -12,6 +12,203 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to Forward Blocks in Ruby]]></title>
+    <link href="http://joeyates.github.io/2014/06/30/how-to-forward-blocks-in-ruby/"/>
+    <updated>2014-06-30T09:51:19+02:00</updated>
+    <id>http://joeyates.github.io/2014/06/30/how-to-forward-blocks-in-ruby</id>
+    <content type="html"><![CDATA[<h1>TL;DR</h1>
+
+<p>Use <code>Proc.new</code></p>
+
+<h1>Calling Enumerators &ndash; normal use</h1>
+
+<p>You&rsquo;re writing some code which calls an Enumerator &ndash; a function that
+makes repeated calls to the block of code that you provide.</p>
+
+<p>```ruby
+def yield_me_2_things
+  yield &lsquo;Thing 1&rsquo;
+  yield &lsquo;Thing 2&rsquo;
+end</p>
+
+<p>yield_me_2_things { |x| puts x }
+```</p>
+
+<p>This will print:</p>
+
+<p><code>
+Thing 1
+Thing 2
+</code></p>
+
+<p>The values are supplied by <code>yield_me_2_things</code> and the printing is done in
+the block, <code>{ |x| puts }</code>, that is passed to that method.</p>
+
+<h1>Generalize</h1>
+
+<p>I can now make a generalized method, to handle any number of things:</p>
+
+<p>```ruby
+def yield_me_n_things(n)
+  1.upto(n) do |i|</p>
+
+<pre><code>thing = "Thing #{i}"
+yield thing
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>yield_me_n_things(2) { |x| puts x }
+```</p>
+
+<p>&hellip;the output is the same.</p>
+
+<h1>An alternative: use a block</h1>
+
+<p>I could equally have implemented the method using a <code>&amp;block</code> parameter &ndash;
+for the caller, it makes no difference:</p>
+
+<p>```ruby
+def call_this_block_with_n_things(n, &amp;block)
+  1.upto(n) do |i|</p>
+
+<pre><code>thing = "Thing #{i}"
+block.call thing
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>call_this_block_with_n_things(2) { |x| puts x }
+```</p>
+
+<p>&hellip;the output is the same.</p>
+
+<h1>The problem</h1>
+
+<p>What if I want one Enumerator to call another?</p>
+
+<p>What if I want to keep the specific version (<code>yield_me_2_things</code>)
+but just make it call the generalized method?</p>
+
+<p>```ruby
+def enumerate_n_things(n) # How do I receive the block?
+  1.upto(n) do |i|</p>
+
+<pre><code>thing = "Thing #{i}"
+# How do I call the block?
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>def enumerate_2_things
+  enumerate_n_things(2) # How do I forward the block?
+end</p>
+
+<p>enumerate_2_things { |x| puts x }
+enumerate_2_things(2) { |x| puts x }
+```</p>
+
+<p>How should I write the two methods, while keeping both usable indipendently?</p>
+
+<h1>Attempt 1: Forward using yield</h1>
+
+<p>With <code>yield</code>, you don&rsquo;t explicitly receive the block, you just call it.
+Does that work across two levels? I.e., does the block get passed to method I call?</p>
+
+<p>```
+def enumerate_n_things(n)
+  1.upto(n) do |i|</p>
+
+<pre><code>thing = "Thing #{i}"
+yield thing
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>def enumerate_2_things
+  enumerate_n_things(2)
+end</p>
+
+<p>enumerate_2_things { |x| puts x }
+```</p>
+
+<p>No, doesn&rsquo;t work, <code>enumerate_n_things</code> doesn&rsquo;t receive a block.</p>
+
+<p>I get this error:
+<code>
+no block given (yield) (LocalJumpError)
+</code></p>
+
+<h1>Attempt 2: Forward using a block</h1>
+
+<p>```
+def enumerate_n_things(n, block) # Note: no &lsquo;&amp;&rsquo;
+  1.upto(n) do |i|</p>
+
+<pre><code>thing = "Thing #{i}"
+block.call thing
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>def enumerate_2_things(&amp;block)
+  enumerate_n_things(2, block)
+end</p>
+
+<p>enumerate_2_things { |x| puts x }
+<code>
+Prints:
+</code>
+Thing 1
+Thing 2
+<code>
+But we can no longer pass a block to the generalized method:
+</code>
+enumerate_n_things(2) { |x| puts x }
+```</p>
+
+<p><code>enumerate_n_things</code> now expects the block as a normal parameter.</p>
+
+<p>I get this error:
+<code>
+wrong number of arguments (1 for 2)
+</code></p>
+
+<h1>Solution: Proc.new</h1>
+
+<p>```ruby
+def enumerate_n_things(n, block = Proc.new)
+  1.upto(n) do |i|</p>
+
+<pre><code>thing = "Thing #{i}"
+block.call thing
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>def enumerate_2_things(proc = Proc.new)
+  enumerate_n_things(2, block)
+end</p>
+
+<p>enumerate_2_things { |x| puts x }
+enumerate_n_things(2) { |x| puts x }
+```
+Both calls now work!</p>
+
+<p><code>Proc.new</code> transforms any block passed to a method into a Proc.
+If we use that as the default value for a block parameter we can
+call methods directly with blocks, or forward blocks between
+enumerators.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Instant Sinatra Starter]]></title>
