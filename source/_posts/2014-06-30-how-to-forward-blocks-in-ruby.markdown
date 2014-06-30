@@ -164,7 +164,7 @@ def enumerate_n_things(n, block = Proc.new)
   end
 end
 
-def enumerate_2_things(proc = Proc.new)
+def enumerate_2_things(block = Proc.new)
   enumerate_n_things(2, block)
 end
 
