@@ -41,6 +41,10 @@ rake preview
 Deploy to GitHub pages:
 
 ```
+rake generate
 mkdir -p _deploy
-rake deploy push
+rake deploy
+git checkout master
+cp -r _deploy/* .
+git add .
 ```
