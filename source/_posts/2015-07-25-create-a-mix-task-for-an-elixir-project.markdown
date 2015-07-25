@@ -20,7 +20,7 @@ Now, inside the new `mix_task_example` project directory, running
 $ mix help
 ```
 
-shows which mix tasksi are available and in this newly created project there
+shows which mix tasks are available and in this newly created project there
 are already more than 30.
 
 Now I create the directory for tasks with

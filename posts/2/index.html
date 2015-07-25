@@ -1,0 +1,649 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Joe Yates' Blog</title>
+  <meta name="author" content="Joe Yates">
+
+  
+  <meta name="description" content="The Site I have a young relative who draws a lot of comic strips, and thinking it would be nice if he could publish them, I looked around for an &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://joeyates.github.io/posts/2">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Joe Yates' Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Joe Yates' Blog</a></h1>
+  
+    <h2>Programming and DevOps</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:joeyates.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/05/31/sinatra-a-real-site/">Sinatra: A Real Site</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-31T00:00:00+02:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="/images/sidcom.png" title="sidcom.me.uk" ></p>
+
+<h1>The Site</h1>
+
+
+<p>
+I have a young relative who draws a lot of comic strips, and thinking it would be nice if he could publish them, I looked around for an Open Source system.<br>
+I wanted something that was as near to XKCD as possible - latest comic, next/previous and random.<br>
+Not finding anything that was both pretty and ultra-simple, I decided to write my own.<br>
+The version for my relative is <a href="http://sidcom.me.uk/">here</a> -
+the system will be up on GitHub as soon as I finish making it configurable.<br>
+</p>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2010/05/31/sinatra-a-real-site/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/05/26/googletest-hello-world/">Googletest Hello World</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-26T00:00:00+02:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>
+This is a quick run down of how to get started with using <a href="http://code.google.com/p/googletest/">googletest</a> on Ubuntu.
+</p>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2010/05/26/googletest-hello-world/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/05/12/object-representation-in-c/">Object Representation in C++</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-12T00:00:00+02:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>Member variables</h1>
+
+<p>Each C++ object needs to hold its instance data. But, there is often not a perfect match between the sum of the byte sizes of the member variables and the size of an object: The space occupied will often be greater than the sum of the sizes of the member variables.</p>
+
+<p>The reasons are:</p>
+
+<ul>
+<li>compiler-specific alignment issues: in order to speed up access, a few bytes can be wasted for each instance to ensure that all the members are aligned on a word boundary,</li>
+<li>the presence of a pointer to the virtual function table,</li>
+<li>empty classes.</li>
+</ul>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2010/05/12/object-representation-in-c/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/05/08/cuil-fail/">Cuil Fail</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-08T00:00:00+02:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Cuil was launched as a search engine in <a href="http://en.wikipedia.org/wiki/Cuil#History">July 2008</a>.</p>
+
+<p><img src="/images/cuilfail-tunnel-lewes.jpg" title="Cuilfail Tunnel in Lewes, United Kingdom" ></p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2010/05/08/cuil-fail/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/04/07/a-beginners-sinatra-tutorial/">A Beginner's Sinatra Tutorial</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-07T00:00:00+02:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In the olden days your first program was probably in BASIC and was run from the command line, nowadays the equivalent is Web programming.</p>
+
+<p>Using Sinatra reminds me of my first programming experiences - you write a tiny bit of code, with no boilerplate and get to see a result.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2010/04/07/a-beginners-sinatra-tutorial/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/04/04/a-rails-programmers-first-django-application/">A Rails Programmer's First Django Application</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-04T00:00:00+02:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;ve seen many comparisons of Rails with Django, its Python counterpart.</p>
+
+<h1>The Application</h1>
+
+<p>I decided to use Django to write <a href="http://titusd.co.uk/snape/timeline/">a small local history application: the story of Snape in East Sussex</a>.</p>
+
+<p><img src="/images/snape-timeline.png" title="The public timeline" ></p>
+
+<p>The front and of the application uses a <a href="http://code.google.com/p/simile-widgets/wiki/Timeline">SIMILE timeline</a> to display dates.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2010/04/04/a-rails-programmers-first-django-application/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/04/02/editing-javascript-in-emacs/">Editing Javascript in Emacs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-02T00:00:00+02:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>
+	Steve Yegge of Google has created a new Javascript mode 'js2-mode' for Emacs.</p>
+<p>
+	It works very well as it uses true parsing, not heuristics, to analyse code.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2010/04/02/editing-javascript-in-emacs/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/03/09/show-your-git-branch-name-in-your-gnu-screen-status-line/">Show Your Git Branch Name in Your GNU Screen Status Line</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-09T00:00:00+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>Git Branch Prompt</h1>
+
+<p><a href="http://github.com/guides/put-your-git-branch-name-in-your-shell-prompt">Many</a> <a href="http://github.com/lvv/git-prompt/">people</a> <a href="http://www.jukie.net/bart/blog/20080404105620">have</a> written about showing the current git branch in your shell prompt.</p>
+
+<p>There is even the Bash function <a href="http://repo.or.cz/w/git.git?a=blob_plain;f=contrib/completion/git-completion.bash">__git_ps1</a> provided in the main Git repo.</p>
+
+<p>I prefer to show info like the current time and current git branch in a GNU screen status line.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2010/03/09/show-your-git-branch-name-in-your-gnu-screen-status-line/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/03/09/a-sunrise-and-sunset-time-calculator/">A Sunrise and Sunset Time Calculator</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-09T00:00:00+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;ve released the <a href="http://rubygems.org/gems/ruby-sun-times">ruby-sun-times gem</a>, which calculates sunrise and sunset times according to date and location.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2010/03/09/a-sunrise-and-sunset-time-calculator/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/03/04/i18n-internationalization-without-rails/">I18n Internationalization Without Rails</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-04T00:00:00+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I searched the Internet in vain for examples of using the Ruby <a href="http://rubygems.org/gems/i18n">i18n gem</a> outside of Rails apps.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2010/03/04/i18n-internationalization-without-rails/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="3">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="1">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <header>
+    <h1>My book about Sinatra</h1>
+  </header>
+  <div>
+    <p>
+      <a href="http://www.packtpub.com/sinatra-starter/book" target="_blank"><img src="/images/SinatraStarterCoverSmall.png" width="191" height="237"></a>
+    </p>
+    <p>
+      <a href="http://www.packtpub.com/sinatra-starter/book" target="_blank">Instant Sinatra Starter</a>
+      An intorduction to creating sites with Sinatra, from installation to testing to deployment.
+    </p>
+  </div>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/07/25/create-a-mix-task-for-an-elixir-project/">Create a Mix Task for an Elixir Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/06/30/how-to-forward-blocks-in-ruby/">How to Forward Blocks in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/12/29/instant-sinatra-starter/">Instant Sinatra Starter</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/12/23/my-everyday-find-command/">My Everyday Find Command</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/">Ruby Bareword Assignment and Method Calls With Implicit Self</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/joeyates">@joeyates</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'joeyates',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Joe Yates -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
