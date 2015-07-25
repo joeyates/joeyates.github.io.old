@@ -1,0 +1,8 @@
+_deploy/
+Gemfile.lock
+HOWTO.markdown
+posts/
+public/
+.pygments-cache/
+.sass-cache/
+source/
