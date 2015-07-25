@@ -9,7 +9,7 @@ ssh_port       = "22"
 document_root  = "~/website.com/"
 rsync_delete   = false
 rsync_args     = ""  # Any extra arguments to pass to rsync
-deploy_default = "push"
+deploy_default = "deploy_master"
 
 # This will be configured for you when you run config_deploy
 deploy_branch  = "master"
@@ -268,6 +268,19 @@ multitask :push do
     Bundler.with_clean_env { system "git push origin #{deploy_branch}" }
     puts "\n## Github Pages deploy complete"
   end
+end
+
+desc "Deploy master branch to GitHub Pages"
+task :deploy_master do
+  puts "Deploying master branch to GitHub Pages"
+  system "git checkout master"
+  cp_r "#{deploy_dir}/.", "."
+  system "git add -A"
+  message = "Site updated at #{Time.now.utc}"
+  puts "\n## Committing: #{message}"
+  system "git commit -m \"#{message}\""
+  system "git push"
+  system "git checkout source"
 end
 
 desc "Update configurations to support publishing to root or sub directory"
