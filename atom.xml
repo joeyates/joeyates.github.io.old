@@ -4,7 +4,7 @@
   <title><![CDATA[Joe Yates' Blog]]></title>
   <link href="http://joeyates.github.io/atom.xml" rel="self"/>
   <link href="http://joeyates.github.io/"/>
-  <updated>2015-07-25T14:01:49+02:00</updated>
+  <updated>2015-07-25T14:48:20+02:00</updated>
   <id>http://joeyates.github.io/</id>
   <author>
     <name><![CDATA[Joe Yates]]></name>
@@ -36,7 +36,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>shows which mix tasksi are available and in this newly created project there
+<p>shows which mix tasks are available and in this newly created project there
 are already more than 30.</p>
 
 <p>Now I create the directory for tasks with</p>
