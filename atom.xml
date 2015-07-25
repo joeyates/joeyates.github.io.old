@@ -4,7 +4,7 @@
   <title><![CDATA[Joe Yates' Blog]]></title>
   <link href="http://joeyates.github.io/atom.xml" rel="self"/>
   <link href="http://joeyates.github.io/"/>
-  <updated>2014-06-30T10:40:38+02:00</updated>
+  <updated>2015-07-25T14:01:49+02:00</updated>
   <id>http://joeyates.github.io/</id>
   <author>
     <name><![CDATA[Joe Yates]]></name>
@@ -12,6 +12,144 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Create a Mix Task for an Elixir Project]]></title>
+    <link href="http://joeyates.github.io/2015/07/25/create-a-mix-task-for-an-elixir-project/"/>
+    <updated>2015-07-25T11:36:16+02:00</updated>
+    <id>http://joeyates.github.io/2015/07/25/create-a-mix-task-for-an-elixir-project</id>
+    <content type="html"><![CDATA[<p>Mix tasks are helper tasks in Elixir projects.</p>
+
+<p>In this post, I&rsquo;ll create an empty project and a &ldquo;Hello World!&rdquo;</p>
+
+<p>I can create a new project with</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>mix new mix_task_example
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, inside the new <code>mix_task_example</code> project directory, running</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>mix <span class="nb">help</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>shows which mix tasksi are available and in this newly created project there
+are already more than 30.</p>
+
+<p>Now I create the directory for tasks with</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>mkdir -p lib/mix/tasks
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and create a file with the name of the task, e.g. <code>mix_task_example.salute.ex</code>
+with the following contents:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">Mix.Tasks.MixTaskExample.Salute</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kn">use</span> <span class="nc">Mix.Task</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">run</span><span class="p">(</span><span class="bp">_</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nc">IO</span><span class="p">.</span><span class="n">puts</span> <span class="s2">&quot;Hello World!&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This far, the task is not yet available, I need to compile the project</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="n">mix</span> <span class="n">compile</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And now I can run it with</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>mix mix_task_example.salute
+</span><span class='line'>Hello World!
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The task doesn&rsquo;t show up in the listing with <code>mix help</code>.
+To make it show up I need to add @shortdoc</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">Mix.Tasks.MixTaskExample.Salute</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kn">use</span> <span class="nc">Mix.Task</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="na">@shortdoc</span> <span class="s2">&quot;Give a short salutation&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">run</span><span class="p">(</span><span class="bp">_</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nc">IO</span><span class="p">.</span><span class="n">puts</span> <span class="s2">&quot;Hello World!&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If the tasks are part of a library, they will be available to project that
+include it as a dependency, so it&rsquo;s important to use the library name
+(e.g. <code>MixTaskExample</code>) in the module name in order to keep tasks in
+a collective namesapce.</p>
+
+<p>As a final touch, let&rsquo;s accept a parameter</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">Mix.Tasks.MixTaskExample.Salute</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kn">use</span> <span class="nc">Mix.Task</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="na">@shortdoc</span> <span class="s2">&quot;Give a short salutation&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">run</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nc">IO</span><span class="p">.</span><span class="n">puts</span> <span class="s2">&quot;Hello </span><span class="si">#{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>mix compile
+</span><span class='line'>mix mix_task_example.salute Joe
+</span><span class='line'>Hello Joe!
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A working mix task!</p>
+
+<p>The code for this example can be found at <a href="https://github.com/joeyates/mix_task_example">https://github.com/joeyates/mix_task_example</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to Forward Blocks in Ruby]]></title>
@@ -22,9 +160,9 @@
 
 <p>Use <code>Proc.new</code></p>
 
-<h1>Calling Enumerators &ndash; normal use</h1>
+<h1>Calling Enumerators - normal use</h1>
 
-<p>You&rsquo;re writing some code which calls an Enumerator &ndash; a function that
+<p>You&rsquo;re writing some code which calls an Enumerator - a function that
 makes repeated calls to the block of code that you provide.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -81,7 +219,7 @@ the block, <code>{ |x| puts }</code>, that is passed to that method.</p>
 
 <h1>An alternative: use a block</h1>
 
-<p>I could equally have implemented the method using a <code>&amp;block</code> parameter &ndash;
+<p>I could equally have implemented the method using a <code>&amp;block</code> parameter -
 for the caller, it makes no difference:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -260,7 +398,7 @@ Does that work across two levels? I.e., does the block get passed to method I ca
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">enumerate_2_things</span><span class="p">(</span><span class="nb">proc</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">enumerate_2_things</span><span class="p">(</span><span class="n">block</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
 </span><span class='line'>  <span class="n">enumerate_n_things</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">block</span><span class="p">)</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
@@ -289,7 +427,7 @@ enumerators.</p>
 
 <p>The book is called &ldquo;Instant Sinatra Starter&rdquo; and is part of Packtpub&rsquo;s Instant series.</p>
 
-<p>Although the book is very short &ndash; the final version is 48 pages &ndash; it took about six
+<p>Although the book is very short - the final version is 48 pages - it took about six
 months from initial planning to publication.</p>
 
 <p>My target audience is people who have a little programming experience, so it doesn&rsquo;t
@@ -347,8 +485,8 @@ application.</p>
 </span><span class='line'><span class="c"># skips whatever you list in _exclude_matches</span>
 </span><span class='line'><span class="nv">_exclude_matches</span><span class="o">=(</span>bundle .git *.pyc<span class="o">)</span>
 </span><span class='line'><span class="nv">_excludes</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
-</span><span class='line'><span class="k">for </span>_match in <span class="nv">$_exclude_matches</span>; <span class="k">do</span>
-</span><span class='line'><span class="k">  </span><span class="nv">_excludes</span><span class="o">=</span><span class="s2">&quot;${_excludes}-name &#39;$_match&#39; -prune -o &quot;</span>
+</span><span class='line'><span class="k">for</span> _match in <span class="nv">$_exclude_matches</span><span class="p">;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nv">_excludes</span><span class="o">=</span><span class="s2">&quot;${_excludes}-name &#39;$_match&#39; -prune -o &quot;</span>
 </span><span class='line'><span class="k">done</span>
 </span><span class='line'>
 </span><span class='line'><span class="nb">eval</span> <span class="s2">&quot;</span>
@@ -378,7 +516,7 @@ application.</p>
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>f 26 ..
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>f <span class="m">26</span> ..
 </span><span class='line'>../api/db/migrate/20121003094826_add_foo_to_bar.rb
 </span><span class='line'>../redmine/db/migrate/20091017212644_add_missing_indexes_to_messages.rb
 </span></code></pre></td></tr></table></div></figure>
@@ -643,7 +781,7 @@ application.</p>
     <content type="html"><![CDATA[<p><img src="http://joeyates.github.io/images/html5-history-api.png" title="The Example App" ></p>
 
 <p>
-The HTML5 history API allows AJAX-based sites to avoid &#8220;breaking the back button&#8221;. Every time you update the page, you store the new content is the window.history object. When the user presses the back button, you retrieve the current item from window.history and update the page with it.
+The HTML5 history API allows AJAX-based sites to avoid "breaking the back button". Every time you update the page, you store the new content is the window.history object. When the user presses the back button, you retrieve the current item from window.history and update the page with it.
 </p>
 
 
@@ -655,7 +793,7 @@ The HTML5 history API allows AJAX-based sites to avoid &#8220;breaking the back 
 
 
 <p>
-What follows is an &#8220;all-in-one page&#8221; Sinatra/jQuery program. You can find the code <a href="https://gist.github.com/1090336">here</a>.
+What follows is an "all-in-one page" Sinatra/jQuery program. You can find the code <a href="https://gist.github.com/1090336">here</a>.
 </p>
 
 
@@ -721,12 +859,10 @@ Notice that pressing the forward and back buttons updates the page correctly wit
     <link href="http://joeyates.github.io/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes/"/>
     <updated>2011-03-06T00:00:00+01:00</updated>
     <id>http://joeyates.github.io/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes</id>
-    <content type="html"><![CDATA[
-
-<figure class='code'><figcaption><span>Dump an Active Record object to Standard Out - dump_active_record_object.cpp </span></figcaption>
+    <content type="html"><![CDATA[<figure class='code'><figcaption><span>Dump an Active Record object to Standard Out - dump_active_record_object.cpp </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">Person</span> <span class="n">person</span><span class="p">(</span> <span class="mi">123</span> <span class="p">);</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">Person</span> <span class="nf">person</span><span class="p">(</span> <span class="mi">123</span> <span class="p">);</span>
 </span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">person</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -802,10 +938,10 @@ Notice that pressing the forward and back buttons updates the page correctly wit
 </span><span class='line'><span class="k">class</span> <span class="nc">MyList</span> <span class="p">{</span>
 </span><span class='line'> <span class="k">public</span><span class="o">:</span>
 </span><span class='line'>  <span class="n">MyList</span><span class="p">()</span> <span class="p">{};</span>
-</span><span class='line'>  <span class="kt">void</span> <span class="n">add</span><span class="p">(</span> <span class="n">T</span> <span class="n">item</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="nf">add</span><span class="p">(</span> <span class="n">T</span> <span class="n">item</span> <span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>    <span class="n">data_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span> <span class="n">item</span> <span class="p">);</span>
 </span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="kt">int</span> <span class="n">length</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="nf">length</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
 </span><span class='line'>    <span class="k">return</span> <span class="n">data_</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'> <span class="k">private</span><span class="o">:</span>
@@ -830,13 +966,11 @@ Notice that pressing the forward and back buttons updates the page correctly wit
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Which should work like this:</p>
-
-<pre><code>$ ./my_list
-2 items:
-  42
-  13
-</code></pre>
+<p>Which should work like this:
+    $ ./my_list
+    2 items:
+      42
+      13</p>
 
 <h2>Implementation</h2>
 
@@ -1015,7 +1149,7 @@ to_ostream.cpp:7: error: 'it' was not declared in this scope
 <span class='line-number'>19</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;string&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="kt">int</span> <span class="n">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span> <span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>  <span class="n">MyList</span><span class="o">&lt;</span> <span class="kt">int</span> <span class="o">&gt;</span> <span class="n">my_ints</span><span class="p">;</span>
 </span><span class='line'>  <span class="n">my_ints</span><span class="p">.</span><span class="n">add</span><span class="p">(</span> <span class="mi">1</span> <span class="p">);</span>
 </span><span class='line'>  <span class="n">my_ints</span><span class="p">.</span><span class="n">add</span><span class="p">(</span> <span class="mi">2</span> <span class="p">);</span>
@@ -1035,15 +1169,14 @@ to_ostream.cpp:7: error: 'it' was not declared in this scope
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The output:</p>
+<p>The output:
+    $ ./to_ostream
+    myints
+    2 items:
+            1
+            2</p>
 
-<pre><code>$ ./to_ostream 
-myints
-2 items:
-        1
-        2
-
-mystrings
+<pre><code>mystrings
 2 items:
         hello
         world
@@ -1065,10 +1198,8 @@ mystrings
 
 <p>The <a href="http://www.libgosu.org/rdoc/files/README_txt.html">Ruby documentation</a> is sparse but sufficient.</p>
 
-<p>The gem is easy to install:</p>
-
-<pre><code>$ gem install gosu
-</code></pre>
+<p>The gem is easy to install:
+    $ gem install gosu</p>
 
 <p>A &lsquo;Hello World!&rsquo; app requires about 20 lines of code:<br /></p>
 
@@ -1097,11 +1228,11 @@ mystrings
 </pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
 </span><span class='line'><span class="nb">require</span> <span class="s1">&#39;gosu&#39;</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">HelloWindow</span> <span class="o">&lt;</span> <span class="ss">Gosu</span><span class="p">:</span><span class="ss">:Window</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">HelloWindow</span> <span class="o">&lt;</span> <span class="no">Gosu</span><span class="o">::</span><span class="no">Window</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
 </span><span class='line'>    <span class="k">super</span><span class="p">(</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="kp">false</span> <span class="p">)</span>
-</span><span class='line'>    <span class="vi">@background_image</span> <span class="o">=</span> <span class="ss">Gosu</span><span class="p">:</span><span class="ss">:Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span> <span class="nb">self</span><span class="p">,</span> <span class="s1">&#39;hello_world.png&#39;</span> <span class="p">)</span>
+</span><span class='line'>    <span class="vi">@background_image</span> <span class="o">=</span> <span class="no">Gosu</span><span class="o">::</span><span class="no">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span> <span class="nb">self</span><span class="p">,</span> <span class="s1">&#39;hello_world.png&#39;</span> <span class="p">)</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">def</span> <span class="nf">draw</span>
@@ -1118,10 +1249,8 @@ mystrings
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Run it like this:</p>
-
-<pre><code>$ ruby hello_gosu.rb
-</code></pre>
+<p>Run it like this:
+    $ ruby hello_gosu.rb</p>
 
 <p>The program creates the window shown at the start of this article.</p>
 
@@ -1135,10 +1264,10 @@ mystrings
     <updated>2010-08-29T00:00:00+02:00</updated>
     <id>http://joeyates.github.io/2010/08/29/use-g-as-an-alias-for-git-without-losing-autocompletion</id>
     <content type="html"><![CDATA[<p>
-I&#8217;ve just started using a new kind of abbreviation system for Git:
+I've just started using a new kind of abbreviation system for Git:
 <ul>
-	<li>I use &#8216;g&#8217; instead of &#8216;git&#8217;,</li>
-	<li>I&#8217;ve set up bash autocompletion for &#8216;g&#8217;, just like &#8216;git&#8217;.</li>
+	<li>I use 'g' instead of 'git',</li>
+	<li>I've set up bash autocompletion for 'g', just like 'git'.</li>
 </ul>
 </p>
 
@@ -1157,7 +1286,7 @@ The problem is that, by doing this, you lose autocompletion.
 
 <h1>Setup</h1>
 
-<h2>Set Up &#8216;g&#8217; as an alias for &#8216;git&#8217;</h2>
+<h2>Set Up 'g' as an alias for 'git'</h2>
 In ~/.bashrc:<br/>
 <p>
 <pre>
@@ -1172,12 +1301,12 @@ alias g='git'
 Locate your bash_completion.d directory:
 <ul>
 	<li>On Linux, /etc/bash_completion.d</li>
-	<li>I&#8217;m using OS X with Mac Ports, so mine is at /opt/local/etc/bash_completion.d.</li>
+	<li>I'm using OS X with Mac Ports, so mine is at /opt/local/etc/bash_completion.d.</li>
 </ul>
 Ensure the directory contains <code>git-completion.bash</code>
 </p>
 
-<h2>3. Add Completion for &#8216;g&#8217;</h2>
+<h2>3. Add Completion for 'g'</h2>
 <p>
 Add the following to the end of <code>git-completion.bash</code>:
 <typo:code lang="shell">
@@ -1205,9 +1334,7 @@ annotate            describe            log                 revert
     <link href="http://joeyates.github.io/2010/08/29/rake-builder/"/>
     <updated>2010-08-29T00:00:00+02:00</updated>
     <id>http://joeyates.github.io/2010/08/29/rake-builder</id>
-    <content type="html"><![CDATA[
-
-<figure class='code'><figcaption><span>Use Rake::Builder as a Make Replacement - build.sh </span></figcaption>
+    <content type="html"><![CDATA[<figure class='code'><figcaption><span>Use Rake::Builder as a Make Replacement - build.sh </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rake build
 </span></code></pre></td></tr></table></div></figure>
@@ -1216,7 +1343,7 @@ annotate            describe            log                 revert
 <p>I&rsquo;ve put together a rake-based system for building C and C++ projects.</p>
 
 <p>
-I&#8217;ve called it Rake::Builder, it&#8217;s available on GitHub <a href="http://github.com/joeyates/rake-builder">here</a>.
+I've called it Rake::Builder, it's available on GitHub <a href="http://github.com/joeyates/rake-builder">here</a>.
 </p>
 
 
@@ -1240,8 +1367,8 @@ Build systems are complicated by external dependencies: finding third-party head
 
 
 <p>
-The standard system is GNU&#8217;s autoconf system, but it is a nightmare. At the most simple level, you distribute source code with a Makefile.<br/>
-The problem is that Makefiles are just pure dependency managers - if they don&#8217;t find what they need, they just fail.<br/>
+The standard system is GNU's autoconf system, but it is a nightmare. At the most simple level, you distribute source code with a Makefile.<br/>
+The problem is that Makefiles are just pure dependency managers - if they don't find what they need, they just fail.<br/>
 The solution to that problem is the use of <string>configure</strong>. Configure runs a series of compatibility tests, sniffs the host system and spits out a Makefile.<br/>
 So, with configure, the user then does the following:
 <typo:code lang="shell">
@@ -1254,47 +1381,43 @@ $ sudo make install
 
 <p>But, configure itself is a long file, and it&rsquo;s is a program: about 6000 lines of shell code.</p>
 
-<p>A few lines:</p>
-
-<pre><code>ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext &gt;&amp;5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS &gt;&amp;5'
-</code></pre>
+<p>A few lines:
+    ac_ext=cpp
+    ac_cpp=&lsquo;$CXXCPP $CPPFLAGS&rsquo;
+    ac_compile=&lsquo;$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&amp;5&rsquo;
+    ac_link=&lsquo;$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&amp;5&rsquo;</p>
 
 <p>The solution to having to maintain configure? Generate it!</p>
 
 <p>With autotools, there is a seemingly eternal regress of configuration files and scripts generated by other scripts.</p>
 
-<p>This was my project&rsquo;s root directory listing before I gave up on autoconf:<br/></p>
-
-<pre><code>AUTHORS
-COPYING
-ChangeLog
-EXAMPLE
-INSTALL
-Makefile
-Makefile.am
-Makefile.in
-NEWS
-README
-aclocal.m4
-autom4te.cache
-config.h
-config.h.in
-config.log
-config.status
-configure
-configure.ac
-depcomp
-include
-install-sh
-missing
-objects
-src
-stamp-h1
-test
-</code></pre>
+<p>This was my project&rsquo;s root directory listing before I gave up on autoconf:<br/>
+    AUTHORS
+    COPYING
+    ChangeLog
+    EXAMPLE
+    INSTALL
+    Makefile
+    Makefile.am
+    Makefile.in
+    NEWS
+    README
+    aclocal.m4
+    autom4te.cache
+    config.h
+    config.h.in
+    config.log
+    config.status
+    configure
+    configure.ac
+    depcomp
+    include
+    install-sh
+    missing
+    objects
+    src
+    stamp-h1
+    test</p>
 
 <p>Fifteen of those files are involved in the mechanics of autoconf.</p>
 
@@ -1308,7 +1431,7 @@ test
 
 <p>There are already a number of specializations of rake. In Rails projects, and Gem building, Rakefiles handle maintenance, testing, documentation building and packaging.</p>
 
-<figure class='code'><figcaption><span>Rake::Builder&#8217;s Rakefile - Rakefile </span></figcaption>
+<figure class='code'><figcaption><span>Rake::Builder's Rakefile - Rakefile </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -1361,7 +1484,7 @@ test
 
 <p>
 Rake::Builder is my attempt to specialise rake to the task of building C and C++ projects.<br />
-I&#8217;ve got to version 0.0.11 and it now builds the following types of projects:
+I've got to version 0.0.11 and it now builds the following types of projects:
 <ul>
     <li>C++,</li>
     <li>QT C++,</li>
@@ -1376,7 +1499,7 @@ I&#8217;ve got to version 0.0.11 and it now builds the following types of projec
 <p><p>
 This is an example with two build targets: a static library and a test executable, with the test project depending on the library:</p>
 
-<p><figure class='code'><figcaption><span>Rakefile for a C++ Library &ndash; Rakefile </span></figcaption>
+<p><figure class='code'><figcaption><span>Rakefile for a C++ Library - Rakefile </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -1463,7 +1586,7 @@ the system will be up on GitHub as soon as I finish making it configurable.<br>
 
 
 <p>
-If you&#8217;ve read the title of this post, you won&#8217;t be surprised to read that I chose <a href="http://www.sinatrarb.com/intro.html">Sinatra</a>.<br>
+If you've read the title of this post, you won't be surprised to read that I chose <a href="http://www.sinatrarb.com/intro.html">Sinatra</a>.<br>
 </p>
 
 
@@ -1474,7 +1597,7 @@ If you&#8217;ve read the title of this post, you won&#8217;t be surprised to rea
 
 <p>
 I decided to use <a href="http://datamapper.org/">DataMapper</a> as the ORM.<br>
-I&#8217;m also using SQLite for both development and production.<br>
+I'm also using SQLite for both development and production.<br>
 </p>
 
 
@@ -1484,7 +1607,7 @@ I&#8217;m also using SQLite for both development and production.<br>
 
 
 <p>
-As will be clear from the example site, I didn&#8217;t work over hard on making a fresh graphic look -
+As will be clear from the example site, I didn't work over hard on making a fresh graphic look -
 all I did was strip out a lot of HTML that was there to make rounded corners,
 and replaced it with Mozilla and WebKit specific rounding.<br>
 I then translated the HTML into <a href="http://haml-lang.com/">HAML</a> and
@@ -1560,7 +1683,7 @@ What follows is a list of the phases I went through while developing (on Ubuntu)
 </span><span class='line'>  <span class="p">})</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">class</span> <span class="nc">Comic</span>
-</span><span class='line'>    <span class="kp">include</span> <span class="ss">DataMapper</span><span class="p">:</span><span class="ss">:Resource</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="no">DataMapper</span><span class="o">::</span><span class="no">Resource</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="n">property</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:text</span>
 </span><span class='line'>    <span class="n">property</span> <span class="ss">:permalink</span><span class="p">,</span> <span class="ss">:text</span>
@@ -1571,7 +1694,7 @@ What follows is a list of the phases I went through while developing (on Ubuntu)
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The &lsquo;<code>Comic.auto_upgrade!</code>&rsquo; bit handles migrations &ndash;
+<p>The &lsquo;<code>Comic.auto_upgrade!</code>&rsquo; bit handles migrations -
 at startup, table columns are adjusted to match the declaration in the equivalent class.</p>
 
 <h1>Rack</h1>
@@ -1581,7 +1704,7 @@ at startup, table columns are adjusted to match the declaration in the equivalen
 
 
 <p>
-This application has a &#8216;public&#8217; and an &#8216;admin&#8217; area, so I actually created two Sinatra Apps,
+This application has a 'public' and an 'admin' area, so I actually created two Sinatra Apps,
 wrapping one in <a href="http://rack.rubyforge.org/doc/Rack/Auth/Digest/MD5.html">Rack::Auth::Digest::MD5</a>.
 A local settings file holds user names and hashed (kinda salted) passwords.<br>
 </p>
@@ -1623,7 +1746,7 @@ Sinatra - by design - includes routing in the structure of an app, so it cannot 
 
 
 <p>
-I found HAML very easy to start using, what I didn&#8217;t immediately understand was:<br>
+I found HAML very easy to start using, what I didn't immediately understand was:<br>
 <ul>
   <li>
     how to interpolate variables,
@@ -1640,7 +1763,7 @@ I found HAML very easy to start using, what I didn&#8217;t immediately understan
 
 <p>
 These are actually all the same problem, but it took me a while to realize that!<br>
-In HAML, you can interpolate the Ruby way (with &#8217;<code>#{...}</code>&#8217;) or the HAML way (with &#8217;<code>=</code>&#8217;).<br>
+In HAML, you can interpolate the Ruby way (with '<code>#{...}</code>') or the HAML way (with '<code>=</code>').<br>
 </p>
 
 
@@ -1724,7 +1847,7 @@ Sinatra handles small sites very well.
 The code can be kept DRY, and if you decide to, Sinatra projects can be quite easily transformed into Rails projects.<br>
 Actually, I have doubts whether it was worth doing this project in Sinatra -
 a stripped-down Rails 3 project would have been just as lightweight and easy to develop.
-But, then again, it&#8217;s useful to run a sytem through its paces, to have an idea what areas it can usefully be applied to.<br>
+But, then again, it's useful to run a sytem through its paces, to have an idea what areas it can usefully be applied to.<br>
 </p>
 
 ]]></content>
@@ -1768,7 +1891,7 @@ Assuming you have a working GCC build environment, all you have to do is install
 
 
 <p>
-The only think of note about the Makefile is that it includes &#8216;libgtest_main&#8217; - which implements main() and calls RUN_ALL_TESTS()
+The only think of note about the Makefile is that it includes 'libgtest_main' - which implements main() and calls RUN_ALL_TESTS()
 </p>
 
 
@@ -1827,7 +1950,7 @@ The only think of note about the Makefile is that it includes &#8216;libgtest_ma
 
 
 <p>
-I&#8217;ve put everything into a single source file to keep things minimal:
+I've put everything into a single source file to keep things minimal:
 </p>
 
 
@@ -1938,7 +2061,7 @@ Running main() from gtest_main.cc
 
 
 <p>
-It couldn&#8217;t really be much simpler!
+It couldn't really be much simpler!
 </p>
 
 ]]></content>
@@ -2015,8 +2138,8 @@ In both cases, the instance of the empty class occupies 1 byte. And, in both cas
 
 
 <p>
-Next, I&#8217;ll do the same for a non-empty class with a single <code>int</code> member variable.
-(I&#8217;ll initialize member variables to make the dumps easier to read.)
+Next, I'll do the same for a non-empty class with a single <code>int</code> member variable.
+(I'll initialize member variables to make the dumps easier to read.)
 </p>
 
 
@@ -2227,7 +2350,7 @@ A class with a single member function:
 <p></p></p>
 
 <p>
-This example is similar to the empty class above: having no member variables, and no virtual member functions (below), the compiler is forced to waste one byte, to comply with the standard&#8217;s mandate of not having zero-sized classes. Visual C++ seems to initialize the byte.
+This example is similar to the empty class above: having no member variables, and no virtual member functions (below), the compiler is forced to waste one byte, to comply with the standard's mandate of not having zero-sized classes. Visual C++ seems to initialize the byte.
 </p>
 
 
@@ -2242,13 +2365,12 @@ This example is similar to the empty class above: having no member variables, an
 <p>
 The mechanism that compilers use to achieve this is not mandated by the C++ standard, but most implementations use the concept of the &quot;virtual function table&quot;. For every class that has virtual members, a table is created which maps function names to their implementations.
 If a class has virtual functions, the compiler creates a unique vtbl for the class. This vtbl has pointers to the implementations of the member functions.
-Each instance holds a pointer (vptr) to its class&#8217;s vtbl.
+Each instance holds a pointer (vptr) to its class's vtbl.
 In the case of virtual inheritance, the derived class has a vtbl, which has a mix of pointers to member functions: those overridden in the derived class and those inherited.
 </p>
 
 
 <p>
-
 
 <figure class='code'><figcaption><span>Virtusl Member Functions - virtual_member_functions.cpp </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -2264,7 +2386,6 @@ In the case of virtual inheritance, the derived class has a vtbl, which has a mi
 </span><span class='line'><span class="n">E</span> <span class="n">e</span><span class="p">;</span>
 </span><span class='line'><span class="n">dump_instance</span><span class="p">(</span><span class="s">&quot;A class with a virtual member function:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// We supply the number of virtual methods</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 GCC:<br />
 <pre>
@@ -2292,7 +2413,7 @@ A class with a virtual member function:
 
 
 <p>
-This class&#8217;s instances occupy 4 bytes, which hold the pointer to the class&#8217;s virtual function table.
+This class's instances occupy 4 bytes, which hold the pointer to the class's virtual function table.
 </p>
 
 
@@ -2328,7 +2449,7 @@ This class&#8217;s instances occupy 4 bytes, which hold the pointer to the class
 </span><span class='line'><span class="k">class</span> <span class="nc">F1</span> <span class="o">:</span> <span class="n">F</span> <span class="p">{</span>
 </span><span class='line'><span class="k">public</span><span class="o">:</span>
 </span><span class='line'>  <span class="n">F1</span><span class="p">()</span> <span class="o">:</span> <span class="n">f1data</span><span class="p">(</span><span class="mh">0xf1f1f1f1</span><span class="p">)</span> <span class="p">{};</span> <span class="c1">// Initialize with easy-to-spot data to make dumps clearer</span>
-</span><span class='line'>  <span class="k">virtual</span> <span class="kt">int</span> <span class="n">f</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="mh">0x33333333</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">f</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="mh">0x33333333</span><span class="p">;</span> <span class="p">}</span>
 </span><span class='line'><span class="k">private</span><span class="o">:</span>
 </span><span class='line'>  <span class="kt">int</span> <span class="n">f1data</span><span class="p">;</span>
 </span><span class='line'><span class="p">};</span>
@@ -2369,7 +2490,7 @@ A subclass of an abstract class:
 <p></p></p>
 
 <p>
-Both compilers place the vtbl at the start of the instance memory, so a pointer to the instance is a pointer to a pointer to the vtbl. The instance data follows, laid out in &#8220;class derivation order&#8221;.
+Both compilers place the vtbl at the start of the instance memory, so a pointer to the instance is a pointer to a pointer to the vtbl. The instance data follows, laid out in "class derivation order".
 </p>
 
 
@@ -2458,13 +2579,13 @@ Both compilers place the vtbl at the start of the instance memory, so a pointer 
 <span class='line-number'>47</span>
 <span class='line-number'>48</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="c1">// output formatting helper</span>
-</span><span class='line'><span class="kt">void</span> <span class="n">indent</span><span class="p">(</span><span class="kt">int</span> <span class="n">depth</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">indent</span><span class="p">(</span><span class="kt">int</span> <span class="n">depth</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">depth</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
 </span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;  &quot;</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
-</span><span class='line'><span class="kt">void</span> <span class="n">dump_memory</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">items</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">title</span><span class="p">,</span> <span class="kt">int</span> <span class="n">depth</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">dump_memory</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">items</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">title</span><span class="p">,</span> <span class="kt">int</span> <span class="n">depth</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>  <span class="n">indent</span><span class="p">(</span><span class="n">depth</span><span class="p">);</span>
 </span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%08x -&gt; %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span> <span class="n">p</span><span class="p">,</span> <span class="n">title</span><span class="p">);</span>
 </span><span class='line'>  <span class="c1">// Make a format string that prints hex with correct number of leading zeroes</span>
@@ -2550,7 +2671,7 @@ Both compilers place the vtbl at the start of the instance memory, so a pointer 
     <id>http://joeyates.github.io/2010/04/07/a-beginners-sinatra-tutorial</id>
     <content type="html"><![CDATA[<p>In the olden days your first program was probably in BASIC and was run from the command line, nowadays the equivalent is Web programming.</p>
 
-<p>Using Sinatra reminds me of my first programming experiences &ndash; you write a tiny bit of code, with no boilerplate and get to see a result.</p>
+<p>Using Sinatra reminds me of my first programming experiences - you write a tiny bit of code, with no boilerplate and get to see a result.</p>
 
 <!--more-->
 
@@ -2563,10 +2684,8 @@ Both compilers place the vtbl at the start of the instance memory, so a pointer 
 
 <p>Apart from Ruby, you&rsquo;ll need to use a text editor (e.g. GEdit) a Web browser and the Terminal (normally found in the Applications menu under Accessories).</p>
 
-<p>Next install Sinatra:</p>
-
-<pre><code>$ gem install sinatra
-</code></pre>
+<p>Next install Sinatra:
+    $ gem install sinatra</p>
 
 <h1>1. Hello World!</h1>
 
@@ -2586,10 +2705,8 @@ Both compilers place the vtbl at the start of the instance memory, so a pointer 
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Now, open a Terminal window and type:</p>
-
-<pre><code>ruby minimal.rb
-</code></pre>
+<p>Now, open a Terminal window and type:
+    ruby minimal.rb</p>
 
 <p>Finally, go to this address: <a href="http://127.0.0.1:4567/"><a href="http://127.0.0.1:4567/">http://127.0.0.1:4567/</a></a></p>
 
@@ -2613,7 +2730,7 @@ Both compilers place the vtbl at the start of the instance memory, so a pointer 
 </pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s2">&quot;1.9&quot;</span>
 </span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
 </span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/&#39;</span> <span class="k">do</span>
 </span><span class='line'>    <span class="s1">&#39;Hello World!&#39;</span>
 </span><span class='line'>  <span class="k">end</span>
@@ -2623,10 +2740,8 @@ Both compilers place the vtbl at the start of the instance memory, so a pointer 
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Run it:</p>
-
-<pre><code>ruby sinatra_base.rb
-</code></pre>
+<p>Run it:
+    ruby sinatra_base.rb</p>
 
 <h3>3. Structure: A Separate App File</h3>
 
@@ -2644,7 +2759,7 @@ Both compilers place the vtbl at the start of the instance memory, so a pointer 
 </pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s2">&quot;1.9&quot;</span>
 </span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
 </span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/&#39;</span> <span class="k">do</span>
 </span><span class='line'>    <span class="s1">&#39;Hello World from MyApp in separate file!&#39;</span>
 </span><span class='line'>  <span class="k">end</span>
@@ -2664,33 +2779,26 @@ Both compilers place the vtbl at the start of the instance memory, so a pointer 
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Run it:</p>
-
-<pre><code>$ ruby run_my_app.rb
-</code></pre>
+<p>Run it:
+    $ ruby run_my_app.rb</p>
 
 <h1>4. Rackup</h1>
 
 <p>Instead of writing a script to start the app, we can use Rackup to launch the same script:</p>
 
-<p>Create a file &lsquo;config.ru&rsquo;:</p>
+<p>Create a file &lsquo;config.ru&rsquo;:
+    require &lsquo;my_app&rsquo;</p>
 
-<pre><code>require 'my_app'
-
-run MyApp.new
+<pre><code>run MyApp.new
 </code></pre>
 
-<p>Run it:</p>
-
-<pre><code>rackup config.ru
-</code></pre>
+<p>Run it:
+    rackup config.ru</p>
 
 <p>This time the application is visible at <a href="http://127.0.0.1:9292"><a href="http://127.0.0.1:9292">http://127.0.0.1:9292</a></a></p>
 
-<p>If we want it to have the same address as before, we can run it like this:</p>
-
-<pre><code>rackup config.ru --port=4567
-</code></pre>
+<p>If we want it to have the same address as before, we can run it like this:
+    rackup config.ru &ndash;port=4567</p>
 
 <h3>5. Static Files</h3>
 
@@ -2711,7 +2819,7 @@ run MyApp.new
 </pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s2">&quot;1.9&quot;</span>
 </span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
 </span><span class='line'>  <span class="n">set</span> <span class="ss">:static</span><span class="p">,</span> <span class="kp">true</span>
 </span><span class='line'>  <span class="n">set</span> <span class="ss">:public</span><span class="p">,</span> <span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/static&#39;</span>
 </span><span class='line'><span class="k">end</span>
@@ -2793,7 +2901,7 @@ run MyApp.new
 </pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span> <span class="k">if</span> <span class="no">RUBY_VERSION</span> <span class="o">&lt;</span> <span class="s2">&quot;1.9&quot;</span>
 </span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
 </span><span class='line'>  <span class="n">set</span> <span class="ss">:static</span><span class="p">,</span> <span class="kp">true</span>
 </span><span class='line'>  <span class="n">set</span> <span class="ss">:public</span><span class="p">,</span> <span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/public&#39;</span>
 </span><span class='line'>
@@ -2869,7 +2977,7 @@ run MyApp.new
 </span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
 </span><span class='line'><span class="nb">require</span> <span class="s1">&#39;erb&#39;</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
 </span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/template&#39;</span> <span class="k">do</span>
 </span><span class='line'>    <span class="vi">@foo</span> <span class="o">=</span> <span class="s1">&#39;erb&#39;</span>
 </span><span class='line'>    <span class="n">erb</span> <span class="ss">:index</span>
@@ -2916,7 +3024,7 @@ run MyApp.new
 
 <p>The advantage of the Django system is that the model holds authoritative information about the fields in the database.</p>
 
-<p>The great disadvantage is that there are no TABLE ALTERing migrations &ndash; you have to dump the table creation SQL and manually construct and run TABLE ALTER commands.</p>
+<p>The great disadvantage is that there are no TABLE ALTERing migrations - you have to dump the table creation SQL and manually construct and run TABLE ALTER commands.</p>
 
 <h2>Settings</h2>
 
@@ -2928,15 +3036,15 @@ run MyApp.new
 
 <p>There is a difference between how one handles static files in development and production. Most people seem to use a hack in the urls.py file, indicating where to get static content if in DEBUG mode, whereas in production mode you are supposed to set up Apache aliases for the various directories.</p>
 
-<p>The logic here is that Django should not get involved in serving static content (quite rightly), but it certainly makes setup more laborious. One can achieve a happy medium in Rails using <code>X-SendFile</code> &ndash; Rails gets the request and then punts serving to Apache.</p>
+<p>The logic here is that Django should not get involved in serving static content (quite rightly), but it certainly makes setup more laborious. One can achieve a happy medium in Rails using <code>X-SendFile</code> - Rails gets the request and then punts serving to Apache.</p>
 
 <h2>Generating URLs</h2>
 
-<p>There is an equivalent to Rails&#8217; <code>url_for</code> which is available inside Django templates, it&rsquo;s the filter <code>{ % url %}</code>. Unfortunately, the first time I wanted to create a URL was actually in Python code &ndash; I wanted to redirect. I was unable to find a way to use url from Python code. There is <code>get_absolute_url</code>, which can be implemented inside the model, but it&rsquo;s only for instances.</p>
+<p>There is an equivalent to Rails' <code>url_for</code> which is available inside Django templates, it&rsquo;s the filter <code>{ % url %}</code>. Unfortunately, the first time I wanted to create a URL was actually in Python code - I wanted to redirect. I was unable to find a way to use url from Python code. There is <code>get_absolute_url</code>, which can be implemented inside the model, but it&rsquo;s only for instances.</p>
 
 <h1>Overall</h1>
 
-<p>I think Django is fairly straightforward for the Rails programmer. The fact that you get a &lsquo;free&rsquo; admin backend (similar to ActiveScaffold), is certainly handy. There are a lot of sources of online information and tutorials, so it&rsquo;s quite easy to get up and running. The main impression I got was of a small framework &ndash; while Rails covers a great range of functionality, I felt I came up against Django limitations rather quickly. That may be due to not looking in the right places, but my Google searches showed that a lot of other people were asking the same questions.</p>
+<p>I think Django is fairly straightforward for the Rails programmer. The fact that you get a &lsquo;free&rsquo; admin backend (similar to ActiveScaffold), is certainly handy. There are a lot of sources of online information and tutorials, so it&rsquo;s quite easy to get up and running. The main impression I got was of a small framework - while Rails covers a great range of functionality, I felt I came up against Django limitations rather quickly. That may be due to not looking in the right places, but my Google searches showed that a lot of other people were asking the same questions.</p>
 ]]></content>
   </entry>
   
@@ -2946,7 +3054,7 @@ run MyApp.new
     <updated>2010-04-02T00:00:00+02:00</updated>
     <id>http://joeyates.github.io/2010/04/02/editing-javascript-in-emacs</id>
     <content type="html"><![CDATA[<p>
-	Steve Yegge of Google has created a new Javascript mode &#8216;js2-mode&#8217; for Emacs.</p>
+	Steve Yegge of Google has created a new Javascript mode 'js2-mode' for Emacs.</p>
 <p>
 	It works very well as it uses true parsing, not heuristics, to analyse code.</p>
 
@@ -2960,7 +3068,7 @@ run MyApp.new
 	<li>
 		Rename the file as js2-mode.el</li>
 	<li>
-		Move it to a directory in your <a href="http://www.gnu.org/software/emacs/emacs-faq.html#Changing-load_002dpath">&#8216;load-path&#8217;</a> (~/.emacs.d/ should work),</li>
+		Move it to a directory in your <a href="http://www.gnu.org/software/emacs/emacs-faq.html#Changing-load_002dpath">'load-path'</a> (~/.emacs.d/ should work),</li>
 	<li>
 		Compile it:
 		<ul>
@@ -2987,7 +3095,7 @@ js2-mode.el
 	Some features of the mode are:</p>
 <ul>
 	<li>
-		Highlighting of syntax errors and doubtful structures, e.g. missing &#8216;;&#8217;, and undeclared variables,</li>
+		Highlighting of syntax errors and doubtful structures, e.g. missing ';', and undeclared variables,</li>
 	<li>
 		The auto-indentation system works.</li>
 </ul>
@@ -3034,14 +3142,14 @@ js2-mode.el
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="k">function </span>set_screen_path<span class="o">()</span> <span class="o">{</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="k">function</span> set_screen_path<span class="o">()</span> <span class="o">{</span>
 </span><span class='line'>  screen -X chdir <span class="s2">&quot;`pwd`&quot;</span>
 </span><span class='line'><span class="o">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">case</span> <span class="nv">$TERM</span> in
 </span><span class='line'>screen*<span class="o">)</span>
 </span><span class='line'>  <span class="nv">PROMPT_COMMAND</span><span class="o">=</span>set_screen_path
-</span><span class='line'>  ;;
+</span><span class='line'>  <span class="p">;;</span>
 </span><span class='line'><span class="k">esac</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -3058,7 +3166,7 @@ js2-mode.el
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#!/bin/sh</span>
 </span><span class='line'>
-</span><span class='line'>git branch 2&gt;/dev/null | grep <span class="s1">&#39;*&#39;</span> | sed <span class="s1">&#39;s/\* //&#39;</span>
+</span><span class='line'>git branch 2&gt;/dev/null <span class="p">|</span> grep <span class="s1">&#39;*&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/\* //&#39;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -3077,10 +3185,8 @@ screen -t edit 1
 select 0
 </code></pre>
 
-<p>The important line is:</p>
-
-<pre><code>backtick 1 0 1 git-current-branch
-</code></pre>
+<p>The important line is:
+    backtick 1 0 1 git-current-branch</p>
 
 <p>which creates a &lsquo;<a href="http://www.gnu.org/software/screen/manual/html_node/Backtick.html">backtick command</a>&rsquo; (number 1) which calls <code>git-current-branch</code> once a second via <code>%1`</code> in the hardstatus line.</p>
 
@@ -3137,7 +3243,7 @@ select 0
 <!--more-->
 
 
-<p>Below is a minimal example: the aim is (as usual) to produce a greeting &ndash; this time in English and Italian.</p>
+<p>Below is a minimal example: the aim is (as usual) to produce a greeting - this time in English and Italian.</p>
 
 <h1>Installation</h1>
 
@@ -3168,15 +3274,11 @@ select 0
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>These translations can be accessed as follows:</p>
+<p>These translations can be accessed as follows:
+    I18n.t( &lsquo;hello world&rsquo; )</p>
 
-<pre><code>I18n.t( 'hello world' )
-</code></pre>
-
-<p>That will use the current locale setting. You can change it as follows:</p>
-
-<pre><code>I18n.locale = :it
-</code></pre>
+<p>That will use the current locale setting. You can change it as follows:
+    I18n.locale = :it</p>
 
 <h1>The Program</h1>
 
@@ -3218,158 +3320,6 @@ Hello World!
 In Italian...
 Ciao Mondo!
 </code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Setting Up PostGIS]]></title>
-    <link href="http://joeyates.github.io/2010/02/22/setting-up-postgis/"/>
-    <updated>2010-02-22T00:00:00+01:00</updated>
-    <id>http://joeyates.github.io/2010/02/22/setting-up-postgis</id>
-    <content type="html"><![CDATA[<h1>
-    Install</h1>
-
-
-<p>
-    You can install PostGIS as a package or from sources. Sometimes the version available from Linux distributions is a bit out of step with the PostgreSQL version that gets installed (i.e. Ubuntu currently installs PostgreSQL 8.4, but only has PostGIS 8.3)</p>
-
-
-
-
-<!--more-->
-
-
-
-
-<h2>From Sources</h2>
-
-
-
-
-<p>
-    <a href="http://postgis.refractions.net/download/">Choose which version to download</a></p>
-
-
-
-
-<pre>$ wget http://postgis.refractions.net/download/postgis-1.4.1.tar.gz
-$ tar -xkzf postgis-1.4.1.tar.gz
-$ cd postgis-1.4.1
-$ ./configure
-$ make
-$ sudo make install
-</pre>
-
-
-<p>
-    On my system (Ubuntu), the net result is that you get various files copied into /usr/share/postgresql/8.4/contrib:</p>
-
-
-<pre>$ ls /usr/share/postgresql/8.4/contrib
-postgis.sql                   postgis_upgrade_13_to_14.sql  postgis_upgrade.sql  uninstall_postgis.sql
-postgis_upgrade_12_to_14.sql  postgis_upgrade_14_minor.sql  spatial_ref_sys.sql</pre>
-
-
-<h1>
-    Create a PostGIS Template Database</h1>
-
-
-<p>
-    If you create a specific template with PostGIS, and use it instead of template1 (the default) template, you will be able to create PostGIS-enabled databases more quickly.</p>
-
-
-<pre>$ sudo -u postgres createdb template_postgis -E UTF-8
-</pre>
-
-
-<p>
-    Set the Template Flag</p>
-
-
-<pre>UPDATE pg_database SET datistemplate = TRUE WHERE datname = 'template_postgis';</pre>
-
-
-<p>
-    Make sure pl/pgsql is installed:</p>
-
-
-<pre>$ sudo -u postgres createlang -d template_postgis plpgsql</pre>
-
-
-<p>
-    Insert PostGIS functions and tables:</p>
-
-
-<pre>$ sudo -u postgres psql template_postgis < /usr/share/postgresql/8.4/contrib/postgis.sql
-$ sudo -u postgres psql template_postgis < /usr/share/postgresql/8.4/contrib/spatial_ref_sys.sql
-</pre>
-
-
-<h4>
-    Correct Permissions</h4>
-
-
-<p>
-    The PostGIS tables need to be writeable by the owner of the database:</p>
-
-
-<pre>$ sudo -u postgres psql template_postgis
-# GRANT ALL ON geometry_columns TO PUBLIC;
-# GRANT ALL ON spatial_ref_sys TO PUBLIC;
-</pre>
-
-
-<h1>
-    Create a PostGIS-Enabled Database</h1>
-
-
-<pre>$ sudo -u postgres createuser [USER NAME]
-Shall the new role be a superuser? (y/n) n
-Shall the new role be allowed to create databases? (y/n) n
-Shall the new role be allowed to create more new roles? (y/n) n
-$ sudo -u postgres createdb [DATABASE NAME] -O [USER NAME] -T template_postgis</pre>
-
-
-<h1>
-    Check it Works</h1>
-
-
-<pre>$ psql -U [USER NAME] [DATABASE NAME]
-</pre>
-
-
-<p>
-    First let&#8217;s create a &#8216;locations&#8217; table:</p>
-
-
-<pre># CREATE TABLE locations (id serial, name character varying);
-# SELECT AddGeometryColumn('', 'locations', 'geom', 32661, 'POINT', 2);
-</pre>
-
-
-<p>
-    Insert a record:</p>
-
-
-<pre># INSERT INTO "locations" ("name", "geom") VALUES(E'Tokyo International Airport', ST_GeomFromText('POINT(139.783333 35.55)', 32661)) RETURNING "id";
- id
-----
-  1
-(1 row)
-
-INSERT 0 1</pre>
-
-
-<p>
-    Find all results in a given box:</p>
-
-
-<pre># SELECT * FROM "locations" WHERE ("locations"."geom" && SetSRID(E'BOX3D(130.0 30.0, 140.0 40.0)'::box3d, 32661));
- id |            name             |                        geom
-----+-----------------------------+----------------------------------------------------
-  1 | Tokyo International Airport | 0101000020957F0000151C5E10117961406666666666C64140
-(1 row)</pre>
-
 ]]></content>
   </entry>
   

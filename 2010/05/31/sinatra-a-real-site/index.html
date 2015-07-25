@@ -119,7 +119,7 @@ the system will be up on GitHub as soon as I finish making it configurable.<br>
 
 
 <p>
-If you&#8217;ve read the title of this post, you won&#8217;t be surprised to read that I chose <a href="http://www.sinatrarb.com/intro.html">Sinatra</a>.<br>
+If you've read the title of this post, you won't be surprised to read that I chose <a href="http://www.sinatrarb.com/intro.html">Sinatra</a>.<br>
 </p>
 
 
@@ -130,7 +130,7 @@ If you&#8217;ve read the title of this post, you won&#8217;t be surprised to rea
 
 <p>
 I decided to use <a href="http://datamapper.org/">DataMapper</a> as the ORM.<br>
-I&#8217;m also using SQLite for both development and production.<br>
+I'm also using SQLite for both development and production.<br>
 </p>
 
 
@@ -140,7 +140,7 @@ I&#8217;m also using SQLite for both development and production.<br>
 
 
 <p>
-As will be clear from the example site, I didn&#8217;t work over hard on making a fresh graphic look -
+As will be clear from the example site, I didn't work over hard on making a fresh graphic look -
 all I did was strip out a lot of HTML that was there to make rounded corners,
 and replaced it with Mozilla and WebKit specific rounding.<br>
 I then translated the HTML into <a href="http://haml-lang.com/">HAML</a> and
@@ -216,7 +216,7 @@ What follows is a list of the phases I went through while developing (on Ubuntu)
 </span><span class='line'>  <span class="p">})</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">class</span> <span class="nc">Comic</span>
-</span><span class='line'>    <span class="kp">include</span> <span class="ss">DataMapper</span><span class="p">:</span><span class="ss">:Resource</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="no">DataMapper</span><span class="o">::</span><span class="no">Resource</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="n">property</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:text</span>
 </span><span class='line'>    <span class="n">property</span> <span class="ss">:permalink</span><span class="p">,</span> <span class="ss">:text</span>
@@ -227,7 +227,7 @@ What follows is a list of the phases I went through while developing (on Ubuntu)
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The &lsquo;<code>Comic.auto_upgrade!</code>&rsquo; bit handles migrations &ndash;
+<p>The &lsquo;<code>Comic.auto_upgrade!</code>&rsquo; bit handles migrations -
 at startup, table columns are adjusted to match the declaration in the equivalent class.</p>
 
 <h1>Rack</h1>
@@ -237,7 +237,7 @@ at startup, table columns are adjusted to match the declaration in the equivalen
 
 
 <p>
-This application has a &#8216;public&#8217; and an &#8216;admin&#8217; area, so I actually created two Sinatra Apps,
+This application has a 'public' and an 'admin' area, so I actually created two Sinatra Apps,
 wrapping one in <a href="http://rack.rubyforge.org/doc/Rack/Auth/Digest/MD5.html">Rack::Auth::Digest::MD5</a>.
 A local settings file holds user names and hashed (kinda salted) passwords.<br>
 </p>
@@ -279,7 +279,7 @@ Sinatra - by design - includes routing in the structure of an app, so it cannot 
 
 
 <p>
-I found HAML very easy to start using, what I didn&#8217;t immediately understand was:<br>
+I found HAML very easy to start using, what I didn't immediately understand was:<br>
 <ul>
   <li>
     how to interpolate variables,
@@ -296,7 +296,7 @@ I found HAML very easy to start using, what I didn&#8217;t immediately understan
 
 <p>
 These are actually all the same problem, but it took me a while to realize that!<br>
-In HAML, you can interpolate the Ruby way (with &#8217;<code>#{...}</code>&#8217;) or the HAML way (with &#8217;<code>=</code>&#8217;).<br>
+In HAML, you can interpolate the Ruby way (with '<code>#{...}</code>') or the HAML way (with '<code>=</code>').<br>
 </p>
 
 
@@ -380,7 +380,7 @@ Sinatra handles small sites very well.
 The code can be kept DRY, and if you decide to, Sinatra projects can be quite easily transformed into Rails projects.<br>
 Actually, I have doubts whether it was worth doing this project in Sinatra -
 a stripped-down Rails 3 project would have been just as lightweight and easy to develop.
-But, then again, it&#8217;s useful to run a sytem through its paces, to have an idea what areas it can usefully be applied to.<br>
+But, then again, it's useful to run a sytem through its paces, to have an idea what areas it can usefully be applied to.<br>
 </p>
 
 </div>
@@ -454,6 +454,10 @@ But, then again, it&#8217;s useful to run a sytem through its paces, to have an 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/07/25/create-a-mix-task-for-an-elixir-project/">Create a Mix Task for an Elixir Project</a>
+      </li>
+    
+      <li class="post">
         <a href="/2014/06/30/how-to-forward-blocks-in-ruby/">How to Forward Blocks in Ruby</a>
       </li>
     
@@ -467,10 +471,6 @@ But, then again, it&#8217;s useful to run a sytem through its paces, to have an 
     
       <li class="post">
         <a href="/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/">Ruby Bareword Assignment and Method Calls With Implicit Self</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/07/18/html-history-api/">HTML History API</a>
       </li>
     
   </ul>
@@ -513,7 +513,7 @@ But, then again, it&#8217;s useful to run a sytem through its paces, to have an 
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - Joe Yates -
+  Copyright &copy; 2015 - Joe Yates -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

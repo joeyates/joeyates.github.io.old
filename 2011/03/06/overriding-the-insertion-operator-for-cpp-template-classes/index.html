@@ -12,7 +12,7 @@
   <meta name="description" content="Dump an Active Record object to Standard Out - dump_active_record_object.cpp 1
 2
 Person person( 123 );
-std::cout &lt;&lt; person &lt;&lt; endl; &hellip;">
+std::cout &lt;&lt; person &lt;&lt; endl; While &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -94,12 +94,10 @@ std::cout &lt;&lt; person &lt;&lt; endl; &hellip;">
   </header>
 
 
-<div class="entry-content">
-
-<figure class='code'><figcaption><span>Dump an Active Record object to Standard Out - dump_active_record_object.cpp </span></figcaption>
+<div class="entry-content"><figure class='code'><figcaption><span>Dump an Active Record object to Standard Out - dump_active_record_object.cpp </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">Person</span> <span class="n">person</span><span class="p">(</span> <span class="mi">123</span> <span class="p">);</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">Person</span> <span class="nf">person</span><span class="p">(</span> <span class="mi">123</span> <span class="p">);</span>
 </span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">person</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -175,10 +173,10 @@ std::cout &lt;&lt; person &lt;&lt; endl; &hellip;">
 </span><span class='line'><span class="k">class</span> <span class="nc">MyList</span> <span class="p">{</span>
 </span><span class='line'> <span class="k">public</span><span class="o">:</span>
 </span><span class='line'>  <span class="n">MyList</span><span class="p">()</span> <span class="p">{};</span>
-</span><span class='line'>  <span class="kt">void</span> <span class="n">add</span><span class="p">(</span> <span class="n">T</span> <span class="n">item</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="nf">add</span><span class="p">(</span> <span class="n">T</span> <span class="n">item</span> <span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>    <span class="n">data_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span> <span class="n">item</span> <span class="p">);</span>
 </span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="kt">int</span> <span class="n">length</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="nf">length</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
 </span><span class='line'>    <span class="k">return</span> <span class="n">data_</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'> <span class="k">private</span><span class="o">:</span>
@@ -203,13 +201,11 @@ std::cout &lt;&lt; person &lt;&lt; endl; &hellip;">
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Which should work like this:</p>
-
-<pre><code>$ ./my_list
-2 items:
-  42
-  13
-</code></pre>
+<p>Which should work like this:
+    $ ./my_list
+    2 items:
+      42
+      13</p>
 
 <h2>Implementation</h2>
 
@@ -388,7 +384,7 @@ to_ostream.cpp:7: error: 'it' was not declared in this scope
 <span class='line-number'>19</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;string&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="kt">int</span> <span class="n">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span> <span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>  <span class="n">MyList</span><span class="o">&lt;</span> <span class="kt">int</span> <span class="o">&gt;</span> <span class="n">my_ints</span><span class="p">;</span>
 </span><span class='line'>  <span class="n">my_ints</span><span class="p">.</span><span class="n">add</span><span class="p">(</span> <span class="mi">1</span> <span class="p">);</span>
 </span><span class='line'>  <span class="n">my_ints</span><span class="p">.</span><span class="n">add</span><span class="p">(</span> <span class="mi">2</span> <span class="p">);</span>
@@ -408,15 +404,14 @@ to_ostream.cpp:7: error: 'it' was not declared in this scope
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The output:</p>
+<p>The output:
+    $ ./to_ostream
+    myints
+    2 items:
+            1
+            2</p>
 
-<pre><code>$ ./to_ostream 
-myints
-2 items:
-        1
-        2
-
-mystrings
+<pre><code>mystrings
 2 items:
         hello
         world
@@ -492,6 +487,10 @@ mystrings
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/07/25/create-a-mix-task-for-an-elixir-project/">Create a Mix Task for an Elixir Project</a>
+      </li>
+    
+      <li class="post">
         <a href="/2014/06/30/how-to-forward-blocks-in-ruby/">How to Forward Blocks in Ruby</a>
       </li>
     
@@ -505,10 +504,6 @@ mystrings
     
       <li class="post">
         <a href="/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/">Ruby Bareword Assignment and Method Calls With Implicit Self</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/07/18/html-history-api/">HTML History API</a>
       </li>
     
   </ul>
@@ -551,7 +546,7 @@ mystrings
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - Joe Yates -
+  Copyright &copy; 2015 - Joe Yates -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

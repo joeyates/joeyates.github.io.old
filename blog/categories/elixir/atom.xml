@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Elixir | Joe Yates' Blog]]></title>
+  <link href="http://joeyates.github.io/blog/categories/elixir/atom.xml" rel="self"/>
+  <link href="http://joeyates.github.io/"/>
+  <updated>2015-07-25T14:01:49+02:00</updated>
+  <id>http://joeyates.github.io/</id>
+  <author>
+    <name><![CDATA[Joe Yates]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Create a Mix Task for an Elixir Project]]></title>
+    <link href="http://joeyates.github.io/2015/07/25/create-a-mix-task-for-an-elixir-project/"/>
+    <updated>2015-07-25T11:36:16+02:00</updated>
+    <id>http://joeyates.github.io/2015/07/25/create-a-mix-task-for-an-elixir-project</id>
+    <content type="html"><![CDATA[<p>Mix tasks are helper tasks in Elixir projects.</p>
+
+<p>In this post, I&rsquo;ll create an empty project and a &ldquo;Hello World!&rdquo;</p>
+
+<p>I can create a new project with
+<code>sh
+$ mix new mix_task_example
+</code></p>
+
+<p>Now, inside the new <code>mix_task_example</code> project directory, running</p>
+
+<pre><code class="sh">$ mix help
+</code></pre>
+
+<p>shows which mix tasksi are available and in this newly created project there
+are already more than 30.</p>
+
+<p>Now I create the directory for tasks with
+<code>sh
+$ mkdir -p lib/mix/tasks
+</code></p>
+
+<p>and create a file with the name of the task, e.g. <code>mix_task_example.salute.ex</code>
+with the following contents:
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">Mix.Tasks.MixTaskExample.Salute</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kn">use</span> <span class="nc">Mix.Task</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="kd">def</span> <span class="n">run</span><span class="p">(</span><span class="bp">_</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nc">IO</span><span class="p">.</span><span class="n">puts</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nc">Hello</span> <span class="nc">World</span><span class="o">!&amp;</span><span class="n">rdquo</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>This far, the task is not yet available, I need to compile the project
+<code>
+mix compile
+</code></p>
+
+<p>And now I can run it with
+<code>sh
+$ mix mix_task_example.salute
+Hello World!
+</code></p>
+
+<p>The task doesn&rsquo;t show up in the listing with <code>mix help</code>.
+To make it show up I need to add @shortdoc
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">Mix.Tasks.MixTaskExample.Salute</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kn">use</span> <span class="nc">Mix.Task</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="na">@shortdoc</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nc">Give</span> <span class="n">a</span> <span class="n">short</span> <span class="n">salutation</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="kd">def</span> <span class="n">run</span><span class="p">(</span><span class="bp">_</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nc">IO</span><span class="p">.</span><span class="n">puts</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nc">Hello</span> <span class="nc">World</span><span class="o">!&amp;</span><span class="n">rdquo</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>If the tasks are part of a library, they will be available to project that
+include it as a dependency, so it&rsquo;s important to use the library name
+(e.g. <code>MixTaskExample</code>) in the module name in order to keep tasks in
+a collective namesapce.</p>
+
+<p>As a final touch, let&rsquo;s accept a parameter</p>
+
+<pre><code class="elixir">defmodule Mix.Tasks.MixTaskExample.Salute do
+  use Mix.Task
+
+  @shortdoc "Give a short salutation"
+
+  def run(name) do
+    IO.puts "Hello #{name}!"
+  end
+end
+</code></pre>
+
+<pre><code class="sh">mix compile
+mix mix_task_example.salute Joe
+Hello Joe!
+</code></pre>
+
+<p>A working mix task!</p>
+
+<p>The code for this example can be found at <a href="https://github.com/joeyates/mix_task_example">https://github.com/joeyates/mix_task_example</a></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -9,8 +9,7 @@
   <meta name="author" content="Joe Yates">
 
   
-  <meta name="description" content="TL;DR Use Proc.new Calling Enumerators &ndash; normal use You&rsquo;re writing some code which calls an Enumerator &ndash; a function that
-makes &hellip;">
+  <meta name="description" content="Mix tasks are helper tasks in Elixir projects. In this post, I&rsquo;ll create an empty project and a &ldquo;Hello World!&rdquo; I can create a new &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -72,6 +71,171 @@ makes &hellip;">
       
   <header>
     
+      <h1 class="entry-title"><a href="/2015/07/25/create-a-mix-task-for-an-elixir-project/">Create a Mix Task for an Elixir Project</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-07-25T11:36:16+02:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Mix tasks are helper tasks in Elixir projects.</p>
+
+<p>In this post, I&rsquo;ll create an empty project and a &ldquo;Hello World!&rdquo;</p>
+
+<p>I can create a new project with</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>mix new mix_task_example
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, inside the new <code>mix_task_example</code> project directory, running</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>mix <span class="nb">help</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>shows which mix tasksi are available and in this newly created project there
+are already more than 30.</p>
+
+<p>Now I create the directory for tasks with</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>mkdir -p lib/mix/tasks
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and create a file with the name of the task, e.g. <code>mix_task_example.salute.ex</code>
+with the following contents:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">Mix.Tasks.MixTaskExample.Salute</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kn">use</span> <span class="nc">Mix.Task</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">run</span><span class="p">(</span><span class="bp">_</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nc">IO</span><span class="p">.</span><span class="n">puts</span> <span class="s2">&quot;Hello World!&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This far, the task is not yet available, I need to compile the project</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="n">mix</span> <span class="n">compile</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And now I can run it with</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>mix mix_task_example.salute
+</span><span class='line'>Hello World!
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The task doesn&rsquo;t show up in the listing with <code>mix help</code>.
+To make it show up I need to add @shortdoc</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">Mix.Tasks.MixTaskExample.Salute</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kn">use</span> <span class="nc">Mix.Task</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="na">@shortdoc</span> <span class="s2">&quot;Give a short salutation&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">run</span><span class="p">(</span><span class="bp">_</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nc">IO</span><span class="p">.</span><span class="n">puts</span> <span class="s2">&quot;Hello World!&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If the tasks are part of a library, they will be available to project that
+include it as a dependency, so it&rsquo;s important to use the library name
+(e.g. <code>MixTaskExample</code>) in the module name in order to keep tasks in
+a collective namesapce.</p>
+
+<p>As a final touch, let&rsquo;s accept a parameter</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='elixir'><span class='line'><span class="kd">defmodule</span> <span class="nc">Mix.Tasks.MixTaskExample.Salute</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kn">use</span> <span class="nc">Mix.Task</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="na">@shortdoc</span> <span class="s2">&quot;Give a short salutation&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">def</span> <span class="n">run</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nc">IO</span><span class="p">.</span><span class="n">puts</span> <span class="s2">&quot;Hello </span><span class="si">#{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>mix compile
+</span><span class='line'>mix mix_task_example.salute Joe
+</span><span class='line'>Hello Joe!
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A working mix task!</p>
+
+<p>The code for this example can be found at <a href="https://github.com/joeyates/mix_task_example">https://github.com/joeyates/mix_task_example</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2014/06/30/how-to-forward-blocks-in-ruby/">How to Forward Blocks in Ruby</a></h1>
     
     
@@ -88,7 +252,7 @@ makes &hellip;">
   
 
 
-<time datetime="2014-06-30T09:51:19+02:00" pubdate data-updated="true">Jun 30<span>th</span>, 2014</time>
+<time datetime="2014-06-30T09:51:19+02:00" pubdate data-updated="true"></time>
         
       </p>
     
@@ -99,9 +263,9 @@ makes &hellip;">
 
 <p>Use <code>Proc.new</code></p>
 
-<h1>Calling Enumerators &ndash; normal use</h1>
+<h1>Calling Enumerators - normal use</h1>
 
-<p>You&rsquo;re writing some code which calls an Enumerator &ndash; a function that
+<p>You&rsquo;re writing some code which calls an Enumerator - a function that
 makes repeated calls to the block of code that you provide.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -158,7 +322,7 @@ the block, <code>{ |x| puts }</code>, that is passed to that method.</p>
 
 <h1>An alternative: use a block</h1>
 
-<p>I could equally have implemented the method using a <code>&amp;block</code> parameter &ndash;
+<p>I could equally have implemented the method using a <code>&amp;block</code> parameter -
 for the caller, it makes no difference:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -337,7 +501,7 @@ Does that work across two levels? I.e., does the block get passed to method I ca
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">enumerate_2_things</span><span class="p">(</span><span class="nb">proc</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">enumerate_2_things</span><span class="p">(</span><span class="n">block</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
 </span><span class='line'>  <span class="n">enumerate_n_things</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">block</span><span class="p">)</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
@@ -380,7 +544,7 @@ enumerators.</p>
   
 
 
-<time datetime="2013-12-29T14:36:04+01:00" pubdate data-updated="true">Dec 29<span>th</span>, 2013</time>
+<time datetime="2013-12-29T14:36:04+01:00" pubdate data-updated="true"></time>
         
       </p>
     
@@ -393,7 +557,7 @@ enumerators.</p>
 
 <p>The book is called &ldquo;Instant Sinatra Starter&rdquo; and is part of Packtpub&rsquo;s Instant series.</p>
 
-<p>Although the book is very short &ndash; the final version is 48 pages &ndash; it took about six
+<p>Although the book is very short - the final version is 48 pages - it took about six
 months from initial planning to publication.</p>
 
 <p>My target audience is people who have a little programming experience, so it doesn&rsquo;t
@@ -443,7 +607,7 @@ application.</p>
   
 
 
-<time datetime="2012-12-23T14:08:00+01:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2012</time>
+<time datetime="2012-12-23T14:08:00+01:00" pubdate data-updated="true"></time>
         
       </p>
     
@@ -478,8 +642,8 @@ application.</p>
 </span><span class='line'><span class="c"># skips whatever you list in _exclude_matches</span>
 </span><span class='line'><span class="nv">_exclude_matches</span><span class="o">=(</span>bundle .git *.pyc<span class="o">)</span>
 </span><span class='line'><span class="nv">_excludes</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
-</span><span class='line'><span class="k">for </span>_match in <span class="nv">$_exclude_matches</span>; <span class="k">do</span>
-</span><span class='line'><span class="k">  </span><span class="nv">_excludes</span><span class="o">=</span><span class="s2">&quot;${_excludes}-name &#39;$_match&#39; -prune -o &quot;</span>
+</span><span class='line'><span class="k">for</span> _match in <span class="nv">$_exclude_matches</span><span class="p">;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nv">_excludes</span><span class="o">=</span><span class="s2">&quot;${_excludes}-name &#39;$_match&#39; -prune -o &quot;</span>
 </span><span class='line'><span class="k">done</span>
 </span><span class='line'>
 </span><span class='line'><span class="nb">eval</span> <span class="s2">&quot;</span>
@@ -509,7 +673,7 @@ application.</p>
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>f 26 ..
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>f <span class="m">26</span> ..
 </span><span class='line'>../api/db/migrate/20121003094826_add_foo_to_bar.rb
 </span><span class='line'>../redmine/db/migrate/20091017212644_add_missing_indexes_to_messages.rb
 </span></code></pre></td></tr></table></div></figure>
@@ -544,7 +708,7 @@ application.</p>
   
 
 
-<time datetime="2012-01-16T18:52:00+01:00" pubdate data-updated="true">Jan 16<span>th</span>, 2012</time>
+<time datetime="2012-01-16T18:52:00+01:00" pubdate data-updated="true"></time>
         
       </p>
     
@@ -621,7 +785,7 @@ application.</p>
   <div class="entry-content"><p><img src="/images/html5-history-api.png" title="The Example App" ></p>
 
 <p>
-The HTML5 history API allows AJAX-based sites to avoid &#8220;breaking the back button&#8221;. Every time you update the page, you store the new content is the window.history object. When the user presses the back button, you retrieve the current item from window.history and update the page with it.
+The HTML5 history API allows AJAX-based sites to avoid "breaking the back button". Every time you update the page, you store the new content is the window.history object. When the user presses the back button, you retrieve the current item from window.history and update the page with it.
 </p>
 
 
@@ -666,12 +830,10 @@ The HTML5 history API allows AJAX-based sites to avoid &#8220;breaking the back 
   </header>
 
 
-  <div class="entry-content">
-
-<figure class='code'><figcaption><span>Dump an Active Record object to Standard Out - dump_active_record_object.cpp </span></figcaption>
+  <div class="entry-content"><figure class='code'><figcaption><span>Dump an Active Record object to Standard Out - dump_active_record_object.cpp </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">Person</span> <span class="n">person</span><span class="p">(</span> <span class="mi">123</span> <span class="p">);</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">Person</span> <span class="nf">person</span><span class="p">(</span> <span class="mi">123</span> <span class="p">);</span>
 </span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">person</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -741,7 +903,7 @@ The HTML5 history API allows AJAX-based sites to avoid &#8220;breaking the back 
       
   <header>
     
-      <h1 class="entry-title"><a href="/2010/08/29/use-g-as-an-alias-for-git-without-losing-autocompletion/">Use &#8216;G&#8217; as an Alias for &#8216;Git&#8217; Without Losing Autocompletion</a></h1>
+      <h1 class="entry-title"><a href="/2010/08/29/use-g-as-an-alias-for-git-without-losing-autocompletion/">Use 'G' as an Alias for 'Git' Without Losing Autocompletion</a></h1>
     
     
       <p class="meta">
@@ -765,10 +927,10 @@ The HTML5 history API allows AJAX-based sites to avoid &#8220;breaking the back 
 
 
   <div class="entry-content"><p>
-I&#8217;ve just started using a new kind of abbreviation system for Git:
+I've just started using a new kind of abbreviation system for Git:
 <ul>
-	<li>I use &#8216;g&#8217; instead of &#8216;git&#8217;,</li>
-	<li>I&#8217;ve set up bash autocompletion for &#8216;g&#8217;, just like &#8216;git&#8217;.</li>
+	<li>I use 'g' instead of 'git',</li>
+	<li>I've set up bash autocompletion for 'g', just like 'git'.</li>
 </ul>
 </p>
 
@@ -811,9 +973,7 @@ I&#8217;ve just started using a new kind of abbreviation system for Git:
   </header>
 
 
-  <div class="entry-content">
-
-<figure class='code'><figcaption><span>Use Rake::Builder as a Make Replacement - build.sh </span></figcaption>
+  <div class="entry-content"><figure class='code'><figcaption><span>Use Rake::Builder as a Make Replacement - build.sh </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rake build
 </span></code></pre></td></tr></table></div></figure>
@@ -822,7 +982,7 @@ I&#8217;ve just started using a new kind of abbreviation system for Git:
 <p>I&rsquo;ve put together a rake-based system for building C and C++ projects.</p>
 
 <p>
-I&#8217;ve called it Rake::Builder, it&#8217;s available on GitHub <a href="http://github.com/joeyates/rake-builder">here</a>.
+I've called it Rake::Builder, it's available on GitHub <a href="http://github.com/joeyates/rake-builder">here</a>.
 </p>
 
 
@@ -839,64 +999,9 @@ I&#8217;ve called it Rake::Builder, it&#8217;s available on GitHub <a href="http
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2010/05/31/sinatra-a-real-site/">Sinatra: A Real Site</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-05-31T00:00:00+02:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/sidcom.png" title="sidcom.me.uk" ></p>
-
-<h1>The Site</h1>
-
-
-<p>
-I have a young relative who draws a lot of comic strips, and thinking it would be nice if he could publish them, I looked around for an Open Source system.<br>
-I wanted something that was as near to XKCD as possible - latest comic, next/previous and random.<br>
-Not finding anything that was both pretty and ultra-simple, I decided to write my own.<br>
-The version for my relative is <a href="http://sidcom.me.uk/">here</a> -
-the system will be up on GitHub as soon as I finish making it configurable.<br>
-</p>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/2010/05/31/sinatra-a-real-site/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
-      <a class="prev" href="/blog/page/2/">&larr; Older</a>
+      <a class="prev" href="2">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -923,6 +1028,10 @@ the system will be up on GitHub as soon as I finish making it configurable.<br>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/07/25/create-a-mix-task-for-an-elixir-project/">Create a Mix Task for an Elixir Project</a>
+      </li>
+    
+      <li class="post">
         <a href="/2014/06/30/how-to-forward-blocks-in-ruby/">How to Forward Blocks in Ruby</a>
       </li>
     
@@ -938,17 +1047,13 @@ the system will be up on GitHub as soon as I finish making it configurable.<br>
         <a href="/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/">Ruby Bareword Assignment and Method Calls With Implicit Self</a>
       </li>
     
-      <li class="post">
-        <a href="/2011/07/18/html-history-api/">HTML History API</a>
-      </li>
-    
   </ul>
 </section>
 
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/joeyates">@joeyates</a> on GitHub
@@ -981,7 +1086,7 @@ the system will be up on GitHub as soon as I finish making it configurable.<br>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - Joe Yates -
+  Copyright &copy; 2015 - Joe Yates -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

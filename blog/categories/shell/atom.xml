@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Shell | Joe Yates' Blog]]></title>
   <link href="http://joeyates.github.io/blog/categories/shell/atom.xml" rel="self"/>
   <link href="http://joeyates.github.io/"/>
-  <updated>2014-06-30T10:40:38+02:00</updated>
+  <updated>2015-07-25T14:01:49+02:00</updated>
   <id>http://joeyates.github.io/</id>
   <author>
     <name><![CDATA[Joe Yates]]></name>
@@ -20,36 +20,27 @@
     <id>http://joeyates.github.io/2012/12/23/my-everyday-find-command</id>
     <content type="html"><![CDATA[<p>When I&rsquo;m searching for files, I use this function:</p>
 
-<p>```bash</p>
+<pre><code class="bash"># f - everyday find
+# usage:
+#   f filename_fragment [path]
+# skips whatever you list in _exclude_matches
+_exclude_matches=(bundle .git *.pyc)
+_excludes=''
+for _match in $_exclude_matches; do
+  _excludes="${_excludes}-name '$_match' -prune -o "
+done
 
-<h1>f &ndash; everyday find</h1>
-
-<h1>usage:</h1>
-
-<h1>f filename_fragment [path]</h1>
-
-<h1>skips whatever you list in _exclude_matches</h1>
-
-<p><em>exclude_matches=(bundle .git *.pyc)
-</em>excludes=&lsquo;&rsquo;
-for <em>match in $</em>exclude_matches; do
-  <em>excludes=&ldquo;${</em>excludes}-name &lsquo;$_match&rsquo; -prune -o &rdquo;
-done</p>
-
-<p>eval &ldquo;
+eval "
 function my_everyday_find() {
-  find \$2 \</p>
-
-<pre><code>$_excludes \
--name \"*\$1*\"    \
--print;
-</code></pre>
-
-<p>}
-&ldquo;
-unset <em>exclude_matches </em>excludes _match
+  find \$2 \
+    $_excludes \
+    -name \"*\$1*\"    \
+    -print;
+}
+"
+unset _exclude_matches _excludes _match
 alias f=my_everyday_find
-```</p>
+</code></pre>
 
 <p>It searches for files and directories with partial matches of the first parameter:
 <code>bash

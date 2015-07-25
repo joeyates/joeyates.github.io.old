@@ -118,7 +118,7 @@
 
 <p>The advantage of the Django system is that the model holds authoritative information about the fields in the database.</p>
 
-<p>The great disadvantage is that there are no TABLE ALTERing migrations &ndash; you have to dump the table creation SQL and manually construct and run TABLE ALTER commands.</p>
+<p>The great disadvantage is that there are no TABLE ALTERing migrations - you have to dump the table creation SQL and manually construct and run TABLE ALTER commands.</p>
 
 <h2>Settings</h2>
 
@@ -130,15 +130,15 @@
 
 <p>There is a difference between how one handles static files in development and production. Most people seem to use a hack in the urls.py file, indicating where to get static content if in DEBUG mode, whereas in production mode you are supposed to set up Apache aliases for the various directories.</p>
 
-<p>The logic here is that Django should not get involved in serving static content (quite rightly), but it certainly makes setup more laborious. One can achieve a happy medium in Rails using <code>X-SendFile</code> &ndash; Rails gets the request and then punts serving to Apache.</p>
+<p>The logic here is that Django should not get involved in serving static content (quite rightly), but it certainly makes setup more laborious. One can achieve a happy medium in Rails using <code>X-SendFile</code> - Rails gets the request and then punts serving to Apache.</p>
 
 <h2>Generating URLs</h2>
 
-<p>There is an equivalent to Rails&#8217; <code>url_for</code> which is available inside Django templates, it&rsquo;s the filter <code>{ % url %}</code>. Unfortunately, the first time I wanted to create a URL was actually in Python code &ndash; I wanted to redirect. I was unable to find a way to use url from Python code. There is <code>get_absolute_url</code>, which can be implemented inside the model, but it&rsquo;s only for instances.</p>
+<p>There is an equivalent to Rails' <code>url_for</code> which is available inside Django templates, it&rsquo;s the filter <code>{ % url %}</code>. Unfortunately, the first time I wanted to create a URL was actually in Python code - I wanted to redirect. I was unable to find a way to use url from Python code. There is <code>get_absolute_url</code>, which can be implemented inside the model, but it&rsquo;s only for instances.</p>
 
 <h1>Overall</h1>
 
-<p>I think Django is fairly straightforward for the Rails programmer. The fact that you get a &lsquo;free&rsquo; admin backend (similar to ActiveScaffold), is certainly handy. There are a lot of sources of online information and tutorials, so it&rsquo;s quite easy to get up and running. The main impression I got was of a small framework &ndash; while Rails covers a great range of functionality, I felt I came up against Django limitations rather quickly. That may be due to not looking in the right places, but my Google searches showed that a lot of other people were asking the same questions.</p>
+<p>I think Django is fairly straightforward for the Rails programmer. The fact that you get a &lsquo;free&rsquo; admin backend (similar to ActiveScaffold), is certainly handy. There are a lot of sources of online information and tutorials, so it&rsquo;s quite easy to get up and running. The main impression I got was of a small framework - while Rails covers a great range of functionality, I felt I came up against Django limitations rather quickly. That may be due to not looking in the right places, but my Google searches showed that a lot of other people were asking the same questions.</p>
 </div>
 
 
@@ -210,6 +210,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/07/25/create-a-mix-task-for-an-elixir-project/">Create a Mix Task for an Elixir Project</a>
+      </li>
+    
+      <li class="post">
         <a href="/2014/06/30/how-to-forward-blocks-in-ruby/">How to Forward Blocks in Ruby</a>
       </li>
     
@@ -223,10 +227,6 @@
     
       <li class="post">
         <a href="/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/">Ruby Bareword Assignment and Method Calls With Implicit Self</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/07/18/html-history-api/">HTML History API</a>
       </li>
     
   </ul>
@@ -269,7 +269,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - Joe Yates -
+  Copyright &copy; 2015 - Joe Yates -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

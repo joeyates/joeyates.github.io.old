@@ -9,8 +9,8 @@
   <meta name="author" content="Joe Yates">
 
   
-  <meta name="description" content="TL;DR Use Proc.new Calling Enumerators &ndash; normal use You&rsquo;re writing some code which calls an Enumerator &ndash; a function that
-makes &hellip;">
+  <meta name="description" content="TL;DR Use Proc.new Calling Enumerators - normal use You&rsquo;re writing some code which calls an Enumerator - a function that
+makes repeated calls &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,7 +85,7 @@ makes &hellip;">
   
 
 
-<time datetime="2014-06-30T09:51:19+02:00" pubdate data-updated="true">Jun 30<span>th</span>, 2014</time>
+<time datetime="2014-06-30T09:51:19+02:00" pubdate data-updated="true"></time>
         
       </p>
     
@@ -96,9 +96,9 @@ makes &hellip;">
 
 <p>Use <code>Proc.new</code></p>
 
-<h1>Calling Enumerators &ndash; normal use</h1>
+<h1>Calling Enumerators - normal use</h1>
 
-<p>You&rsquo;re writing some code which calls an Enumerator &ndash; a function that
+<p>You&rsquo;re writing some code which calls an Enumerator - a function that
 makes repeated calls to the block of code that you provide.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -155,7 +155,7 @@ the block, <code>{ |x| puts }</code>, that is passed to that method.</p>
 
 <h1>An alternative: use a block</h1>
 
-<p>I could equally have implemented the method using a <code>&amp;block</code> parameter &ndash;
+<p>I could equally have implemented the method using a <code>&amp;block</code> parameter -
 for the caller, it makes no difference:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -334,7 +334,7 @@ Does that work across two levels? I.e., does the block get passed to method I ca
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">enumerate_2_things</span><span class="p">(</span><span class="nb">proc</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">enumerate_2_things</span><span class="p">(</span><span class="n">block</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
 </span><span class='line'>  <span class="n">enumerate_n_things</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">block</span><span class="p">)</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
@@ -371,12 +371,12 @@ enumerators.</p>
   
 
 
-<time datetime="2014-06-30T09:51:19+02:00" pubdate data-updated="true">Jun 30<span>th</span>, 2014</time>
+<time datetime="2014-06-30T09:51:19+02:00" pubdate data-updated="true"></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+    <a class='category' href='/blog/categories/ruby/'>ruby</a>
   
 </span>
 
@@ -396,6 +396,8 @@ enumerators.</p>
       
         <a class="basic-alignment left" href="/2013/12/29/instant-sinatra-starter/" title="Previous Post: Instant Sinatra Starter">&laquo; Instant Sinatra Starter</a>
       
+      
+        <a class="basic-alignment right" href="/2015/07/25/create-a-mix-task-for-an-elixir-project/" title="Next Post: Create a Mix Task for an Elixir Project">Create a Mix Task for an Elixir Project &raquo;</a>
       
     </p>
   </footer>
@@ -424,6 +426,10 @@ enumerators.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/07/25/create-a-mix-task-for-an-elixir-project/">Create a Mix Task for an Elixir Project</a>
+      </li>
+    
+      <li class="post">
         <a href="/2014/06/30/how-to-forward-blocks-in-ruby/">How to Forward Blocks in Ruby</a>
       </li>
     
@@ -437,10 +443,6 @@ enumerators.</p>
     
       <li class="post">
         <a href="/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/">Ruby Bareword Assignment and Method Calls With Implicit Self</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/07/18/html-history-api/">HTML History API</a>
       </li>
     
   </ul>
@@ -483,7 +485,7 @@ enumerators.</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - Joe Yates -
+  Copyright &copy; 2015 - Joe Yates -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
