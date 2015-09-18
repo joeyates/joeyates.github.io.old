@@ -268,19 +268,19 @@ multitask :push do
     Bundler.with_clean_env { system "git push origin #{deploy_branch}" }
     puts "\n## Github Pages deploy complete"
   end
-  system "git checkout source"
 end
 
 desc "Deploy master branch to GitHub Pages"
 task :deploy_master do
   puts "Deploying master branch to GitHub Pages"
-  system "git checkout master"
-  cp_r "#{deploy_dir}/.", "."
-  system "git add -A"
-  message = "Site updated at #{Time.now.utc}"
-  puts "\n## Committing: #{message}"
-  system "git commit -m \"#{message}\""
-  system "git push"
+  cp_r "#{public_dir}/.", deploy_dir
+  cd "#{deploy_dir}" do
+    system "git add -A"
+    message = "Site updated at #{Time.now.utc}"
+    puts "\n## Committing: #{message}"
+    system "git commit -m \"#{message}\""
+    system "git push"
+  end
   system "git checkout source"
 end
 
