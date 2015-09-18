@@ -16,17 +16,20 @@ On GitHub:
  * The compiled site
  * Checked out in _deploy
 
+# Configuration
+
+* _config.yml
+* layout: source/_layouts/default.html
+
 # Editing
 
 ```
 git checkout source
 ```
 
-## Create a new post:
+## Create a new post
 
-```
-rake new_post[TITLE]
-```
+`rake new_post[TITLE]`
 
 # Preview
 
