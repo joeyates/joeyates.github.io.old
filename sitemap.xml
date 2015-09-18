@@ -117,6 +117,9 @@
     <lastmod>2010-01-30T00:00:00+01:00</lastmod>
   </url>
   <url>
+    <loc>http://joeyates.github.io/about</loc>
+  </url>
+  <url>
     <loc>http://joeyates.github.io/</loc>
   </url>
   <url>
@@ -133,5 +136,11 @@
   </url>
   <url>
     <loc>http://joeyates.github.io/blog/categories/elixir/</loc>
+  </url>
+  <url>
+    <loc>http://joeyates.github.io/posts/2/</loc>
+  </url>
+  <url>
+    <loc>http://joeyates.github.io/posts/3/</loc>
   </url>
 </urlset>
