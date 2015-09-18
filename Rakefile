@@ -268,6 +268,7 @@ multitask :push do
     Bundler.with_clean_env { system "git push origin #{deploy_branch}" }
     puts "\n## Github Pages deploy complete"
   end
+  system "git checkout source"
 end
 
 desc "Deploy master branch to GitHub Pages"
