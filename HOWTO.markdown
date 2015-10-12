@@ -50,7 +50,7 @@ rake deploy_master
 Manually:
 
 ```
-rake generate
+rake generate        # generates in 'public'
 mkdir -p _deploy
 rake deploy
 git checkout master
