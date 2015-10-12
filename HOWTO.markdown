@@ -44,7 +44,7 @@ rake preview
 Deploy to GitHub pages:
 
 ```
-rake deploy_master
+rake gen_deploy
 ```
 
 Manually:
