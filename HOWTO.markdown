@@ -31,6 +31,24 @@ git checkout source
 
 `rake new_post[TITLE]`
 
+## Static Pages
+
+For an URL foo/bar:
+
+```
+mkdir -p foo/bar
+```
+
+Edit foo/bar/index.md:
+
+```
+---
+title: The Title
+layout: default
+---
+...
+```
+
 # Preview
 
 Preview the site on http://localhost:4000:
