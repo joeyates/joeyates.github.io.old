@@ -9,7 +9,7 @@
   <meta name="author" content="Joe Yates">
 
   
-  <meta name="description" content="Mix tasks are helper tasks in Elixir projects. In this post, I&rsquo;ll create an empty project and a &ldquo;Hello World!&rdquo; I can create a new &hellip;">
+  <meta name="description" content="I&rsquo;m interested in the possibility of running type checks on Javascript code. Proponents of type checking believe that bugs can be avoided by &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +67,320 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2016/02/04/trying-flow/">Trying Flow</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-02-04T18:04:55+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;m interested in the possibility of running type checks on Javascript code.</p>
+
+<p>Proponents of type checking believe that bugs can be avoided by indicating the
+intended type (i.e. String, Number) of values (variables, functions and
+classes), opponents say it adds work but doesn&rsquo;t significantly reduce bugginess.</p>
+
+<p>I read through the intro to <a href="http://www.typescriptlang.org/">Typescript</a> and it certainly
+seems like a lot of work.</p>
+
+<p>An alternative is Facebook&rsquo;s <a href="http://flowtype.org/">flow</a>, it allows gradual typing -
+you add only as many type annotations as you want. Here, I&rsquo;m giving it a spin
+by creating <a href="https://github.com/joeyates/flow-hello">flow-hello</a> - a &ldquo;Hello World!&rdquo; Example.</p>
+
+<h1>Installation</h1>
+
+<p>The type checking system is written in OCaml, and you need to install a binary
+or <a href="https://github.com/facebook/flow#building-flow">compile from source</a>.</p>
+
+<p>I opted to use <code>npm</code> to install the binary globally:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>sudo npm install flow-bin --global
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Project setup</h1>
+
+<p>Configure flow:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>flow init
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>A Bug</h1>
+
+<p>Here&rsquo;s a Javascript with a bug:</p>
+
+<figure>
+  <figcaption>File: src/01-buggy.js</figcaption>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">logLength</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">logLength</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">logLength</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></figure></p>
+
+<p>This code logs <code>undefined</code> when the number <code>1</code> is passed to the function
+<code>logLength</code>, as <code>1</code> does not have a <code>length</code> attribute:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>node src/01-buggy.js
+</span><span class='line'>5
+</span><span class='line'>undefined
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As is, flow does not analyze the file:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>flow check
+</span><span class='line'>Found <span class="m">0</span> errors
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Activate flow</h1>
+
+<p>Flow is activated by adding <code>@flow</code> to the first comment in any file:</p>
+
+<figure>
+  <figcaption>File: src/02-with-flow.js</figcaption>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="cm">/* @flow */</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">logLength</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">logLength</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">logLength</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></figure></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>flow check
+</span><span class='line'>src/02-with-flow.js:3
+</span><span class='line'>3:   console.log<span class="o">(</span>x.length<span class="o">)</span><span class="p">;</span>
+</span><span class='line'>                   ^^^^^^ property <span class="s1">&#39;length&#39;</span>. Property not found in
+</span><span class='line'>3:   console.log<span class="o">(</span>x.length<span class="o">)</span><span class="p">;</span>
+</span><span class='line'>                 ^ Number
+</span><span class='line'>
+</span><span class='line'>Found <span class="m">1</span> error
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&rsquo;s good, as it explains how we get <code>undefined</code> in the output, but it&rsquo;s not
+clear that this happens due to the second invocation of the function.</p>
+
+<h1>Annotate function parameters</h1>
+
+<p>Now, let&rsquo;s indicate the intended type of the <code>x</code> parameter so that calls with
+parameters of the wrong type will be pointed out.</p>
+
+<figure>
+  <figcaption>File: src/03-parameter-annotations.js</figcaption>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="cm">/* @flow */</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">logLength</span><span class="p">(</span><span class="nx">x</span><span class="o">:</span> <span class="nx">string</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">logLength</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">logLength</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></figure></p>
+
+<p>As <code>flow check</code> checks all the <code>.js</code> files it finds, I&rsquo;ll run pass the file
+contents to flow via stdin:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>flow check-contents &lt; src/03-parameter-annotations.js
+</span><span class='line'>7: logLength<span class="o">(</span>1<span class="o">)</span><span class="p">;</span>
+</span><span class='line'>   ^^^^^^^^^^^^ <span class="k">function</span> call
+</span><span class='line'>7: logLength<span class="o">(</span>1<span class="o">)</span><span class="p">;</span>
+</span><span class='line'>             ^ number. This <span class="nb">type </span>is incompatible with
+</span><span class='line'>2: <span class="k">function</span> logLength<span class="o">(</span>x: string<span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                         ^^^^^^ string
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Found <span class="m">1</span> error
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&rsquo;s good - we know which call caused the problem.</p>
+
+<h1>Stripping type annotations with Babel</h1>
+
+<p>Unfortunately, we can no longer simply run the code:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span> <span class="nx">node</span> <span class="nx">src</span><span class="o">/</span><span class="mi">03</span><span class="o">-</span><span class="nx">parameter</span><span class="o">-</span><span class="nx">annotations</span><span class="p">.</span><span class="nx">js</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">logLength</span><span class="p">(</span><span class="nx">x</span><span class="o">:</span> <span class="nx">string</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="o">^</span>
+</span><span class='line'><span class="nx">SyntaxError</span><span class="o">:</span> <span class="nx">Unexpected</span> <span class="nx">token</span> <span class="o">:</span>
+</span><span class='line'><span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can use <a href="http://babeljs.io/">Babel</a> to <a href="https://babeljs.io/docs/plugins/transform-flow-strip-types/">remove type annotations</a>
+when we want to run the code.</p>
+
+<p>Setting up Babel requires a bit of work:</p>
+
+<figure>
+  <figcaption>File: package.json</figcaption>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;scripts&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;babel&quot;</span><span class="p">:</span> <span class="s2">&quot;babel ...&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></figure></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>npm install --save-dev babel-cli
+</span><span class='line'>...
+</span><span class='line'><span class="nv">$ </span>npm install --save-dev babel-plugin-transform-flow-strip-types
+</span><span class='line'>...
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure>
+  <figcaption>File: .babelrc</figcaption>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;plugins&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;transform-flow-strip-types&quot;</span><span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></figure></p>
+
+<p>Now we can run babel:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>node_modules/.bin/babel src/03-parameter-annotations.js
+</span><span class='line'>
+</span><span class='line'><span class="k">function</span> logLength<span class="o">(</span>x<span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  console.log<span class="o">(</span>x.length<span class="o">)</span><span class="p">;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>logLength<span class="o">(</span><span class="s2">&quot;Hello&quot;</span><span class="o">)</span><span class="p">;</span>
+</span><span class='line'>logLength<span class="o">(</span>1<span class="o">)</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We get normal Javascript as output.</p>
+
+<h1>Conclusion</h1>
+
+<p>So, I got what I wanted: help with figuring out an error cuased by calling a
+function with a parameter of the wrong type.</p>
+
+<p>But, it&rsquo;s truly a &ldquo;Hello World!&rdquo;, there is a whole type specification system
+yet to learn and try out.</p>
+
+<p>I like the idea of being able to annotate just as much of my code as I like, so
+I think I&rsquo;ll be using Flow on my next Javascript project.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -947,60 +1261,6 @@ I've just started using a new kind of abbreviation system for Git:
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2010/08/29/rake-builder/">Rake::Builder</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-08-29T00:00:00+02:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><figure class='code'><figcaption><span>Use Rake::Builder as a Make Replacement - build.sh </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rake build
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I&rsquo;ve put together a rake-based system for building C and C++ projects.</p>
-
-<p>
-I've called it Rake::Builder, it's available on GitHub <a href="http://github.com/joeyates/rake-builder">here</a>.
-</p>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/2010/08/29/rake-builder/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="2">&larr; Older</a>
@@ -1030,6 +1290,10 @@ I've called it Rake::Builder, it's available on GitHub <a href="http://github.co
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2016/02/04/trying-flow/">Trying Flow</a>
+      </li>
+    
+      <li class="post">
         <a href="/2015/07/25/create-a-mix-task-for-an-elixir-project/">Create a Mix Task for an Elixir Project</a>
       </li>
     
@@ -1043,10 +1307,6 @@ I've called it Rake::Builder, it's available on GitHub <a href="http://github.co
     
       <li class="post">
         <a href="/2012/12/23/my-everyday-find-command/">My Everyday Find Command</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/">Ruby Bareword Assignment and Method Calls With Implicit Self</a>
       </li>
     
   </ul>
