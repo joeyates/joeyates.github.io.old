@@ -21,17 +21,14 @@ On GitHub:
 * _config.yml
 * layout: source/_layouts/default.html
 
-# Editing
+# Create a new post
 
-```
+```sh
 git checkout source
+rake new_post[TITLE]
 ```
 
-## Create a new post
-
-`rake new_post[TITLE]`
-
-## Static Pages
+# Static Pages
 
 For an URL foo/bar:
 
@@ -54,6 +51,7 @@ layout: default
 Preview the site on http://localhost:4000:
 
 ```
+git checkout source
 rake preview
 ```
 
@@ -68,6 +66,7 @@ rake gen_deploy
 Manually:
 
 ```
+git checkout source
 rake generate        # generates in 'public'
 mkdir -p _deploy
 rake deploy
