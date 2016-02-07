@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Elixir | Joe Yates' Blog]]></title>
-  <link href="http://joeyates.github.io/blog/categories/elixir/atom.xml" rel="self"/>
-  <link href="http://joeyates.github.io/"/>
-  <updated>2016-02-06T17:35:41+01:00</updated>
-  <id>http://joeyates.github.io/</id>
+  <link href="http://joeyates.info/blog/categories/elixir/atom.xml" rel="self"/>
+  <link href="http://joeyates.info/"/>
+  <updated>2016-02-07T17:36:23+01:00</updated>
+  <id>http://joeyates.info/</id>
   <author>
     <name><![CDATA[Joe Yates]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Create a Mix Task for an Elixir Project]]></title>
-    <link href="http://joeyates.github.io/2015/07/25/create-a-mix-task-for-an-elixir-project/"/>
+    <link href="http://joeyates.info/2015/07/25/create-a-mix-task-for-an-elixir-project/"/>
     <updated>2015-07-25T11:36:16+02:00</updated>
-    <id>http://joeyates.github.io/2015/07/25/create-a-mix-task-for-an-elixir-project</id>
+    <id>http://joeyates.info/2015/07/25/create-a-mix-task-for-an-elixir-project</id>
     <content type="html"><![CDATA[<p>Mix tasks are helper tasks in Elixir projects.</p>
 
 <p>In this post, I&rsquo;ll create an empty project and a &ldquo;Hello World!&rdquo;</p>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Sinatra | Joe Yates' Blog]]></title>
-  <link href="http://joeyates.github.io/blog/categories/sinatra/atom.xml" rel="self"/>
-  <link href="http://joeyates.github.io/"/>
-  <updated>2016-02-06T17:35:41+01:00</updated>
-  <id>http://joeyates.github.io/</id>
+  <link href="http://joeyates.info/blog/categories/sinatra/atom.xml" rel="self"/>
+  <link href="http://joeyates.info/"/>
+  <updated>2016-02-07T17:36:23+01:00</updated>
+  <id>http://joeyates.info/</id>
   <author>
     <name><![CDATA[Joe Yates]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Instant Sinatra Starter]]></title>
-    <link href="http://joeyates.github.io/2013/12/29/instant-sinatra-starter/"/>
+    <link href="http://joeyates.info/2013/12/29/instant-sinatra-starter/"/>
     <updated>2013-12-29T14:36:04+01:00</updated>
-    <id>http://joeyates.github.io/2013/12/29/instant-sinatra-starter</id>
+    <id>http://joeyates.info/2013/12/29/instant-sinatra-starter</id>
     <content type="html"><![CDATA[<p>I was asked to write a book about Sinatra, to be published by Packt Publishing.</p>
 
 <p><img src="/images/SinatraStarterCover.png" alt="Instant Sinatra Starter" /></p>

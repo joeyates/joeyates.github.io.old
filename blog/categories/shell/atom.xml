@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Shell | Joe Yates' Blog]]></title>
-  <link href="http://joeyates.github.io/blog/categories/shell/atom.xml" rel="self"/>
-  <link href="http://joeyates.github.io/"/>
-  <updated>2016-02-06T17:35:41+01:00</updated>
-  <id>http://joeyates.github.io/</id>
+  <link href="http://joeyates.info/blog/categories/shell/atom.xml" rel="self"/>
+  <link href="http://joeyates.info/"/>
+  <updated>2016-02-07T17:36:23+01:00</updated>
+  <id>http://joeyates.info/</id>
   <author>
     <name><![CDATA[Joe Yates]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[My Everyday Find Command]]></title>
-    <link href="http://joeyates.github.io/2012/12/23/my-everyday-find-command/"/>
+    <link href="http://joeyates.info/2012/12/23/my-everyday-find-command/"/>
     <updated>2012-12-23T14:08:00+01:00</updated>
-    <id>http://joeyates.github.io/2012/12/23/my-everyday-find-command</id>
+    <id>http://joeyates.info/2012/12/23/my-everyday-find-command</id>
     <content type="html"><![CDATA[<p>When I&rsquo;m searching for files, I use this function:</p>
 
 <pre><code class="bash"># f - everyday find

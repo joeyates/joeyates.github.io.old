@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Joe Yates' Blog]]></title>
-  <link href="http://joeyates.github.io/atom.xml" rel="self"/>
-  <link href="http://joeyates.github.io/"/>
-  <updated>2016-02-06T17:35:41+01:00</updated>
-  <id>http://joeyates.github.io/</id>
+  <link href="http://joeyates.info/atom.xml" rel="self"/>
+  <link href="http://joeyates.info/"/>
+  <updated>2016-02-07T17:36:23+01:00</updated>
+  <id>http://joeyates.info/</id>
   <author>
     <name><![CDATA[Joe Yates]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Trying Flow]]></title>
-    <link href="http://joeyates.github.io/2016/02/04/trying-flow/"/>
+    <link href="http://joeyates.info/2016/02/04/trying-flow/"/>
     <updated>2016-02-04T18:04:55+01:00</updated>
-    <id>http://joeyates.github.io/2016/02/04/trying-flow</id>
+    <id>http://joeyates.info/2016/02/04/trying-flow</id>
     <content type="html"><![CDATA[<p>I&rsquo;m interested in the possibility of running type checks on Javascript code.</p>
 
 <p>Proponents of type checking believe that bugs can be avoided by indicating the
@@ -302,9 +302,9 @@ I think I&rsquo;ll be using Flow on my next Javascript project.</p>
   
   <entry>
     <title type="html"><![CDATA[Create a Mix Task for an Elixir Project]]></title>
-    <link href="http://joeyates.github.io/2015/07/25/create-a-mix-task-for-an-elixir-project/"/>
+    <link href="http://joeyates.info/2015/07/25/create-a-mix-task-for-an-elixir-project/"/>
     <updated>2015-07-25T11:36:16+02:00</updated>
-    <id>http://joeyates.github.io/2015/07/25/create-a-mix-task-for-an-elixir-project</id>
+    <id>http://joeyates.info/2015/07/25/create-a-mix-task-for-an-elixir-project</id>
     <content type="html"><![CDATA[<p>Mix tasks are helper tasks in Elixir projects.</p>
 
 <p>In this post, I&rsquo;ll create an empty project and a &ldquo;Hello World!&rdquo;</p>
@@ -440,9 +440,9 @@ a collective namesapce.</p>
   
   <entry>
     <title type="html"><![CDATA[How to Forward Blocks in Ruby]]></title>
-    <link href="http://joeyates.github.io/2014/06/30/how-to-forward-blocks-in-ruby/"/>
+    <link href="http://joeyates.info/2014/06/30/how-to-forward-blocks-in-ruby/"/>
     <updated>2014-06-30T09:51:19+02:00</updated>
-    <id>http://joeyates.github.io/2014/06/30/how-to-forward-blocks-in-ruby</id>
+    <id>http://joeyates.info/2014/06/30/how-to-forward-blocks-in-ruby</id>
     <content type="html"><![CDATA[<h1>TL;DR</h1>
 
 <p>Use <code>Proc.new</code></p>
@@ -705,12 +705,12 @@ enumerators.</p>
   
   <entry>
     <title type="html"><![CDATA[Instant Sinatra Starter]]></title>
-    <link href="http://joeyates.github.io/2013/12/29/instant-sinatra-starter/"/>
+    <link href="http://joeyates.info/2013/12/29/instant-sinatra-starter/"/>
     <updated>2013-12-29T14:36:04+01:00</updated>
-    <id>http://joeyates.github.io/2013/12/29/instant-sinatra-starter</id>
+    <id>http://joeyates.info/2013/12/29/instant-sinatra-starter</id>
     <content type="html"><![CDATA[<p>I was asked to write a book about Sinatra, to be published by Packt Publishing.</p>
 
-<p><img src="http://joeyates.github.io/images/SinatraStarterCover.png" alt="Instant Sinatra Starter" /></p>
+<p><img src="http://joeyates.info/images/SinatraStarterCover.png" alt="Instant Sinatra Starter" /></p>
 
 <p>The book is called &ldquo;Instant Sinatra Starter&rdquo; and is part of Packtpub&rsquo;s Instant series.</p>
 
@@ -741,9 +741,9 @@ application.</p>
   
   <entry>
     <title type="html"><![CDATA[My Everyday Find Command]]></title>
-    <link href="http://joeyates.github.io/2012/12/23/my-everyday-find-command/"/>
+    <link href="http://joeyates.info/2012/12/23/my-everyday-find-command/"/>
     <updated>2012-12-23T14:08:00+01:00</updated>
-    <id>http://joeyates.github.io/2012/12/23/my-everyday-find-command</id>
+    <id>http://joeyates.info/2012/12/23/my-everyday-find-command</id>
     <content type="html"><![CDATA[<p>When I&rsquo;m searching for files, I use this function:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -815,9 +815,9 @@ application.</p>
   
   <entry>
     <title type="html"><![CDATA[Ruby Bareword Assignment and Method Calls With Implicit Self]]></title>
-    <link href="http://joeyates.github.io/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/"/>
+    <link href="http://joeyates.info/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/"/>
     <updated>2012-01-16T18:52:00+01:00</updated>
-    <id>http://joeyates.github.io/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self</id>
+    <id>http://joeyates.info/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self</id>
     <content type="html"><![CDATA[<h1>Problem</h1>
 
 <p>If I do this:</p>
@@ -1062,10 +1062,10 @@ application.</p>
   
   <entry>
     <title type="html"><![CDATA[HTML History API]]></title>
-    <link href="http://joeyates.github.io/2011/07/18/html-history-api/"/>
+    <link href="http://joeyates.info/2011/07/18/html-history-api/"/>
     <updated>2011-07-18T00:00:00+02:00</updated>
-    <id>http://joeyates.github.io/2011/07/18/html-history-api</id>
-    <content type="html"><![CDATA[<p><img src="http://joeyates.github.io/images/html5-history-api.png" title="The Example App" ></p>
+    <id>http://joeyates.info/2011/07/18/html-history-api</id>
+    <content type="html"><![CDATA[<p><img src="http://joeyates.info/images/html5-history-api.png" title="The Example App" ></p>
 
 <p>
 The HTML5 history API allows AJAX-based sites to avoid "breaking the back button". Every time you update the page, you store the new content is the window.history object. When the user presses the back button, you retrieve the current item from window.history and update the page with it.
@@ -1143,9 +1143,9 @@ Notice that pressing the forward and back buttons updates the page correctly wit
   
   <entry>
     <title type="html"><![CDATA[Overriding the Insertion Operator for C++ Template Classes]]></title>
-    <link href="http://joeyates.github.io/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes/"/>
+    <link href="http://joeyates.info/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes/"/>
     <updated>2011-03-06T00:00:00+01:00</updated>
-    <id>http://joeyates.github.io/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes</id>
+    <id>http://joeyates.info/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes</id>
     <content type="html"><![CDATA[<figure class='code'><figcaption><span>Dump an Active Record object to Standard Out - dump_active_record_object.cpp </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1473,10 +1473,10 @@ to_ostream.cpp:7: error: 'it' was not declared in this scope
   
   <entry>
     <title type="html"><![CDATA[Hello Gosu!]]></title>
-    <link href="http://joeyates.github.io/2011/02/19/hello-gosu/"/>
+    <link href="http://joeyates.info/2011/02/19/hello-gosu/"/>
     <updated>2011-02-19T00:00:00+01:00</updated>
-    <id>http://joeyates.github.io/2011/02/19/hello-gosu</id>
-    <content type="html"><![CDATA[<p><img src="http://joeyates.github.io/images/hello_gosu.png" title="Hello Gosu!" ></p>
+    <id>http://joeyates.info/2011/02/19/hello-gosu</id>
+    <content type="html"><![CDATA[<p><img src="http://joeyates.info/images/hello_gosu.png" title="Hello Gosu!" ></p>
 
 <p>I&rsquo;m trying out <a href="http://www.libgosu.org/">Gosu</a>, which is a 2D game library written in C++ with Ruby bindings (<a href="https://secure.wikimedia.org/wikipedia/en/wiki/Gosu_%28library%29">Wikipedia article</a>).</p>
 
@@ -1547,9 +1547,9 @@ to_ostream.cpp:7: error: 'it' was not declared in this scope
   
   <entry>
     <title type="html"><![CDATA[Use 'G' as an Alias for 'Git' Without Losing Autocompletion]]></title>
-    <link href="http://joeyates.github.io/2010/08/29/use-g-as-an-alias-for-git-without-losing-autocompletion/"/>
+    <link href="http://joeyates.info/2010/08/29/use-g-as-an-alias-for-git-without-losing-autocompletion/"/>
     <updated>2010-08-29T00:00:00+02:00</updated>
-    <id>http://joeyates.github.io/2010/08/29/use-g-as-an-alias-for-git-without-losing-autocompletion</id>
+    <id>http://joeyates.info/2010/08/29/use-g-as-an-alias-for-git-without-losing-autocompletion</id>
     <content type="html"><![CDATA[<p>
 I've just started using a new kind of abbreviation system for Git:
 <ul>
@@ -1618,9 +1618,9 @@ annotate            describe            log                 revert
   
   <entry>
     <title type="html"><![CDATA[Rake::Builder]]></title>
-    <link href="http://joeyates.github.io/2010/08/29/rake-builder/"/>
+    <link href="http://joeyates.info/2010/08/29/rake-builder/"/>
     <updated>2010-08-29T00:00:00+02:00</updated>
-    <id>http://joeyates.github.io/2010/08/29/rake-builder</id>
+    <id>http://joeyates.info/2010/08/29/rake-builder</id>
     <content type="html"><![CDATA[<figure class='code'><figcaption><span>Use Rake::Builder as a Make Replacement - build.sh </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rake build
@@ -1708,7 +1708,7 @@ $ sudo make install
 
 <p>Fifteen of those files are involved in the mechanics of autoconf.</p>
 
-<p><img src="http://joeyates.github.io/images/autoconf.png" title="autoconf dependencies" ></p>
+<p><img src="http://joeyates.info/images/autoconf.png" title="autoconf dependencies" ></p>
 
 <p>Autoconf doesn&rsquo;t really address the issue of building on various systems and adapting semi-automatically. You still have to add all the settings, but you have to learn where in a myriad of files these settings are to be placed.</p>
 
@@ -1842,10 +1842,10 @@ I&rsquo;m about to start using Rake::Builder on a sizable C++ project using QT, 
   
   <entry>
     <title type="html"><![CDATA[Sinatra: A Real Site]]></title>
-    <link href="http://joeyates.github.io/2010/05/31/sinatra-a-real-site/"/>
+    <link href="http://joeyates.info/2010/05/31/sinatra-a-real-site/"/>
     <updated>2010-05-31T00:00:00+02:00</updated>
-    <id>http://joeyates.github.io/2010/05/31/sinatra-a-real-site</id>
-    <content type="html"><![CDATA[<p><img src="http://joeyates.github.io/images/sidcom.png" title="sidcom.me.uk" ></p>
+    <id>http://joeyates.info/2010/05/31/sinatra-a-real-site</id>
+    <content type="html"><![CDATA[<p><img src="http://joeyates.info/images/sidcom.png" title="sidcom.me.uk" ></p>
 
 <h1>The Site</h1>
 
@@ -2142,9 +2142,9 @@ But, then again, it's useful to run a sytem through its paces, to have an idea w
   
   <entry>
     <title type="html"><![CDATA[Googletest Hello World]]></title>
-    <link href="http://joeyates.github.io/2010/05/26/googletest-hello-world/"/>
+    <link href="http://joeyates.info/2010/05/26/googletest-hello-world/"/>
     <updated>2010-05-26T00:00:00+02:00</updated>
-    <id>http://joeyates.github.io/2010/05/26/googletest-hello-world</id>
+    <id>http://joeyates.info/2010/05/26/googletest-hello-world</id>
     <content type="html"><![CDATA[<p>
 This is a quick run down of how to get started with using <a href="http://code.google.com/p/googletest/">googletest</a> on Ubuntu.
 </p>
@@ -2356,9 +2356,9 @@ It couldn't really be much simpler!
   
   <entry>
     <title type="html"><![CDATA[Object Representation in C++]]></title>
-    <link href="http://joeyates.github.io/2010/05/12/object-representation-in-c/"/>
+    <link href="http://joeyates.info/2010/05/12/object-representation-in-c/"/>
     <updated>2010-05-12T00:00:00+02:00</updated>
-    <id>http://joeyates.github.io/2010/05/12/object-representation-in-c</id>
+    <id>http://joeyates.info/2010/05/12/object-representation-in-c</id>
     <content type="html"><![CDATA[<h1>Member variables</h1>
 
 <p>Each C++ object needs to hold its instance data. But, there is often not a perfect match between the sum of the byte sizes of the member variables and the size of an object: The space occupied will often be greater than the sum of the sizes of the member variables.</p>
@@ -2933,12 +2933,12 @@ Both compilers place the vtbl at the start of the instance memory, so a pointer 
   
   <entry>
     <title type="html"><![CDATA[Cuil Fail]]></title>
-    <link href="http://joeyates.github.io/2010/05/08/cuil-fail/"/>
+    <link href="http://joeyates.info/2010/05/08/cuil-fail/"/>
     <updated>2010-05-08T00:00:00+02:00</updated>
-    <id>http://joeyates.github.io/2010/05/08/cuil-fail</id>
+    <id>http://joeyates.info/2010/05/08/cuil-fail</id>
     <content type="html"><![CDATA[<p>Cuil was launched as a search engine in <a href="http://en.wikipedia.org/wiki/Cuil#History">July 2008</a>.</p>
 
-<p><img src="http://joeyates.github.io/images/cuilfail-tunnel-lewes.jpg" title="Cuilfail Tunnel in Lewes, United Kingdom" ></p>
+<p><img src="http://joeyates.info/images/cuilfail-tunnel-lewes.jpg" title="Cuilfail Tunnel in Lewes, United Kingdom" ></p>
 
 <!--more-->
 
@@ -2953,9 +2953,9 @@ Both compilers place the vtbl at the start of the instance memory, so a pointer 
   
   <entry>
     <title type="html"><![CDATA[A Beginner's Sinatra Tutorial]]></title>
-    <link href="http://joeyates.github.io/2010/04/07/a-beginners-sinatra-tutorial/"/>
+    <link href="http://joeyates.info/2010/04/07/a-beginners-sinatra-tutorial/"/>
     <updated>2010-04-07T00:00:00+02:00</updated>
-    <id>http://joeyates.github.io/2010/04/07/a-beginners-sinatra-tutorial</id>
+    <id>http://joeyates.info/2010/04/07/a-beginners-sinatra-tutorial</id>
     <content type="html"><![CDATA[<p>In the olden days your first program was probably in BASIC and was run from the command line, nowadays the equivalent is Web programming.</p>
 
 <p>Using Sinatra reminds me of my first programming experiences - you write a tiny bit of code, with no boilerplate and get to see a result.</p>
@@ -3275,22 +3275,22 @@ Both compilers place the vtbl at the start of the instance memory, so a pointer 
 
 <p>You should get the following on <a href="http://localhost:4567/template"><a href="http://localhost:4567/template">http://localhost:4567/template</a></a>:<br /></p>
 
-<p><img src="http://joeyates.github.io/images/sinatra-erb-template.png" title="Sinatra ERB Template" ></p>
+<p><img src="http://joeyates.info/images/sinatra-erb-template.png" title="Sinatra ERB Template" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[A Rails Programmer's First Django Application]]></title>
-    <link href="http://joeyates.github.io/2010/04/04/a-rails-programmers-first-django-application/"/>
+    <link href="http://joeyates.info/2010/04/04/a-rails-programmers-first-django-application/"/>
     <updated>2010-04-04T00:00:00+02:00</updated>
-    <id>http://joeyates.github.io/2010/04/04/a-rails-programmers-first-django-application</id>
+    <id>http://joeyates.info/2010/04/04/a-rails-programmers-first-django-application</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve seen many comparisons of Rails with Django, its Python counterpart.</p>
 
 <h1>The Application</h1>
 
 <p>I decided to use Django to write <a href="http://titusd.co.uk/snape/timeline/">a small local history application: the story of Snape in East Sussex</a>.</p>
 
-<p><img src="http://joeyates.github.io/images/snape-timeline.png" title="The public timeline" ></p>
+<p><img src="http://joeyates.info/images/snape-timeline.png" title="The public timeline" ></p>
 
 <p>The front and of the application uses a <a href="http://code.google.com/p/simile-widgets/wiki/Timeline">SIMILE timeline</a> to display dates.</p>
 
@@ -3337,9 +3337,9 @@ Both compilers place the vtbl at the start of the instance memory, so a pointer 
   
   <entry>
     <title type="html"><![CDATA[Editing Javascript in Emacs]]></title>
-    <link href="http://joeyates.github.io/2010/04/02/editing-javascript-in-emacs/"/>
+    <link href="http://joeyates.info/2010/04/02/editing-javascript-in-emacs/"/>
     <updated>2010-04-02T00:00:00+02:00</updated>
-    <id>http://joeyates.github.io/2010/04/02/editing-javascript-in-emacs</id>
+    <id>http://joeyates.info/2010/04/02/editing-javascript-in-emacs</id>
     <content type="html"><![CDATA[<p>
 	Steve Yegge of Google has created a new Javascript mode 'js2-mode' for Emacs.</p>
 <p>
@@ -3393,9 +3393,9 @@ js2-mode.el
   
   <entry>
     <title type="html"><![CDATA[Show Your Git Branch Name in Your GNU Screen Status Line]]></title>
-    <link href="http://joeyates.github.io/2010/03/09/show-your-git-branch-name-in-your-gnu-screen-status-line/"/>
+    <link href="http://joeyates.info/2010/03/09/show-your-git-branch-name-in-your-gnu-screen-status-line/"/>
     <updated>2010-03-09T00:00:00+01:00</updated>
-    <id>http://joeyates.github.io/2010/03/09/show-your-git-branch-name-in-your-gnu-screen-status-line</id>
+    <id>http://joeyates.info/2010/03/09/show-your-git-branch-name-in-your-gnu-screen-status-line</id>
     <content type="html"><![CDATA[<h1>Git Branch Prompt</h1>
 
 <p><a href="http://github.com/guides/put-your-git-branch-name-in-your-shell-prompt">Many</a> <a href="http://github.com/lvv/git-prompt/">people</a> <a href="http://www.jukie.net/bart/blog/20080404105620">have</a> written about showing the current git branch in your shell prompt.</p>
@@ -3479,7 +3479,7 @@ select 0
 
 <h1>The Result</h1>
 
-<p><img src="http://joeyates.github.io/images/GnuScreenShowingCurrentGitBranch.png" width="341" height="153"></p>
+<p><img src="http://joeyates.info/images/GnuScreenShowingCurrentGitBranch.png" width="341" height="153"></p>
 
 <h1>Conclusion</h1>
 
@@ -3491,9 +3491,9 @@ select 0
   
   <entry>
     <title type="html"><![CDATA[A Sunrise and Sunset Time Calculator]]></title>
-    <link href="http://joeyates.github.io/2010/03/09/a-sunrise-and-sunset-time-calculator/"/>
+    <link href="http://joeyates.info/2010/03/09/a-sunrise-and-sunset-time-calculator/"/>
     <updated>2010-03-09T00:00:00+01:00</updated>
-    <id>http://joeyates.github.io/2010/03/09/a-sunrise-and-sunset-time-calculator</id>
+    <id>http://joeyates.info/2010/03/09/a-sunrise-and-sunset-time-calculator</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve released the <a href="http://rubygems.org/gems/ruby-sun-times">ruby-sun-times gem</a>, which calculates sunrise and sunset times according to date and location.</p>
 
 <!--more-->
