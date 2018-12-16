@@ -1,144 +1,155 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>http://joeyates.info/2016/02/04/trying-flow/</loc>
-    <lastmod>2016-02-04T18:04:55+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2015/07/25/create-a-mix-task-for-an-elixir-project/</loc>
-    <lastmod>2015-07-25T11:36:16+02:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2014/06/30/how-to-forward-blocks-in-ruby/</loc>
-    <lastmod>2014-06-30T09:51:19+02:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2013/12/29/instant-sinatra-starter/</loc>
-    <lastmod>2013-12-29T14:36:04+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2012/12/23/my-everyday-find-command/</loc>
-    <lastmod>2012-12-23T14:08:00+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/</loc>
-    <lastmod>2012-01-16T18:52:00+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2011/07/18/html-history-api/</loc>
-    <lastmod>2011-07-18T00:00:00+02:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes/</loc>
-    <lastmod>2011-03-06T00:00:00+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2011/02/19/hello-gosu/</loc>
-    <lastmod>2011-02-19T00:00:00+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/08/29/use-g-as-an-alias-for-git-without-losing-autocompletion/</loc>
-    <lastmod>2010-08-29T00:00:00+02:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/08/29/rake-builder/</loc>
-    <lastmod>2010-08-29T00:00:00+02:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/05/31/sinatra-a-real-site/</loc>
-    <lastmod>2010-05-31T00:00:00+02:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/05/26/googletest-hello-world/</loc>
-    <lastmod>2010-05-26T00:00:00+02:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/05/12/object-representation-in-c/</loc>
-    <lastmod>2010-05-12T00:00:00+02:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/05/08/cuil-fail/</loc>
-    <lastmod>2010-05-08T00:00:00+02:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/04/07/a-beginners-sinatra-tutorial/</loc>
-    <lastmod>2010-04-07T00:00:00+02:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/04/04/a-rails-programmers-first-django-application/</loc>
-    <lastmod>2010-04-04T00:00:00+02:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/04/02/editing-javascript-in-emacs/</loc>
-    <lastmod>2010-04-02T00:00:00+02:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/03/09/show-your-git-branch-name-in-your-gnu-screen-status-line/</loc>
-    <lastmod>2010-03-09T00:00:00+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/03/09/a-sunrise-and-sunset-time-calculator/</loc>
-    <lastmod>2010-03-09T00:00:00+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/03/04/i18n-internationalization-without-rails/</loc>
-    <lastmod>2010-03-04T00:00:00+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/02/22/setting-up-postgis/</loc>
-    <lastmod>2010-02-22T00:00:00+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/02/22/jruby-on-rails/</loc>
-    <lastmod>2010-02-22T00:00:00+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/02/22/handling-multiple-versions-of-ruby/</loc>
-    <lastmod>2010-02-22T00:00:00+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/02/22/debian-alternatives/</loc>
-    <lastmod>2010-02-22T00:00:00+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/02/21/shared-git-repositories/</loc>
-    <lastmod>2010-02-21T00:00:00+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/02/09/trying-out-clojure/</loc>
-    <lastmod>2010-02-09T00:00:00+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/02/01/managing-multiple-gnu-screen-sessions/</loc>
-    <lastmod>2010-02-01T00:00:00+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/01/31/regular-expressions-in-sqlite/</loc>
-    <lastmod>2010-01-31T00:00:00+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/2010/01/30/callbacks-in-objective-c/</loc>
-    <lastmod>2010-01-30T00:00:00+01:00</lastmod>
-  </url>
-  <url>
-    <loc>http://joeyates.info/</loc>
-  </url>
-  <url>
-    <loc>http://joeyates.info/blog/archives/</loc>
-  </url>
-  <url>
-    <loc>http://joeyates.info/open-source/</loc>
-  </url>
-  <url>
-    <loc>http://joeyates.info/blog/categories/ruby/</loc>
-  </url>
-  <url>
-    <loc>http://joeyates.info/blog/categories/shell/</loc>
-  </url>
-  <url>
-    <loc>http://joeyates.info/blog/categories/sinatra/</loc>
-  </url>
-  <url>
-    <loc>http://joeyates.info/blog/categories/elixir/</loc>
-  </url>
+<url>
+<loc>http://joeyates.info/2018/12/16/dotfiles/</loc>
+<lastmod>2018-12-16T09:32:14+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2016/02/04/trying-flow/</loc>
+<lastmod>2016-02-04T18:04:55+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2015/07/25/create-a-mix-task-for-an-elixir-project/</loc>
+<lastmod>2015-07-25T11:36:16+02:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2014/06/30/how-to-forward-blocks-in-ruby/</loc>
+<lastmod>2014-06-30T09:51:19+02:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2013/12/29/instant-sinatra-starter/</loc>
+<lastmod>2013-12-29T14:36:04+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2012/12/23/my-everyday-find-command/</loc>
+<lastmod>2012-12-23T14:08:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/</loc>
+<lastmod>2012-01-16T18:52:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2011/07/18/html-history-api/</loc>
+<lastmod>2011-07-18T00:00:00+02:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2011/03/06/overriding-the-insertion-operator-for-cpp-template-classes/</loc>
+<lastmod>2011-03-06T00:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2011/02/19/hello-gosu/</loc>
+<lastmod>2011-02-19T00:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/08/29/use-g-as-an-alias-for-git-without-losing-autocompletion/</loc>
+<lastmod>2010-08-29T00:00:00+02:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/08/29/rake-builder/</loc>
+<lastmod>2010-08-29T00:00:00+02:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/05/31/sinatra-a-real-site/</loc>
+<lastmod>2010-05-31T00:00:00+02:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/05/26/googletest-hello-world/</loc>
+<lastmod>2010-05-26T00:00:00+02:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/05/12/object-representation-in-c/</loc>
+<lastmod>2010-05-12T00:00:00+02:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/05/08/cuil-fail/</loc>
+<lastmod>2010-05-08T00:00:00+02:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/04/07/a-beginners-sinatra-tutorial/</loc>
+<lastmod>2010-04-07T00:00:00+02:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/04/04/a-rails-programmers-first-django-application/</loc>
+<lastmod>2010-04-04T00:00:00+02:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/04/02/editing-javascript-in-emacs/</loc>
+<lastmod>2010-04-02T00:00:00+02:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/03/09/show-your-git-branch-name-in-your-gnu-screen-status-line/</loc>
+<lastmod>2010-03-09T00:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/03/09/a-sunrise-and-sunset-time-calculator/</loc>
+<lastmod>2010-03-09T00:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/03/04/i18n-internationalization-without-rails/</loc>
+<lastmod>2010-03-04T00:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/02/22/setting-up-postgis/</loc>
+<lastmod>2010-02-22T00:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/02/22/jruby-on-rails/</loc>
+<lastmod>2010-02-22T00:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/02/22/handling-multiple-versions-of-ruby/</loc>
+<lastmod>2010-02-22T00:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/02/22/debian-alternatives/</loc>
+<lastmod>2010-02-22T00:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/02/21/shared-git-repositories/</loc>
+<lastmod>2010-02-21T00:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/02/09/trying-out-clojure/</loc>
+<lastmod>2010-02-09T00:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/02/01/managing-multiple-gnu-screen-sessions/</loc>
+<lastmod>2010-02-01T00:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/01/31/regular-expressions-in-sqlite/</loc>
+<lastmod>2010-01-31T00:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/2010/01/30/callbacks-in-objective-c/</loc>
+<lastmod>2010-01-30T00:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://joeyates.info/blog/archives/</loc>
+</url>
+<url>
+<loc>http://joeyates.info/</loc>
+</url>
+<url>
+<loc>http://joeyates.info/open-source/</loc>
+</url>
+<url>
+<loc>http://joeyates.info/blog/categories/ruby/</loc>
+</url>
+<url>
+<loc>http://joeyates.info/blog/categories/shell/</loc>
+</url>
+<url>
+<loc>http://joeyates.info/blog/categories/sinatra/</loc>
+</url>
+<url>
+<loc>http://joeyates.info/blog/categories/elixir/</loc>
+</url>
+<url>
+<loc>http://joeyates.info/blog/categories/setup/</loc>
+</url>
+<url>
+<loc>http://joeyates.info/joeyates-curriculum-vitae.pdf</loc>
+<lastmod>2018-12-16T09:59:57+01:00</lastmod>
+</url>
 </urlset>

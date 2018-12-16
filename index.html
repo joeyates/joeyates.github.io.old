@@ -9,7 +9,9 @@
   <meta name="author" content="Joe Yates">
 
   
-  <meta name="description" content="I&rsquo;m interested in the possibility of running type checks on Javascript code. Proponents of type checking believe that bugs can be avoided by &hellip;">
+  <meta name="description" content="This post presents a &ldquo;Pure Git&rdquo; approach to managing dotfiles: No symlinks,
+No scripts,
+Just Git configuration. It is inspired by a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +69,174 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2018/12/16/dotfiles/">Dotfiles</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-12-16T09:32:14+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This post presents a &ldquo;Pure Git&rdquo; approach to managing dotfiles:</p>
+
+<ul>
+<li>No symlinks,</li>
+<li>No scripts,</li>
+<li>Just Git configuration.</li>
+</ul>
+
+
+<p>It is inspired by a <a href="https://news.ycombinator.com/item?id=11070797">comment on Hacker News</a>.</p>
+
+<h1>How it works</h1>
+
+<p>The dotfiles repo is cloned to <code>~/.dotfiles</code>, but Git is told that
+the working directory is the home directory.</p>
+
+<p>From then on, it&rsquo;s just a Git repo.</p>
+
+<p>You can add any file in your home directory or subdirectories below it.</p>
+
+<h1>Getting Started</h1>
+
+<p>You <strong>could</strong> clone someone else&rsquo;s dotfiles, but I advise against it -
+it&rsquo;s best to understand what you have by stealing here and there.</p>
+
+<h2>Create your Dotfiles Repo</h2>
+
+<ul>
+<li>Create an empty Git repo somewhere (I use <a href="https://gitlab.com/">GitLab</a>),</li>
+<li>Follow the next section.</li>
+</ul>
+
+
+<p>It is a good idea to add a <code>README</code> file to the root of your repo with a copy
+the setup steps below. That way, you know where to look every time
+you need to set up on a fresh computer.</p>
+
+<h2>Install your Repo</h2>
+
+<p>If you&rsquo;re installing on a new computer, you can do the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone --bare &lt;my repo&gt; ~/.dotfiles
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> ~/.dotfiles
+</span><span class='line'><span class="nv">$ </span>git config --local core.bare <span class="nb">false</span>
+</span><span class='line'><span class="nv">$ </span>git config --local core.worktree &lt;my home&gt;
+</span><span class='line'><span class="nv">$ </span>git config --local status.showUntrackedFiles no
+</span><span class='line'><span class="nv">$ </span>git reset
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>These steps have cloned and set up the Git repo, but so far nothing has changed.</p>
+
+<p>Now, run the following to check what will change when you &ldquo;install&rdquo; the
+dotfiles:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git status
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Check you are not going to overwrite any local files with local changes
+you want to keep.</p>
+
+<p>Beware - the next line installs the current version of files in your dotfiles
+repo, potentially overwriting different versions in your home directory (or
+subdirectories).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git reset --hard HEAD --
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&rsquo;s it, your home directory is now managed by Git!</p>
+
+<h1>Maintenance</h1>
+
+<p><code>cd</code> to your <code>~/.dotfiles</code> directory.</p>
+
+<p>Run <code>git status</code> to see what has changed.</p>
+
+<p><strong>Note that all file operations have a <code>..</code> prefix</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git add ../foobar
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Outside the .dotfiles directory</h1>
+
+<p>Use the following to manage your repo without having to <code>cd</code> to <code>~/.dotfiles</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git --git-dir<span class="o">=</span><span class="nv">$HOME</span>/.dotfiles --work-tree<span class="o">=</span><span class="nv">$HOME</span> &lt;<span class="nb">command</span>&gt; <span class="o">[</span>ARGS<span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can add this to your <code>.bashrc</code> or <code>.zshrc</code> as follows:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">alias </span><span class="nv">dotgit</span><span class="o">=</span><span class="s2">&quot;git --git-dir=$HOME/.dotfiles --work-tree=$HOME&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you add <strong>that</strong> to your dotfiles repo, that&rsquo;s really all the
+configuration you need.</p>
+
+<h1>Notes</h1>
+
+<h2><code>.gitignore</code></h2>
+
+<p>The is no <code>.gitignore</code> in this system, as Git is instructed to ignore all
+files that are not part of the repo.</p>
+
+<h2>Automation</h2>
+
+<p>If you want to automate adding local changes to your repo, it should be
+quite easy. Though, you&rsquo;ll need to decide how to deal with remote changes
+if you are using your dotfiles on more than one computer.</p>
+
+<h2>Branches</h2>
+
+<p>If you have big differences between your needs on your various computers,
+you can even keep differences in branches!</p>
+
+<h1>That&rsquo;s It</h1>
+
+<p>Enjoy your lightweight dotfiles!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1214,53 +1384,6 @@ The HTML5 history API allows AJAX-based sites to avoid "breaking the back button
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2010/08/29/use-g-as-an-alias-for-git-without-losing-autocompletion/">Use 'G' as an Alias for 'Git' Without Losing Autocompletion</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-08-29T00:00:00+02:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>
-I've just started using a new kind of abbreviation system for Git:
-<ul>
-	<li>I use 'g' instead of 'git',</li>
-	<li>I've set up bash autocompletion for 'g', just like 'git'.</li>
-</ul>
-</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/2010/08/29/use-g-as-an-alias-for-git-without-losing-autocompletion/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="2">&larr; Older</a>
@@ -1290,6 +1413,10 @@ I've just started using a new kind of abbreviation system for Git:
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2018/12/16/dotfiles/">Dotfiles</a>
+      </li>
+    
+      <li class="post">
         <a href="/2016/02/04/trying-flow/">Trying Flow</a>
       </li>
     
@@ -1303,10 +1430,6 @@ I've just started using a new kind of abbreviation system for Git:
     
       <li class="post">
         <a href="/2013/12/29/instant-sinatra-starter/">Instant Sinatra Starter</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2012/12/23/my-everyday-find-command/">My Everyday Find Command</a>
       </li>
     
   </ul>
@@ -1348,7 +1471,7 @@ I've just started using a new kind of abbreviation system for Git:
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2016 - Joe Yates -
+  Copyright &copy; 2018 - Joe Yates -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

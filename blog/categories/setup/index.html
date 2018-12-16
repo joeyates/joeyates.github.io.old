@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Shared Git Repositories - Joe Yates' Blog</title>
+  <title>Category: Setup - Joe Yates' Blog</title>
   <meta name="author" content="Joe Yates">
 
   
-  <meta name="description" content="When you want to have a central shared git repository to push commits to, there are two common configurations: Everybody uses the same user for &hellip;">
+  <meta name="description" content="Category: setup">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://joeyates.info/2010/02/21/shared-git-repositories">
+  <link rel="canonical" href="http://joeyates.info/blog/categories/setup">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Joe Yates' Blog" type="application/atom+xml">
@@ -66,146 +66,35 @@
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">Shared Git Repositories</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-02-21T00:00:00+01:00" pubdate data-updated="true"></time>
-        
-      </p>
+    <h1 class="entry-title">Category: Setup</h1>
     
   </header>
-
-
-<div class="entry-content"><p>When you want to have a central shared git repository to push commits to, there are two common configurations:</p>
-
-<ol>
-    <li>Everybody uses the same user for commits - easy to set up, but very messy,</li>
-    <li>Create a system user for each committer, create a system group for each project and add users to relevant groups.</li>
-</ol>
+  
+  <div id="blog-archives" class="category">
 
 
 
+  
+  <h2>2018</h2>
 
-<!--more-->
+<article>
+  
+<h1><a href="/2018/12/16/dotfiles/">Dotfiles</a></h1>
+<time datetime="2018-12-16T09:32:14+01:00" pubdate><span class='month'>Dec</span> <span class='day'>16</span> <span class='year'>2018</span></time>
+
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/setup/'>setup</a></span>
+</footer>
 
 
-<p>Below is an explanation of how to set up and manage configuration 2.</p>
+</article>
 
-<h1>Create User &lsquo;git&rsquo;</h1>
-
-<p>Create a &lsquo;user 'git&rsquo; to manage projects.</p>
-
-<pre><code>$ sudo useradd --shell /bin/bash --home-dir /var/git --create-home git
-</code></pre>
-
-<h1>A Directory for Repositories</h1>
-
-<pre><code>$ sudo su - git
-$ mkdir /var/git/repositories
-</code></pre>
-
-<h1>Create a Project</h1>
-
-<pre><code>$ cd /var/git/repositories
-$ mkdir [PROJECT_NAME]
-$ cd [PROJECT_NAME]
-$ git --bare init
-</code></pre>
-
-<p>Create a group for the project:</p>
-
-<pre><code>$ sudo groupadd [PROJECT_NAME]
-</code></pre>
-
-<p>Add relevant users to the group:</p>
-
-<pre><code>$ sudo usermod --append --groups [GROUP_NAME] [USER_NAME]
-</code></pre>
-
-<p>Give the group write permissions to the repository:</p>
-
-<pre><code>$ sudo chgrp -R [GROUP_NAME] /var/git/repositories/[REPOSITORY_PATH]
-$ sudo chmod -R ug+w /var/git/repositories/[REPOSITORY_PATH]
-$ chmod -R o-w /var/git/repositories/[REPOSITORY_PATH]
-</code></pre>
-
-<h1>Have Git Handle Group Permissions</h1>
-
-<p>In .git/config:</p>
-
-<pre><code>[core]
-  sharedrepository = 1
-</code></pre>
-
-<h1>Use</h1>
-
-<p>Now, when you use the remote shared repository, you can use your personal account:</p>
-
-<pre><code>$ git clone ssh://my-user@example.com/path/to/repo
-</code></pre>
 </div>
 
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">Joe Yates</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-02-21T00:00:00+01:00" pubdate data-updated="true"></time>
-      
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://joeyates.info/2010/02/21/shared-git-repositories/" data-via="" data-counturl="http://joeyates.info/2010/02/21/shared-git-repositories/" >Tweet</a>
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/2010/02/09/trying-out-clojure/" title="Previous Post: Trying out Clojure">&laquo; Trying out Clojure</a>
-      
-      
-        <a class="basic-alignment right" href="/2010/02/22/debian-alternatives/" title="Next Post: Debian Alternatives">Debian Alternatives &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
 </div>

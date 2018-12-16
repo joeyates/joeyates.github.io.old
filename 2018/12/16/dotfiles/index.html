@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>My Everyday Find Command - Joe Yates' Blog</title>
+  <title>Dotfiles - Joe Yates' Blog</title>
   <meta name="author" content="Joe Yates">
 
   
-  <meta name="description" content="a shell funtion to quickly search for files">
+  <meta name="description" content="This post presents a &ldquo;Pure Git&rdquo; approach to managing dotfiles: No symlinks,
+No scripts,
+Just Git configuration. It is inspired by a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://joeyates.info/2012/12/23/my-everyday-find-command">
+  <link rel="canonical" href="http://joeyates.info/2018/12/16/dotfiles">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Joe Yates' Blog" type="application/atom+xml">
@@ -70,7 +72,7 @@
   
   <header>
     
-      <h1 class="entry-title">My Everyday Find Command</h1>
+      <h1 class="entry-title">Dotfiles</h1>
     
     
       <p class="meta">
@@ -86,14 +88,53 @@
   
 
 
-<time datetime="2012-12-23T14:08:00+01:00" pubdate data-updated="true"></time>
+<time datetime="2018-12-16T09:32:14+01:00" pubdate data-updated="true"></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>When I&rsquo;m searching for files, I use this function:</p>
+<div class="entry-content"><p>This post presents a &ldquo;Pure Git&rdquo; approach to managing dotfiles:</p>
+
+<ul>
+<li>No symlinks,</li>
+<li>No scripts,</li>
+<li>Just Git configuration.</li>
+</ul>
+
+
+<p>It is inspired by a <a href="https://news.ycombinator.com/item?id=11070797">comment on Hacker News</a>.</p>
+
+<h1>How it works</h1>
+
+<p>The dotfiles repo is cloned to <code>~/.dotfiles</code>, but Git is told that
+the working directory is the home directory.</p>
+
+<p>From then on, it&rsquo;s just a Git repo.</p>
+
+<p>You can add any file in your home directory or subdirectories below it.</p>
+
+<h1>Getting Started</h1>
+
+<p>You <strong>could</strong> clone someone else&rsquo;s dotfiles, but I advise against it -
+it&rsquo;s best to understand what you have by stealing here and there.</p>
+
+<h2>Create your Dotfiles Repo</h2>
+
+<ul>
+<li>Create an empty Git repo somewhere (I use <a href="https://gitlab.com/">GitLab</a>),</li>
+<li>Follow the next section.</li>
+</ul>
+
+
+<p>It is a good idea to add a <code>README</code> file to the root of your repo with a copy
+the setup steps below. That way, you know where to look every time
+you need to set up on a fresh computer.</p>
+
+<h2>Install your Repo</h2>
+
+<p>If you&rsquo;re installing on a new computer, you can do the following:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -101,64 +142,92 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># f - everyday find</span>
-</span><span class='line'><span class="c"># usage:</span>
-</span><span class='line'><span class="c">#   f filename_fragment [path]</span>
-</span><span class='line'><span class="c"># skips whatever you list in _exclude_matches</span>
-</span><span class='line'><span class="nv">_exclude_matches</span><span class="o">=(</span>bundle .git *.pyc<span class="o">)</span>
-</span><span class='line'><span class="nv">_excludes</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
-</span><span class='line'><span class="k">for</span> _match in <span class="nv">$_exclude_matches</span><span class="p">;</span> <span class="k">do</span>
-</span><span class='line'>  <span class="nv">_excludes</span><span class="o">=</span><span class="s2">&quot;${_excludes}-name &#39;$_match&#39; -prune -o &quot;</span>
-</span><span class='line'><span class="k">done</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">eval</span> <span class="s2">&quot;</span>
-</span><span class='line'><span class="s2">function my_everyday_find() {</span>
-</span><span class='line'><span class="s2">  find \$2 \</span>
-</span><span class='line'><span class="s2">    $_excludes \</span>
-</span><span class='line'><span class="s2">    -name \&quot;*\$1*\&quot;    \</span>
-</span><span class='line'><span class="s2">    -print;</span>
-</span><span class='line'><span class="s2">}</span>
-</span><span class='line'><span class="s2">&quot;</span>
-</span><span class='line'><span class="nb">unset </span>_exclude_matches _excludes _match
-</span><span class='line'><span class="nb">alias </span><span class="nv">f</span><span class="o">=</span>my_everyday_find
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone --bare &lt;my repo&gt; ~/.dotfiles
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> ~/.dotfiles
+</span><span class='line'><span class="nv">$ </span>git config --local core.bare <span class="nb">false</span>
+</span><span class='line'><span class="nv">$ </span>git config --local core.worktree &lt;my home&gt;
+</span><span class='line'><span class="nv">$ </span>git config --local status.showUntrackedFiles no
+</span><span class='line'><span class="nv">$ </span>git reset
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>It searches for files and directories with partial matches of the first parameter:</p>
+<p>These steps have cloned and set up the Git repo, but so far nothing has changed.</p>
+
+<p>Now, run the following to check what will change when you &ldquo;install&rdquo; the
+dotfiles:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>f 26
-</span><span class='line'>./db/migrate/20121003094826_add_foo_to_bar.rb
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git status
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>If I supply a second parameter, it is taken as the directory to search in:</p>
+<p>Check you are not going to overwrite any local files with local changes
+you want to keep.</p>
+
+<p>Beware - the next line installs the current version of files in your dotfiles
+repo, potentially overwriting different versions in your home directory (or
+subdirectories).</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>f <span class="m">26</span> ..
-</span><span class='line'>../api/db/migrate/20121003094826_add_foo_to_bar.rb
-</span><span class='line'>../redmine/db/migrate/20091017212644_add_missing_indexes_to_messages.rb
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git reset --hard HEAD --
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>That&rsquo;s it, your home directory is now managed by Git!</p>
 
+<h1>Maintenance</h1>
+
+<p><code>cd</code> to your <code>~/.dotfiles</code> directory.</p>
+
+<p>Run <code>git status</code> to see what has changed.</p>
+
+<p><strong>Note that all file operations have a <code>..</code> prefix</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git add ../foobar
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Outside the .dotfiles directory</h1>
+
+<p>Use the following to manage your repo without having to <code>cd</code> to <code>~/.dotfiles</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git --git-dir<span class="o">=</span><span class="nv">$HOME</span>/.dotfiles --work-tree<span class="o">=</span><span class="nv">$HOME</span> &lt;<span class="nb">command</span>&gt; <span class="o">[</span>ARGS<span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can add this to your <code>.bashrc</code> or <code>.zshrc</code> as follows:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">alias </span><span class="nv">dotgit</span><span class="o">=</span><span class="s2">&quot;git --git-dir=$HOME/.dotfiles --work-tree=$HOME&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you add <strong>that</strong> to your dotfiles repo, that&rsquo;s really all the
+configuration you need.</p>
+
+<h1>Notes</h1>
+
+<h2><code>.gitignore</code></h2>
+
+<p>The is no <code>.gitignore</code> in this system, as Git is instructed to ignore all
+files that are not part of the repo.</p>
+
+<h2>Automation</h2>
+
+<p>If you want to automate adding local changes to your repo, it should be
+quite easy. Though, you&rsquo;ll need to decide how to deal with remote changes
+if you are using your dotfiles on more than one computer.</p>
+
+<h2>Branches</h2>
+
+<p>If you have big differences between your needs on your various computers,
+you can even keep differences in branches!</p>
+
+<h1>That&rsquo;s It</h1>
+
+<p>Enjoy your lightweight dotfiles!</p>
 </div>
 
 
@@ -181,12 +250,12 @@
   
 
 
-<time datetime="2012-12-23T14:08:00+01:00" pubdate data-updated="true"></time>
+<time datetime="2018-12-16T09:32:14+01:00" pubdate data-updated="true"></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/shell/'>shell</a>
+    <a class='category' href='/blog/categories/setup/'>setup</a>
   
 </span>
 
@@ -195,7 +264,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://joeyates.info/2012/12/23/my-everyday-find-command/" data-via="" data-counturl="http://joeyates.info/2012/12/23/my-everyday-find-command/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://joeyates.info/2018/12/16/dotfiles/" data-via="" data-counturl="http://joeyates.info/2018/12/16/dotfiles/" >Tweet</a>
   
   
   
@@ -204,10 +273,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/2012/01/16/ruby-bareword-assignment-and-method-calls-with-implicit-self/" title="Previous Post: Ruby Bareword Assignment and Method Calls With Implicit Self">&laquo; Ruby Bareword Assignment and Method Calls With Implicit Self</a>
+        <a class="basic-alignment left" href="/2016/02/04/trying-flow/" title="Previous Post: Trying Flow">&laquo; Trying Flow</a>
       
-      
-        <a class="basic-alignment right" href="/2013/12/29/instant-sinatra-starter/" title="Next Post: Instant Sinatra Starter">Instant Sinatra Starter &raquo;</a>
       
     </p>
   </footer>
